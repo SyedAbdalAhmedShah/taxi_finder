@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/views/auth/sign_in_view.dart';
 import 'package:taxi_finder/views/home_page.dart';
 
 void main() {
@@ -19,14 +22,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    "AIzaSyCCyk5eidRuWbW1OelSvr3V39sdnKfb05k";
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        title: 'Taxi Finder',
+        theme: ThemeData(
+          scaffoldBackgroundColor: scaffoldColor,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const SignInView(),
+      );
+    });
   }
 }

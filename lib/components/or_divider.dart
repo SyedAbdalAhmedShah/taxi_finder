@@ -24,7 +24,7 @@ class OrDivider extends StatelessWidget {
             orContinueWith,
             style: TextStyle(
               color: textColorSecondary,
-              fontSize: 12.sp,
+              fontSize: 14.sp,
             ),
           ),
         ),

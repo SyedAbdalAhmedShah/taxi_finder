@@ -12,7 +12,6 @@ import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 
-
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
 
@@ -20,20 +19,22 @@ class SignUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 3.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    LogoImage(
-                      size: 14.h,
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     LogoImage(
+                //       size: 14.h,
+                //     ),
+                //   ],
+                // ),
                 Gap(2.h),
                 Text(
                   createAccount,

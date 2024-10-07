@@ -17,7 +17,7 @@ class SignupPrompt extends StatelessWidget {
           dontHaveAccount,
           style: TextStyle(
             color: textColorSecondary,
-            fontSize: 12.sp,
+            fontSize: 16.sp,
           ),
         ),
         TextButton(
@@ -29,7 +29,7 @@ class SignupPrompt extends StatelessWidget {
             text,
             style: TextStyle(
               color: primaryColor,
-              fontSize: 12.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
             ),
           ),

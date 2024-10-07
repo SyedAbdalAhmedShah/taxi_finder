@@ -14,7 +14,6 @@ import 'package:taxi_finder/views/auth/sign_up_view.dart';
 
 import '../../components/forgot_password.dart';
 
-
 class SignInView extends StatelessWidget {
   const SignInView({super.key});
 
@@ -26,15 +25,16 @@ class SignInView extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 3.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  LogoImage(
-                    size: 14.h,
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     LogoImage(
+              //       size: 14.h,
+              //     ),
+              //   ],
+              // ),
               Gap(2.h),
               Text(
                 welcomeBack,
