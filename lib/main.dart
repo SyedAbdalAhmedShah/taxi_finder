@@ -1,10 +1,12 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/views/auth/sign_in_view.dart';
-import 'package:taxi_finder/views/home_page.dart';
+import 'package:taxi_finder/views/map_view.dart';
 
 void main() {
   final GoogleMapsFlutterPlatform mapsImplementation =
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const SignInView(),
+        home: const MapSample(),
       );
     });
   }
