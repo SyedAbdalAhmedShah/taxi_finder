@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "730051416978",
+    "project_id": "taxi-finder-93d36",
+    "storage_bucket": "taxi-finder-93d36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730051416978:android:37d42fe237177daaab274b",
+        "android_client_info": {
+          "package_name": "com.example.driver_web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK5l1y8dAvLMlvbcaNtR2va70bs8yTJHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730051416978:android:98b9395574db4c01ab274b",
+        "android_client_info": {
+          "package_name": "com.example.taxi_finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK5l1y8dAvLMlvbcaNtR2va70bs8yTJHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

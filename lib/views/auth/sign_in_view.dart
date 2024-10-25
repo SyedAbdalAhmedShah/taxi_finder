@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
-import 'package:taxi_finder/components/logo_image.dart';
 import 'package:taxi_finder/components/or_divider.dart';
 import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/components/secondary_button.dart';
@@ -48,7 +47,7 @@ class SignInView extends StatelessWidget {
               Text(
                 email,
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: 16.sp,
                   color: textColorSecondary,
                 ),
               ),
@@ -58,14 +57,14 @@ class SignInView extends StatelessWidget {
               ),
               Gap(3.h),
               Text(
-                email,
+                password,
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: 16.sp,
                   color: textColorSecondary,
                 ),
               ),
               const AppTextField(
-                hintText: password,
+                hintText: enterPassword,
                 prefixIcon: Icons.email,
                 suffixIcon: Icons.visibility_off,
               ),

@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:taxi_finder/views/map_view.dart';
+import 'package:taxi_finder/views/user/map_view/map_view.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});

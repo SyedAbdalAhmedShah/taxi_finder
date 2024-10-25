@@ -6,7 +6,8 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/views/auth/sign_in_view.dart';
-import 'package:taxi_finder/views/map_view.dart';
+import 'package:taxi_finder/views/bridge/bridge.dart';
+import 'package:taxi_finder/views/user/map_view/map_view.dart';
 
 void main() {
   final GoogleMapsFlutterPlatform mapsImplementation =
@@ -32,7 +33,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const MapSample(),
+        home: const BridgeScreen(
+
+        ),
       );
     });
   }

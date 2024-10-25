@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/components/forgot_password.dart';
-import 'package:taxi_finder/components/logo_image.dart';
 import 'package:taxi_finder/components/or_divider.dart';
 import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/components/secondary_button.dart';

@@ -14,14 +14,19 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   late BitmapDescriptor icon;
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
   Location location = Location();
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
 
-  static const CameraPosition _kLake = CameraPosition(bearing: 192.8334901395799, target: LatLng(37.43296265331129, -122.08832357078792), tilt: 59.440717697143555, zoom: 19.151926040649414);
+  static const CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
   Set<Polyline> polylines = {
     const Polyline(
       polylineId: PolylineId('route1'),
@@ -46,6 +51,7 @@ class MapSampleState extends State<MapSample> {
         infoWindow: const InfoWindow(title: 'Your Location'),
       ));
     });
+    _goToTheLake();
   }
 
 // Cargar imagen del Marker
@@ -70,7 +76,6 @@ class MapSampleState extends State<MapSample> {
     return Scaffold(
       body: GoogleMap(
         mapType: MapType.normal,
-     
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
@@ -84,7 +89,8 @@ class MapSampleState extends State<MapSample> {
           // Hide info window when tapping on the map
           setState(() {
             for (var marker in markers) {
-              markers.remove(marker.copyWith(infoWindowParam: InfoWindow.noText));
+              markers
+                  .remove(marker.copyWith(infoWindowParam: InfoWindow.noText));
             }
           });
         },

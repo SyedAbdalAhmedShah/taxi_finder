@@ -3,7 +3,6 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 
-
 class ForgotPassword extends StatelessWidget {
   const ForgotPassword({super.key});
 
@@ -19,7 +18,7 @@ class ForgotPassword extends StatelessWidget {
           forgotPassword,
           style: TextStyle(
             color: textColorSecondary,
-            fontSize: 12.sp,
+            fontSize: 14.sp,
           ),
         ),
       ),
