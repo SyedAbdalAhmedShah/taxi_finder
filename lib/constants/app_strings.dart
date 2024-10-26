@@ -11,6 +11,7 @@ const whoUR = 'Who You Are';
 const password = 'Password';
 
 const forgotPassword = 'Forgot Password?';
+const usrNotFnd = 'OPPS! User Not Found';
 const signIn = 'Sign In';
 const signUp = 'Sign Up';
 const dontHaveAccount = "Don't have an account?";

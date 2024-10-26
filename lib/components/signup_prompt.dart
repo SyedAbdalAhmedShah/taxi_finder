@@ -13,6 +13,7 @@ class SignupPrompt extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+      
         Text(
           dontHaveAccount,
           style: TextStyle(

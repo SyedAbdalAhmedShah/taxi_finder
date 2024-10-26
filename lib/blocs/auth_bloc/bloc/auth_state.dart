@@ -7,4 +7,14 @@ final class AuthInitial extends AuthState {}
 
 final class AuthLoadingState extends AuthState {}
 
+final class VerifiedEmailState extends AuthState {}
+
+final class NonVerifiedEmailState extends AuthState {}
+
 final class SignInSuccessfullyState extends AuthState {}
+
+final class AuthFailureState extends AuthState {
+  final String failureMessage;
+
+  AuthFailureState({required this.failureMessage});
+}

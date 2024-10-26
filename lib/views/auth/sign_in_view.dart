@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/components/or_divider.dart';
 import 'package:taxi_finder/components/primary_button.dart';
@@ -18,6 +20,7 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = context.read<AuthBloc>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,14 +29,6 @@ class SignInView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     LogoImage(
-              //       size: 14.h,
-              //     ),
-              //   ],
-              // ),
               Gap(2.h),
               Text(
                 welcomeBack,
@@ -51,7 +46,8 @@ class SignInView extends StatelessWidget {
                   color: textColorSecondary,
                 ),
               ),
-              const AppTextField(
+              AppTextField(
+                controller: authBloc.password,
                 hintText: enterEmail,
                 prefixIcon: Icons.email,
               ),
@@ -63,7 +59,8 @@ class SignInView extends StatelessWidget {
                   color: textColorSecondary,
                 ),
               ),
-              const AppTextField(
+              AppTextField(
+                controller: authBloc.password,
                 hintText: enterPassword,
                 prefixIcon: Icons.email,
                 suffixIcon: Icons.visibility_off,
@@ -71,9 +68,16 @@ class SignInView extends StatelessWidget {
               Gap(2.h),
               const ForgotPassword(),
               Gap(3.h),
-              PrimaryButton(
-                text: signIn,
-                onPressed: () {},
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  return PrimaryButton(
+                    text: signIn,
+                    showLoader: state is AuthLoadingState,
+                    onPressed: () {
+                      authBloc.add(SignInEvent());
+                    },
+                  );
+                },
               ),
               Gap(5.h),
               const OrDivider(),

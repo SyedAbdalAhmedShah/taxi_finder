@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/blocs/auth_bloc/bloc/auth_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/components/forgot_password.dart';
 import 'package:taxi_finder/components/or_divider.dart';
@@ -16,6 +18,8 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = context.read<AuthBloc>();
+
     return Scaffold(
       body: SingleChildScrollView(
         
@@ -51,8 +55,9 @@ class SignUpView extends StatelessWidget {
                     color: textColorSecondary,
                   ),
                 ),
-                const AppTextField(
+                 AppTextField(
                   hintText: enterFullName,
+                  controller:auth ,
                   prefixIcon: Icons.person_2_outlined,
                 ),
                 Gap(2.h),

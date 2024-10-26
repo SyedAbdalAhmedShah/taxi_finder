@@ -7,17 +7,20 @@ class AppTextField extends StatelessWidget {
   final String hintText;
   final IconData prefixIcon;
   final IconData? suffixIcon;
+  final TextEditingController controller;
 
   const AppTextField({
     super.key,
     required this.hintText,
     required this.prefixIcon,
     this.suffixIcon,
+    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         filled: true,
         fillColor: textColorSecondary.withOpacity(0.1),
