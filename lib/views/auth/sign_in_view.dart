@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -11,13 +10,16 @@ import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/utils.dart';
+import 'package:taxi_finder/utils/validator.dart';
 import 'package:taxi_finder/views/auth/email_not_verified.dart';
+import 'package:taxi_finder/views/auth/pending_screen.dart';
 import 'package:taxi_finder/views/auth/sign_up_view.dart';
 
 import '../../components/forgot_password.dart';
 
 class SignInView extends StatelessWidget {
-  const SignInView({super.key});
+  final bool isDriver;
+  const SignInView({this.isDriver = false, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,58 +29,68 @@ class SignInView extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 3.w),
           child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Gap(2.h),
-                Text(
-                  welcomeBack,
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Gap(2.h),
+                  Text(
+                    welcomeBack,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Gap(2.h),
-                Text(
-                  email,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: textColorSecondary,
+                  Gap(2.h),
+                  Text(
+                    email,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: textColorSecondary,
+                    ),
                   ),
-                ),
-                AppTextField(
-                  controller: authBloc.email,
-                  hintText: enterEmail,
-                  prefixIcon: Icons.email,
-                ),
-                Gap(3.h),
-                Text(
-                  password,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: textColorSecondary,
+                  AppTextField(
+                    validator: Validator.emailValidator,
+                    controller: authBloc.email,
+                    hintText: enterEmail,
+                    prefixIcon: Icons.email,
                   ),
-                ),
-                AppTextField(
-                  controller: authBloc.password,
-                  hintText: enterPassword,
-                  prefixIcon: Icons.email,
-                  suffixIcon: Icons.visibility_off,
-                ),
-                Gap(2.h),
-                const ForgotPassword(),
-                Gap(3.h),
-                _SignInButtonStates(),
-                Gap(5.h),
-                SignupPrompt(
-                  onPressed: () {
-                    context.push(const SignUpView());
-                  },
-                  text: signUp,
-                ),
-              ],
+                  Gap(3.h),
+                  Text(
+                    password,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: textColorSecondary,
+                    ),
+                  ),
+                  AppTextField(
+                    obscureText: true,
+                    controller: authBloc.password,
+                    validator: Validator.passwordValidator,
+                    hintText: enterPassword,
+                    prefixIcon: Icons.email,
+                    suffixIcon: Icons.visibility_off,
+                  ),
+                  Gap(2.h),
+                  const ForgotPassword(),
+                  Gap(3.h),
+                  _SignInButtonStates(
+                    isDriver: isDriver,
+                  ),
+                  Gap(5.h),
+                  Visibility(
+                    visible: !isDriver,
+                    child: SignupPrompt(
+                      onPressed: () {
+                        context.push(const SignUpView());
+                      },
+                      text: signUp,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -88,7 +100,8 @@ class SignInView extends StatelessWidget {
 }
 
 class _SignInButtonStates extends StatelessWidget {
-  const _SignInButtonStates({super.key});
+  final bool isDriver;
+  const _SignInButtonStates({required this.isDriver, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +112,9 @@ class _SignInButtonStates extends StatelessWidget {
         if (state is AuthFailureState) {
           Utils.showErrortoast(errorMessage: state.failureMessage);
         } else if (state is NonVerifiedEmailState) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => EmailNotVerified(),
-          ));
+          context.pushAndRemoveUntil(const EmailNotVerified());
+        } else if (state is DriverAccountPendingState) {
+          context.push(const PendingScreen());
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(
@@ -110,7 +123,7 @@ class _SignInButtonStates extends StatelessWidget {
             text: signIn,
             showLoader: state is AuthLoadingState,
             onPressed: () {
-              authBloc.add(SignInEvent());
+              authBloc.add(SignInEvent(isDriver: isDriver));
             },
           );
         },

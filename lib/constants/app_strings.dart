@@ -2,18 +2,27 @@ const appName = '\n DayTask';
 const appTagline = 'Manage your \nTask with';
 const getStarted = 'Get Started';
 const welcomeBack = 'Welcome Back';
+const back = 'Back';
 const createAccount = 'Create your account';
 const email = 'Email Address';
 const fullName = 'Full Name';
+
+const String validEmail = 'Please enter a valid email';
+const String emptyField = 'Field can not be empty';
+
 const enterFullName = 'Enter your full name';
 const whoUR = 'Who You Are';
+const String passwordValid = 'Password must be more than 8 characters';
 
 const password = 'Password';
+const pendingStatusDriver =
+    'Your account is pending because we are verifiying your documents and date. \nPlease wait or contact with admin for any query, \n\n Thanks for your support';
 const emailNotVerified =
     'Your email is not verified, Please check your email we have send you and verification email ';
 
 const forgotPassword = 'Forgot Password?';
 const usrNotFnd = 'OPPS! User Not Found';
+const somethingwrong = 'OPPS! Something went wrong';
 const signIn = 'Sign In';
 const signUp = 'Sign Up';
 const dontHaveAccount = "Don't have an account?";

@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/auth/sign_in_view.dart';

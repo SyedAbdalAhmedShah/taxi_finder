@@ -32,7 +32,9 @@ class BridgeScreen extends StatelessWidget {
               SelectorCard(
                 imagePaht: driverImage,
                 name: "Driver",
-                onTap: () => context.push(const SignInView()),
+                onTap: () => context.push(const SignInView(
+                  isDriver: true,
+                )),
               ),
               Gap(2.h),
               Text(
@@ -46,7 +48,7 @@ class BridgeScreen extends StatelessWidget {
               SelectorCard(
                 imagePaht: userImage,
                 name: "User",
-                onTap: () {},
+                onTap: () => context.push(const SignInView()),
               ),
             ],
           ),

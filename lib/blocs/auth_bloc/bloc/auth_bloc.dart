@@ -1,10 +1,13 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/repositories/autth_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
@@ -16,6 +19,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
   final TextEditingController fullName = TextEditingController();
   final TextEditingController password = TextEditingController();
 
+  final signupFormKey = GlobalKey<FormState>();
+  final signInFormKey = GlobalKey<FormState>();
   AuthBloc() : super(AuthInitial()) {
     on<SignInEvent>((event, emit) async {
       emit(AuthLoadingState());
@@ -25,12 +30,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
         if (userCredential != null) {
           bool isVerified = userCredential.user?.emailVerified ?? false;
           if (isVerified) {
-            //check if driver or user 
+            //check if driver or user
 
-
-            // if driver 
-            
-            emit(VerifiedEmailState());
+            // if driver
+            if (event.isDriver) {
+              DriverInfo? driverInfo =
+                  await getDriverData(userCredential.user?.uid ?? "");
+              if (driverInfo != null) {
+                String status = driverInfo.status ?? "";
+                if (status == FirebaseStrings.pending) {
+                  emit(DriverAccountPendingState());
+                }
+              } else {
+                log("Driver info datta is null");
+                emit(AuthFailureState(failureMessage: usrNotFnd));
+              }
+            } else {}
           } else {
             await userCredential.user?.sendEmailVerification();
             emit(NonVerifiedEmailState());
@@ -42,9 +57,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
         final athError = Utils.firebaseSignInErrors(authError.code);
         emit(AuthFailureState(failureMessage: athError));
       } catch (error) {
-        log("gernel error $error");
+        log("gernel error $error", name: "sign in event");
         emit(AuthFailureState(failureMessage: usrNotFnd));
       }
     });
+
+    on<SignupEvent>(
+      (event, emit) async {
+        emit(AuthLoadingState());
+        try {
+          UserCredential? userCredential = await createUserWithEmailAndPass(
+              email: email.text.trim(), password: password.text.trim());
+          final geoPoint = GeoPoint(-80, 80);
+          if (userCredential != null) {
+            final uid = userCredential.user?.uid ?? "";
+            final data = {
+              FirebaseStrings.fullName: fullName.text,
+              FirebaseStrings.email: email.text,
+              FirebaseStrings.uid: uid,
+              FirebaseStrings.currentLocation: geoPoint
+            };
+            await storeUserDatee(uid: uid, data: data);
+
+            emit(SignupSuccessfullState());
+          }
+        } on FirebaseAuthException catch (authError) {
+          final athError = Utils.firebaseSignInErrors(authError.code);
+          emit(AuthFailureState(failureMessage: athError));
+        } catch (error) {
+          log("gernel error $error", name: "sign up event");
+          emit(AuthFailureState(failureMessage: somethingwrong));
+        }
+      },
+    );
   }
 }

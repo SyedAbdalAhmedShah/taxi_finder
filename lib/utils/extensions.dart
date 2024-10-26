@@ -14,4 +14,13 @@ extension ContextExtension on BuildContext {
       );
 
   void pop() => Navigator.pop(this);
+
+  void pushAndRemoveUntil(Widget widget) =>
+      Navigator.of(this).push(MaterialPageRoute(
+        builder: (context) => widget,
+      ));
+  void pushReplacment(Widget child) =>
+      Navigator.of(this).pushReplacement(MaterialPageRoute(
+        builder: (context) => child,
+      ));
 }
