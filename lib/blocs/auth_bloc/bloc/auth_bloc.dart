@@ -13,6 +13,7 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
   final TextEditingController email = TextEditingController();
+  final TextEditingController fullName = TextEditingController();
   final TextEditingController password = TextEditingController();
 
   AuthBloc() : super(AuthInitial()) {
@@ -24,8 +25,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
         if (userCredential != null) {
           bool isVerified = userCredential.user?.emailVerified ?? false;
           if (isVerified) {
+            //check if driver or user 
+
+
+            // if driver 
+            
             emit(VerifiedEmailState());
           } else {
+            await userCredential.user?.sendEmailVerification();
             emit(NonVerifiedEmailState());
           }
         } else {

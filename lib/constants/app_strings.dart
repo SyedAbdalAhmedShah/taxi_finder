@@ -9,6 +9,8 @@ const enterFullName = 'Enter your full name';
 const whoUR = 'Who You Are';
 
 const password = 'Password';
+const emailNotVerified =
+    'Your email is not verified, Please check your email we have send you and verification email ';
 
 const forgotPassword = 'Forgot Password?';
 const usrNotFnd = 'OPPS! User Not Found';

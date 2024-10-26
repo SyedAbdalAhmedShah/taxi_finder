@@ -22,7 +22,6 @@ class SignUpView extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 3.w),
@@ -55,9 +54,9 @@ class SignUpView extends StatelessWidget {
                     color: textColorSecondary,
                   ),
                 ),
-                 AppTextField(
+                AppTextField(
                   hintText: enterFullName,
-                  controller:auth ,
+                  controller: authBloc.fullName,
                   prefixIcon: Icons.person_2_outlined,
                 ),
                 Gap(2.h),
@@ -68,7 +67,8 @@ class SignUpView extends StatelessWidget {
                     color: textColorSecondary,
                   ),
                 ),
-                const AppTextField(
+                AppTextField(
+                  controller: authBloc.email,
                   hintText: enterEmail,
                   prefixIcon: Icons.email,
                 ),
@@ -80,7 +80,8 @@ class SignUpView extends StatelessWidget {
                     color: textColorSecondary,
                   ),
                 ),
-                const AppTextField(
+                AppTextField(
+                  controller: authBloc.password,
                   hintText: password,
                   prefixIcon: Icons.lock_outline,
                   suffixIcon: Icons.visibility_off,
