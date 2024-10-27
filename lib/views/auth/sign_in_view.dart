@@ -14,6 +14,7 @@ import 'package:taxi_finder/utils/validator.dart';
 import 'package:taxi_finder/views/auth/email_not_verified.dart';
 import 'package:taxi_finder/views/auth/pending_screen.dart';
 import 'package:taxi_finder/views/auth/sign_up_view.dart';
+import 'package:taxi_finder/views/user/map_view/home_page.dart';
 
 import '../../components/forgot_password.dart';
 
@@ -112,9 +113,13 @@ class _SignInButtonStates extends StatelessWidget {
         if (state is AuthFailureState) {
           Utils.showErrortoast(errorMessage: state.failureMessage);
         } else if (state is NonVerifiedEmailState) {
-          context.pushAndRemoveUntil(const EmailNotVerified());
+          context.pushAndRemoveUntil(EmailNotVerified(
+            isDriver: state.isDriver,
+          ));
         } else if (state is DriverAccountPendingState) {
           context.push(const PendingScreen());
+        } else if (state is UserAuthSuccessState) {
+          context.pushAndRemoveUntil(const MyHomePage());
         }
       },
       child: BlocBuilder<AuthBloc, AuthState>(

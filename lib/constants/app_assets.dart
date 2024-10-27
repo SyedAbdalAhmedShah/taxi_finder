@@ -5,4 +5,4 @@ const String userImage = 'assets/user.png';
 
 /// LOTTIES
 const String verificationLottie = 'assets/verification.json';
-const String accountPending = 'assets/accountPending.json';
+const String accountPending = 'assets/account_pending.json';

@@ -12,6 +12,7 @@ class Utils {
       ('wrong-password') => 'Incorrect password.',
       ('user-disabled') => 'User account is disabled.',
       ('network-request-failed') => "Please check your internet connection",
+      ('invalid-credential') => " Username or password is incorrect",
       (_) => 'An undefined error occurred: ',
     };
     log('firebase errror $code');

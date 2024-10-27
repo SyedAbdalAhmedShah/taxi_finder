@@ -16,12 +16,13 @@ const String passwordValid = 'Password must be more than 8 characters';
 
 const password = 'Password';
 const pendingStatusDriver =
-    'Your account is pending because we are verifiying your documents and date. \nPlease wait or contact with admin for any query, \n\n Thanks for your support';
+    'Your account is pending because we are verifiying your documents and data. \nPlease wait or contact with admin for any query. \n\n Thanks for your support';
 const emailNotVerified =
     'Your email is not verified, Please check your email we have send you and verification email ';
 
 const forgotPassword = 'Forgot Password?';
 const usrNotFnd = 'OPPS! User Not Found';
+const drvrNotFnd = 'OPPS! Driver Not Found';
 const somethingwrong = 'OPPS! Something went wrong';
 const signIn = 'Sign In';
 const signUp = 'Sign Up';

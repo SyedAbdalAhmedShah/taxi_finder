@@ -6,11 +6,18 @@ sealed class AuthState {}
 final class AuthInitial extends AuthState {}
 
 final class AuthLoadingState extends AuthState {}
+
 final class SignupSuccessfullState extends AuthState {}
 
 final class VerifiedEmailState extends AuthState {}
 
-final class NonVerifiedEmailState extends AuthState {}
+final class UserAuthSuccessState extends AuthState {}
+
+final class NonVerifiedEmailState extends AuthState {
+  final bool isDriver;
+
+  NonVerifiedEmailState({required this.isDriver});
+}
 
 final class SignInSuccessfullyState extends AuthState {}
 

@@ -8,7 +8,8 @@ import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/auth/sign_in_view.dart';
 
 class EmailNotVerified extends StatelessWidget {
-  const EmailNotVerified({super.key});
+  final bool isDriver;
+  const EmailNotVerified({required this.isDriver, super.key});
 
   @override
   Widget build(BuildContext context) {

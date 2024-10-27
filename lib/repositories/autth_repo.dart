@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/driver_info.dart';
+import 'package:taxi_finder/models/user_model.dart';
 
 mixin AuthRepo {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -26,7 +25,7 @@ mixin AuthRepo {
 
   Future storeUserDatee(
       {required String uid, required Map<String, dynamic> data}) async {
-   await _firestore.collection(FirebaseStrings.usersColl).doc(uid).set(data);
+    await _firestore.collection(FirebaseStrings.usersColl).doc(uid).set(data);
   }
 
   Future<DriverInfo?> getDriverData(String driverUid) async {
@@ -36,8 +35,19 @@ mixin AuthRepo {
         .get();
     if (docsnap.exists) {
       DriverInfo driverInfo = DriverInfo.fromJson(docsnap.data() ?? {});
-      log("Driver status ${driverInfo.status}");
       return driverInfo;
+    } else {
+      return null;
+    }
+  }
+
+  Future<UserModel?> getUserDataa({required String uid}) async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await _firestore.collection(FirebaseStrings.usersColl).doc(uid).get();
+    if (documentSnapshot.exists) {
+      UserModel userModel = UserModel.fromFirestore(documentSnapshot);
+
+      return userModel;
     } else {
       return null;
     }
