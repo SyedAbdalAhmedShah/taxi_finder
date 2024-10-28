@@ -20,12 +20,13 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
 
   SplashBloc() : super(SplashInitial()) {
     on<CheckUserAuthentication>((event, emit) async {
-      try {
-        await DependencySetup.setupDependencies();
+      await _auth.signOut();
+      await DependencySetup.setupDependencies();
 
-        final sharedPrefDep = locator.get<SharedPrefrencesDependency>();
-        final loggedRole = locator.get<CurrentUserDependency>();
-        final currentUser = _auth.currentUser;
+      final sharedPrefDep = locator.get<SharedPrefrencesDependency>();
+      final loggedRole = locator.get<CurrentUserDependency>();
+      final currentUser = _auth.currentUser;
+      try {
         bool? isDriver =
             sharedPrefDep.preferences.getBool(FirebaseStrings.driverStoreKey);
         if (currentUser != null) {
@@ -53,6 +54,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
         }
       } catch (error) {
         log("error happened $error");
+        if (currentUser != null) _auth.signOut();
         emit(SplashFilureState(errorMessage: logout));
       }
     });
