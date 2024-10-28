@@ -6,6 +6,7 @@ const back = 'Back';
 const createAccount = 'Create your account';
 const email = 'Email Address';
 const fullName = 'Full Name';
+const logout = 'Something went wrong, User logout';
 
 const String validEmail = 'Please enter a valid email';
 const String emptyField = 'Field can not be empty';

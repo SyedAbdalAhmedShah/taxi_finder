@@ -22,6 +22,8 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedTextKit(
+              repeatForever: true,
+              pause: const Duration(seconds: 2),
               animatedTexts: [
                 ColorizeAnimatedText(
                   'Taxi Finder',

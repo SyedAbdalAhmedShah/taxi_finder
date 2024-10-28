@@ -41,7 +41,7 @@ mixin AuthRepo {
     }
   }
 
-  Future<UserModel?> getUserDataa({required String uid}) async {
+  Future<UserModel?>  getUserDataa({required String uid}) async {
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await _firestore.collection(FirebaseStrings.usersColl).doc(uid).get();
     if (documentSnapshot.exists) {
