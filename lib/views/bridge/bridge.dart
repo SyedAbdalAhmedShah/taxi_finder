@@ -6,7 +6,7 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
-import 'package:taxi_finder/main.dart';
+
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/views/auth/sign_in_view.dart';
 

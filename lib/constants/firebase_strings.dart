@@ -24,4 +24,6 @@ class FirebaseStrings {
   static const String carDocUrl = "carDocUrl";
   static const String status = "status";
   static const String pending = "Pending";
+
+  static const String driverStoreKey = "isDriver";
 }

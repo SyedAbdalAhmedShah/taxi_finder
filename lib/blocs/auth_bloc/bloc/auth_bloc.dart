@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/driver_info.dart';
@@ -26,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
     on<SignInEvent>((event, emit) async {
       emit(AuthLoadingState());
       try {
+        SharedPreferences _prefrences = await SharedPreferences.getInstance();
         UserCredential? userCredential = await signInWithEmailAndPassword(
             email: email.text, password: password.text);
         if (userCredential != null) {
@@ -42,6 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
                 if (status == FirebaseStrings.pending) {
                   emit(DriverAccountPendingState());
                 } else {
+                  await _prefrences.setBool(
+                      FirebaseStrings.driverStoreKey, true);
+
                   // drriver account accepted state
                 }
               } else {
@@ -51,13 +56,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
               UserModel? userModel =
                   await getUserDataa(uid: userCredential.user?.uid ?? "");
               if (userModel != null) {
+                await _prefrences.setBool(
+                    FirebaseStrings.driverStoreKey, false);
+
                 emit(UserAuthSuccessState());
               } else {
                 emit(AuthFailureState(failureMessage: usrNotFnd));
               }
               // user sign in
             }
-          } else {  
+          } else {
             await userCredential.user?.sendEmailVerification();
             emit(NonVerifiedEmailState(isDriver: event.isDriver));
           }
