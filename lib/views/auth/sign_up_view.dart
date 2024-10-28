@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/blocs/auth_bloc/bloc/auth_bloc.dart';
+import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 
 import 'package:taxi_finder/components/primary_button.dart';
