@@ -3,15 +3,17 @@ import 'package:taxi_finder/constants/app_colors.dart';
 
 class AppTextField extends StatefulWidget {
   final String hintText;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final IconData? suffixIcon;
+  final Color? fillColor;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final bool obscureText;
   const AppTextField({
     super.key,
     required this.hintText,
-    required this.prefixIcon,
+    this.fillColor,
+    this.prefixIcon,
     this.suffixIcon,
     this.validator,
     this.obscureText = false,
@@ -39,13 +41,18 @@ class _AppTextFieldState extends State<AppTextField> {
       obscureText: isPassword,
       decoration: InputDecoration(
         filled: true,
-        fillColor: textColorSecondary.withOpacity(0.1),
+        fillColor: widget.fillColor ?? textColorSecondary.withOpacity(0.1),
         hintText: widget.hintText,
-        hintStyle: const TextStyle(color: Colors.white),
-        prefixIcon: Icon(
-          widget.prefixIcon,
-          color: textColorSecondary,
-        ),
+        hintStyle: TextStyle(
+            color: widget.fillColor == Colors.white
+                ? textColorSecondary
+                : Colors.white),
+        prefixIcon: widget.prefixIcon != null
+            ? Icon(
+                widget.prefixIcon,
+                color: textColorSecondary,
+              )
+            : null,
         suffixIcon: widget.suffixIcon != null
             ? InkWell(
                 onTap: () => setState(() {
@@ -58,7 +65,9 @@ class _AppTextFieldState extends State<AppTextField> {
           borderSide: BorderSide.none,
         ),
       ),
-      style: const TextStyle(color: Colors.white),
+      style: TextStyle(
+          color:
+              widget.fillColor == Colors.white ? Colors.black : Colors.white),
     );
   }
 }

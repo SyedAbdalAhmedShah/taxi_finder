@@ -6,6 +6,7 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/blocs/splash_bloc/splash_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/firebase_options.dart';
 import 'package:taxi_finder/views/bridge/bridge.dart';
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => SplashBloc(),
+          ),
+           BlocProvider(
+            create: (context) => UserMapBloc(),
           ),
         ],
         child: MaterialApp(
