@@ -26,19 +26,20 @@ class _MyHomePageState extends State<MyHomePage> {
       if (!_serviceEnabled) {
         return;
       }
-      // _permissionGranted = await location.hasPermission();
-      // if (_permissionGranted == PermissionStatus.denied) {
-      //   _permissionGranted = await location.requestPermission();
-      //   if (_permissionGranted != PermissionStatus.granted) {
-      //     return;
-      //   }
-      // }
+      _permissionGranted = await location.hasPermission();
+      log("permission status $_permissionGranted");
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return;
+        }
+      }
     }
   }
 
   @override
   void initState() {
-    // checkLocationPermission();
+    checkLocationPermission();
     super.initState();
   }
 

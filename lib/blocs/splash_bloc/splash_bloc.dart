@@ -20,7 +20,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
 
   SplashBloc() : super(SplashInitial()) {
     on<CheckUserAuthentication>((event, emit) async {
-      await _auth.signOut();
       await DependencySetup.setupDependencies();
 
       final sharedPrefDep = locator.get<SharedPrefrencesDependency>();

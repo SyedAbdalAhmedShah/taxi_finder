@@ -13,6 +13,9 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
+  LatLng currentLocation = LatLng(37.7749, -122.4194); // Example: San Francisco
+  LatLng destination = LatLng(34.0522, -118.2437);
+
   late BitmapDescriptor icon;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
@@ -30,11 +33,7 @@ class MapSampleState extends State<MapSample> {
   Set<Polyline> polylines = {
     const Polyline(
       polylineId: PolylineId('route1'),
-      points: [
-        LatLng(37.7749, -122.4194),
-        LatLng(37.8051, -122.4300),
-        LatLng(37.8070, -122.4093),
-      ],
+      points: [LatLng(37.7749, -122.4194), LatLng(34.0522, -118.2437)],
       color: Colors.blue,
       width: 4,
     ),
@@ -80,7 +79,11 @@ class MapSampleState extends State<MapSample> {
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
-        polylines: polylines,
+        polylines: {
+          Polyline(
+              polylineId: PolylineId("Route1"),
+              points: [currentLocation, destination])
+        },
         onCameraMoveStarted: () => log("message"),
         markers: markers,
         myLocationButtonEnabled: true,
