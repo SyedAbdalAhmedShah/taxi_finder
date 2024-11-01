@@ -9,7 +9,6 @@ import 'package:taxi_finder/blocs/splash_bloc/splash_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/firebase_options.dart';
-import 'package:taxi_finder/views/bridge/bridge.dart';
 import 'package:taxi_finder/views/splash/splash_screen.dart';
 
 void main() async {
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => SplashBloc(),
           ),
-           BlocProvider(
+          BlocProvider(
             create: (context) => UserMapBloc(),
           ),
         ],

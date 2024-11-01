@@ -14,23 +14,12 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  late UserMapBloc userMapBloc;
-  LatLng currentLocation = LatLng(37.7749, -122.4194); // Example: San Francisco
-  LatLng destination = LatLng(34.0522, -118.2437);
-
-  late BitmapDescriptor icon;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  late UserMapBloc userMapBloc;
 
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  late BitmapDescriptor icon;
+
   Set<Polyline> polylines = {
     const Polyline(
       polylineId: PolylineId('route1'),
@@ -40,19 +29,6 @@ class MapSampleState extends State<MapSample> {
     ),
   };
   Set<Marker> markers = {};
-
-  Future<void> _getUserLocation() async {
-    // final userLocation = await location.getLocation();
-    // setState(() {s
-    //   markers.add(Marker(
-    //     markerId: const MarkerId('userLocation'),
-    //     position: LatLng(userLocation.latitude!, userLocation.longitude!),
-    //     icon: icon,
-    //     infoWindow: const InfoWindow(title: 'Your Location'),
-    //   ));
-    // });
-    _goToTheLake();
-  }
 
 // Cargar imagen del Marker
   getIcons() async {
@@ -77,18 +53,17 @@ class MapSampleState extends State<MapSample> {
     return BlocBuilder<UserMapBloc, UserMapState>(
       builder: (context, state) {
         log("State $state");
-        return state is UpdateMapState
-            ? GoogleMap(
+        return state is UserMapLoadingState
+            ? const Center(
+                child: CircularProgressIndicator.adaptive(),
+              )
+            : GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: userMapBloc.cameraPosition,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
-                polylines: {
-                  Polyline(
-                      polylineId: PolylineId("Route1"),
-                      points: [currentLocation, destination])
-                },
+                polylines: userMapBloc.polylineSet,
                 onCameraMoveStarted: () => log("message"),
                 markers: markers,
                 myLocationButtonEnabled: true,
@@ -102,16 +77,13 @@ class MapSampleState extends State<MapSample> {
                     }
                   });
                 },
-              )
-            : const Center(
-                child: CircularProgressIndicator.adaptive(),
               );
       },
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+  // Future<void> _goToTheLake() async {
+  //   final GoogleMapController controller = await _controller.future;
+  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  // }
 }
