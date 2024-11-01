@@ -46,8 +46,11 @@ class AutoCompleteMapField extends StatelessWidget {
       //       TextPosition(offset: p.description?.length ?? 0));
       // },
       componentCountry: countryISO,
-      controller: controller,
 
+      controller: controller,
+      elevation: 5,
+      
+      postalCodeLookup: false,
       focusNode: focusNode,
       decoration: InputDecoration(
           hintText: hint,

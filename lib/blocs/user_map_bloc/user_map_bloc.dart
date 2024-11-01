@@ -16,7 +16,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   Geolocator location = Geolocator();
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
-  String countryISO = "PK";
+  String? countryISO;
   FocusNode destinationFocusNode = FocusNode();
   PolylinePoints polylinePoints = PolylinePoints();
 
@@ -25,7 +25,9 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     zoom: 14.4746,
   );
   late Position currentLocationPosition;
+
   Set<Polyline> polylineSet = {};
+  Set<Marker> markers = {};
 
   UserMapBloc() : super(UserMapInitial()) {
     on<FetchCurrentLocation>((event, emit) async {
@@ -64,16 +66,13 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     });
     on<OnDirectionEvent>(
       (event, emit) async {
-        List<LatLng> _routeCoords = [];
+        List<LatLng> routeCoords = [];
         PointLatLng currentLocPoint = PointLatLng(
             currentLocationPosition.latitude,
             currentLocationPosition.longitude);
         PointLatLng destinationLocPoint =
             PointLatLng(event.latLng.latitude, event.latLng.longitude);
-        // LatLng currentLatLong = LatLng(currentLocationPosition.latitude,
-        //     currentLocationPosition.longitude);
-        // LatLng destinationLatLong =
-        //     LatLng(event.latLng.latitude, event.latLng.longitude);
+
         try {
           PolylineResult points =
               await polylinePoints.getRouteBetweenCoordinates(
@@ -82,9 +81,9 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                       origin: currentLocPoint,
                       destination: destinationLocPoint,
                       mode: TravelMode.driving));
-          log("Direction ${points.distanceValues}", name: "polypoint");
+
           if (points.points.isNotEmpty) {
-            _routeCoords = points.points
+            routeCoords = points.points
                 .map((p) => LatLng(p.latitude, p.longitude))
                 .toList();
           } else {
@@ -92,11 +91,18 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           }
           Polyline polyline = Polyline(
             polylineId: const PolylineId("Direction Route 1"),
-            points: _routeCoords,
+            points: routeCoords,
             color: secondaryColor,
           );
+
           polylineSet.add(polyline);
-          // log("polyline ${polyline.points.toString()}");
+          Marker destinationMarker = Marker(
+              markerId: const MarkerId("destination"),
+              infoWindow: InfoWindow(title: "${points.endAddress}"),
+              position:
+                  LatLng(routeCoords.last.latitude, routeCoords.last.longitude),
+              visible: true);
+          markers.add(destinationMarker);
           emit(OnDirectionRequestState());
         } catch (error) {
           log("error $error", name: "OnDirectionEvent");

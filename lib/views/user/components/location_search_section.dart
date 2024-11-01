@@ -16,7 +16,7 @@ class LocationSearchSection extends StatelessWidget {
   Widget build(BuildContext context) {
     UserMapBloc userMapBloc = context.read<UserMapBloc>();
     return Container(
-      height: 30.h,
+      height: 25.h,
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 4.w),
       decoration: BoxDecoration(boxShadow: [
@@ -31,29 +31,33 @@ class LocationSearchSection extends StatelessWidget {
       child: SafeArea(
         child: BlocBuilder<UserMapBloc, UserMapState>(
           builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AutoCompleteMapField(
-                  countryISO: userMapBloc.countryISO,
-                  controller: userMapBloc.myLocationController,
-                  hint: "Your Location",
-                  // onLocationSelected: (prediction) {},
-                ),
-                Gap(1.h),
-                AutoCompleteMapField(
-                  countryISO: userMapBloc.countryISO,
-                  controller: userMapBloc.destinationController,
-                  hint: "Destination",
-                  onLocationSelected: (place) async {
-                    FocusManager.instance.primaryFocus!.unfocus();
-                    log("prediction ${place.toString()}");
-                    userMapBloc.add(OnDirectionEvent(
-                        latLng: LatLng(place.lat ?? 0.0, place.lng ?? 0.0)));
-                  },
-                )
-              ],
-            );
+            return state is UserMapLoadingState ||
+                    userMapBloc.countryISO == null
+                ? const SizedBox()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AutoCompleteMapField(
+                        countryISO: userMapBloc.countryISO!,
+                        controller: userMapBloc.myLocationController,
+                        hint: "Your Location",
+                        // onLocationSelected: (prediction) {},
+                      ),
+                      Gap(1.h),
+                      AutoCompleteMapField(
+                        countryISO: userMapBloc.countryISO!,
+                        controller: userMapBloc.destinationController,
+                        hint: "Destination",
+                        onLocationSelected: (place) async {
+                          FocusManager.instance.primaryFocus!.unfocus();
+                          log("prediction ${place.toString()}");
+                          userMapBloc.add(OnDirectionEvent(
+                              latLng:
+                                  LatLng(place.lat ?? 0.0, place.lng ?? 0.0)));
+                        },
+                      )
+                    ],
+                  );
           },
         ),
       ),

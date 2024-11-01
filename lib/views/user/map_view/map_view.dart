@@ -60,13 +60,17 @@ class MapSampleState extends State<MapSample> {
             : GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: userMapBloc.cameraPosition,
-                onMapCreated: (GoogleMapController controller) {
+                onMapCreated: (GoogleMapController controller) async {
                   _controller.complete(controller);
                 },
+                buildingsEnabled: true,
+                fortyFiveDegreeImageryEnabled: true,
                 polylines: userMapBloc.polylineSet,
                 onCameraMoveStarted: () => log("message"),
-                markers: markers,
+                markers: userMapBloc.markers,
                 myLocationButtonEnabled: true,
+                trafficEnabled: true,
+                
                 myLocationEnabled: true,
                 onTap: (LatLng latLng) {
                   // Hide info window when tapping on the map
