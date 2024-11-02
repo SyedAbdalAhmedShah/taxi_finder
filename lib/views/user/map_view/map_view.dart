@@ -80,7 +80,7 @@ class MapSampleState extends State<MapSample> {
                           marker.copyWith(infoWindowParam: InfoWindow.noText));
                     }
                   });
-                },
+                },  
               );
       },
     );

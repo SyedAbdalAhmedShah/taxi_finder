@@ -9,3 +9,5 @@ final class UserMapLoadingState extends UserMapState {}
 final class UpdateMapState extends UserMapState {}
 
 final class OnDirectionRequestState extends UserMapState {}
+
+final class OnLocationSearchState extends UserMapState {}

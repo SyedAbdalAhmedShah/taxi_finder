@@ -9,3 +9,15 @@ class OnDirectionEvent extends UserMapEvent {
 
   OnDirectionEvent({required this.latLng});
 }
+
+class OnLocationSearchEvent extends UserMapEvent {
+  final String query;
+
+  OnLocationSearchEvent({required this.query});
+}
+
+class OnLocationSelectedEvent extends UserMapEvent {
+  final Prediction prediction;
+
+  OnLocationSelectedEvent({required this.prediction});
+}

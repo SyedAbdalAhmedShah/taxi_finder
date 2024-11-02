@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_maps_places_autocomplete_widgets/widgets/address_autocomplete_textfield.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
-import 'package:taxi_finder/utils/api_keys.dart';
+import 'package:taxi_finder/utils/api_helper.dart';
 
 class AutoCompleteMapField extends StatelessWidget {
   final TextEditingController controller;
@@ -25,7 +25,7 @@ class AutoCompleteMapField extends StatelessWidget {
     return AddressAutocompleteTextField(
       // onTapOutside: (event) => FocusScope.of(context).unfocus(),
 
-      mapsApiKey: ApiKeys().placesApiKey,
+      mapsApiKey: ApiHelper().placesApiKey,
       debounceTime: 400,
       maxLines: 1,
       onSuggestionClick: onLocationSelected,
@@ -49,7 +49,7 @@ class AutoCompleteMapField extends StatelessWidget {
 
       controller: controller,
       elevation: 5,
-      
+
       postalCodeLookup: false,
       focusNode: focusNode,
       decoration: InputDecoration(

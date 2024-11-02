@@ -6,7 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/views/user/components/auto_complete_map_field.dart';
 
 class LocationSearchSection extends StatelessWidget {
@@ -44,16 +46,48 @@ class LocationSearchSection extends StatelessWidget {
                         // onLocationSelected: (prediction) {},
                       ),
                       Gap(1.h),
-                      AutoCompleteMapField(
-                        countryISO: userMapBloc.countryISO!,
-                        controller: userMapBloc.destinationController,
-                        hint: "Destination",
-                        onLocationSelected: (place) async {
-                          FocusManager.instance.primaryFocus!.unfocus();
-                          log("prediction ${place.toString()}");
-                          userMapBloc.add(OnDirectionEvent(
-                              latLng:
-                                  LatLng(place.lat ?? 0.0, place.lng ?? 0.0)));
+                      Autocomplete(
+                        optionsViewBuilder: (context, onSelected, options) {
+                          log("option  legth ${options.length}");
+                          return Card(
+                            child: ListView(
+                              children: options.map(
+                                (prediction) {
+                                  return ListTile(
+                                    onTap: () {
+                                      onSelected(prediction);
+                                    },
+                                    title: Text(prediction.description ?? ""),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          );
+                        },
+                        displayStringForOption: (option) =>
+                            option.description ?? "",
+                        fieldViewBuilder: (context, textEditingController,
+                            focusNode, onFieldSubmitted) {
+                          return TextField(
+                            focusNode: focusNode,
+                            onEditingComplete: onFieldSubmitted,
+                            controller: textEditingController,
+                            decoration: InputDecoration(
+                                hintText: "destination",
+                                hintStyle:
+                                    const TextStyle(color: textColorSecondary),
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                )),
+                          );
+                        },
+                        optionsBuilder: (textEditingValue) {
+                          userMapBloc.add(OnLocationSearchEvent(
+                              query: textEditingValue.text));
+                          return userMapBloc.searchLocations;
                         },
                       )
                     ],

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -7,19 +8,23 @@ import 'package:geocoding/geocoding.dart' as gc;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
-import 'package:taxi_finder/utils/api_keys.dart';
+import 'package:taxi_finder/models/auto_complete_model.dart';
+import 'package:taxi_finder/repositories/user_map_repo.dart';
+import 'package:taxi_finder/utils/api_helper.dart';
 
 part 'user_map_event.dart';
 part 'user_map_state.dart';
 
 class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
+  UserMapRepo userMapRepo = UserMapRepo();
+
   Geolocator location = Geolocator();
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
   String? countryISO;
   FocusNode destinationFocusNode = FocusNode();
   PolylinePoints polylinePoints = PolylinePoints();
-
+  List<Prediction> searchLocations = [];
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -76,7 +81,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         try {
           PolylineResult points =
               await polylinePoints.getRouteBetweenCoordinates(
-                  googleApiKey: ApiKeys().placesApiKey,
+                  googleApiKey: ApiHelper().placesApiKey,
                   request: PolylineRequest(
                       origin: currentLocPoint,
                       destination: destinationLocPoint,
@@ -89,6 +94,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           } else {
             log('Error: ${points.errorMessage}');
           }
+          log("distance ${(points.distanceTexts)}");
           Polyline polyline = Polyline(
             polylineId: const PolylineId("Direction Route 1"),
             points: routeCoords,
@@ -107,6 +113,15 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         } catch (error) {
           log("error $error", name: "OnDirectionEvent");
         }
+      },
+    );
+    on<OnLocationSearchEvent>(
+      (event, emit) async {
+        destinationController.text = event.query;
+        searchLocations = await userMapRepo.getPlacesSuggestion(
+            query: event.query, countryISO: countryISO ?? "PK");
+        
+        emit(OnLocationSearchState());
       },
     );
   }
