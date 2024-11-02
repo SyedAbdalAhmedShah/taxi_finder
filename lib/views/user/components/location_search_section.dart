@@ -3,12 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
-import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
-import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/views/user/components/auto_complete_map_field.dart';
 
 class LocationSearchSection extends StatelessWidget {

@@ -1,17 +1,12 @@
 import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart' as gc;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
-import 'package:taxi_finder/utils/api_helper.dart';
 
 part 'user_map_event.dart';
 part 'user_map_state.dart';
