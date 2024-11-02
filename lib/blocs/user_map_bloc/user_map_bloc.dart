@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
+import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 
@@ -23,7 +24,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   TextEditingController destinationController = TextEditingController();
   String? countryISO;
   FocusNode destinationFocusNode = FocusNode();
-  PolylinePoints polylinePoints = PolylinePoints();
+
   List<Prediction> searchLocations = [];
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -71,43 +72,15 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     });
     on<OnDirectionEvent>(
       (event, emit) async {
-        List<LatLng> routeCoords = [];
-        PointLatLng currentLocPoint = PointLatLng(
-            currentLocationPosition.latitude,
-            currentLocationPosition.longitude);
-        PointLatLng destinationLocPoint =
-            PointLatLng(event.latLng.latitude, event.latLng.longitude);
+        Polyline polyline;
+        Marker destinationMarker;
+        (polyline, destinationMarker) = await userMapRepo.getPolyLinesAndMarket(
+            currentLocationPosition: currentLocationPosition,
+            destLocationPosition: event.latLng);
 
         try {
-          PolylineResult points =
-              await polylinePoints.getRouteBetweenCoordinates(
-                  googleApiKey: ApiHelper().placesApiKey,
-                  request: PolylineRequest(
-                      origin: currentLocPoint,
-                      destination: destinationLocPoint,
-                      mode: TravelMode.driving));
-
-          if (points.points.isNotEmpty) {
-            routeCoords = points.points
-                .map((p) => LatLng(p.latitude, p.longitude))
-                .toList();
-          } else {
-            log('Error: ${points.errorMessage}');
-          }
-          log("distance ${(points.distanceTexts)}");
-          Polyline polyline = Polyline(
-            polylineId: const PolylineId("Direction Route 1"),
-            points: routeCoords,
-            color: secondaryColor,
-          );
-
           polylineSet.add(polyline);
-          Marker destinationMarker = Marker(
-              markerId: const MarkerId("destination"),
-              infoWindow: InfoWindow(title: "${points.endAddress}"),
-              position:
-                  LatLng(routeCoords.last.latitude, routeCoords.last.longitude),
-              visible: true);
+
           markers.add(destinationMarker);
           emit(OnDirectionRequestState());
         } catch (error) {
@@ -120,8 +93,26 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         destinationController.text = event.query;
         searchLocations = await userMapRepo.getPlacesSuggestion(
             query: event.query, countryISO: countryISO ?? "PK");
-        
+
         emit(OnLocationSearchState());
+      },
+    );
+    on<OnLocationSelectedEvent>(
+      (event, emit) async {
+        try {
+          PlacesDetail placesDetail = await userMapRepo
+              .getPlaceDetailById(event.prediction.placeId ?? "");
+          Location? location = placesDetail.result?.geometry?.location;
+          if (location != null) {
+            LatLng latLng = LatLng(location.lat!, location.lng!);
+            add(OnDirectionEvent(latLng: latLng));
+          } else {
+            // error message
+            log("locaation laat long is null");
+          }
+        } catch (error) {
+          log("error occur in catch $error");
+        }
       },
     );
   }

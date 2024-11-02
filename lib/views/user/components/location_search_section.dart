@@ -64,6 +64,10 @@ class LocationSearchSection extends StatelessWidget {
                             ),
                           );
                         },
+                        onSelected: (option) {
+                          userMapBloc
+                              .add(OnLocationSelectedEvent(prediction: option));
+                        },
                         displayStringForOption: (option) =>
                             option.description ?? "",
                         fieldViewBuilder: (context, textEditingController,
