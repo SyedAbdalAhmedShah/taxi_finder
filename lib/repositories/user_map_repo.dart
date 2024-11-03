@@ -37,8 +37,6 @@ class UserMapRepo {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       AutoCompleteModel autoComplete = AutoCompleteModel.fromJson(data);
-      log("Auto completee status ${autoComplete.status}");
-      log("predictions ${autoComplete.predictions.toString()}");
       if (autoComplete.status != null && autoComplete.status == "OK") {
         return autoComplete.predictions!;
       } else {

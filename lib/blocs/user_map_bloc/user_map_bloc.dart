@@ -49,7 +49,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           gc.Placemark placemark = placemarks.first;
           String address =
               "${placemark.street ?? ""}${placemark.subLocality ?? ""} ${placemark.locality ?? ""} ${placemark.administrativeArea ?? ""} ${placemark.country ?? ""}";
-          countryISO = placemark.isoCountryCode ?? countryISO;
+          countryISO = placemark.isoCountryCode ?? "PK";
 
           myLocationController.text = address;
           cameraPosition = CameraPosition(
@@ -106,7 +106,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
             log("locaation laat long is null");
           }
         } catch (error) {
-          log("error occur in catch $error");
+          log("error occur in catch $error", name: "OnLocationSelectedEvent");
         }
       },
     );

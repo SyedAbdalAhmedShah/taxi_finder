@@ -45,7 +45,7 @@ class LocationSearchSection extends StatelessWidget {
                       Gap(1.h),
                       Autocomplete(
                         optionsViewBuilder: (context, onSelected, options) {
-                          log("option  legth ${options.length}");
+
                           return Card(
                             child: ListView(
                               children: options.map(
@@ -62,6 +62,7 @@ class LocationSearchSection extends StatelessWidget {
                           );
                         },
                         onSelected: (option) {
+                          FocusScope.of(context).unfocus();
                           userMapBloc
                               .add(OnLocationSelectedEvent(prediction: option));
                         },
@@ -74,7 +75,7 @@ class LocationSearchSection extends StatelessWidget {
                             onEditingComplete: onFieldSubmitted,
                             controller: textEditingController,
                             decoration: InputDecoration(
-                                hintText: "destination",
+                                hintText: "Destination",
                                 hintStyle:
                                     const TextStyle(color: textColorSecondary),
                                 filled: true,
