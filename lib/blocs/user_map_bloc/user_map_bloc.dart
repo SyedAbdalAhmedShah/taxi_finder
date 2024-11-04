@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart' as gc;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 part 'user_map_event.dart';
 part 'user_map_state.dart';
@@ -19,7 +21,10 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   TextEditingController destinationController = TextEditingController();
   String? countryISO;
   FocusNode destinationFocusNode = FocusNode();
-
+  String totalLocationDistance = "";
+  String totalfare = "";
+  bool showRequestSheet = false;
+  TextEditingController totalSeatBookController = TextEditingController();
   List<Prediction> searchLocations = [];
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -67,31 +72,35 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     });
     on<OnDirectionEvent>(
       (event, emit) async {
-        Polyline polyline;
-        Marker destinationMarker;
-        (polyline, destinationMarker) = await userMapRepo.getPolyLinesAndMarket(
-            currentLocationPosition: currentLocationPosition,
-            destLocationPosition: event.latLng);
-
         try {
+          Polyline polyline;
+          Marker destinationMarker;
+          String totalDistance;
+          (totalDistance, polyline, destinationMarker) =
+              await userMapRepo.getPolyLinesAndMarket(
+                  currentLocationPosition: currentLocationPosition,
+                  destLocationPosition: event.latLng);
+          totalLocationDistance = totalDistance;
+
+          totalfare =
+              userMapRepo.getTotalFare(totalLocationDistance).toString();
           polylineSet.add(polyline);
 
           markers.add(destinationMarker);
           emit(OnDirectionRequestState());
         } catch (error) {
           log("error $error", name: "OnDirectionEvent");
+          emit(UserMapFailureState(errorMessage: routeNotFount));
         }
       },
     );
-    on<OnLocationSearchEvent>(
-      (event, emit) async {
-        destinationController.text = event.query;
-        searchLocations = await userMapRepo.getPlacesSuggestion(
-            query: event.query, countryISO: countryISO ?? "PK");
+    on<OnLocationSearchEvent>((event, emit) async {
+      destinationController.text = event.query;
+      searchLocations = await userMapRepo.getPlacesSuggestion(
+          query: event.query, countryISO: countryISO ?? "PK");
 
-        emit(OnLocationSearchState());
-      },
-    );
+      emit(OnLocationSearchState());
+    });
     on<OnLocationSelectedEvent>(
       (event, emit) async {
         try {
@@ -100,6 +109,8 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           Location? location = placesDetail.result?.geometry?.location;
           if (location != null) {
             LatLng latLng = LatLng(location.lat!, location.lng!);
+
+            showRequestSheet = true;
             add(OnDirectionEvent(latLng: latLng));
           } else {
             // error message

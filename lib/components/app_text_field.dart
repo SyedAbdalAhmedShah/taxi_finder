@@ -8,12 +8,16 @@ class AppTextField extends StatefulWidget {
   final Color? fillColor;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
   final bool obscureText;
+  final Function(PointerDownEvent)? onTapOutside;
   const AppTextField({
     super.key,
     required this.hintText,
     this.fillColor,
     this.prefixIcon,
+    this.keyboardType,
+    this.onTapOutside,
     this.suffixIcon,
     this.validator,
     this.obscureText = false,
@@ -39,6 +43,8 @@ class _AppTextFieldState extends State<AppTextField> {
       controller: widget.controller,
       validator: widget.validator,
       obscureText: isPassword,
+      keyboardType: widget.keyboardType,
+      onTapOutside: widget.onTapOutside,
       decoration: InputDecoration(
         filled: true,
         fillColor: widget.fillColor ?? textColorSecondary.withOpacity(0.1),

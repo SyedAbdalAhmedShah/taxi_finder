@@ -64,9 +64,10 @@ class UserMapRepo {
     }
   }
 
-  Future<(Polyline polyLine, Marker maarker)> getPolyLinesAndMarket(
-      {required Position currentLocationPosition,
-      required LatLng destLocationPosition}) async {
+  Future<(String totalDistance, Polyline polyLine, Marker maarker)>
+      getPolyLinesAndMarket(
+          {required Position currentLocationPosition,
+          required LatLng destLocationPosition}) async {
     List<LatLng> routeCoords = [];
     PointLatLng currentLocPoint = PointLatLng(
         currentLocationPosition.latitude, currentLocationPosition.longitude);
@@ -79,6 +80,7 @@ class UserMapRepo {
             destination: destinationLocPoint,
             mode: TravelMode.driving));
 
+    log('error= = = = = = ${points.errorMessage}');
     if (points.points.isNotEmpty) {
       routeCoords =
           points.points.map((p) => LatLng(p.latitude, p.longitude)).toList();
@@ -86,6 +88,7 @@ class UserMapRepo {
       log('Error: ${points.errorMessage}');
     }
     log("distance ${(points.distanceTexts)}");
+    String totalDistance = points.distanceTexts?.first ?? "";
     Polyline polyline = Polyline(
       polylineId: const PolylineId("Direction Route 1"),
       points: routeCoords,
@@ -96,7 +99,20 @@ class UserMapRepo {
         infoWindow: InfoWindow(title: "${points.endAddress}"),
         position: LatLng(routeCoords.last.latitude, routeCoords.last.longitude),
         visible: true);
-    return (polyline, destinationMarker);
+    return (totalDistance, polyline, destinationMarker);
+  }
+
+  double getTotalFare(String totalDistance) {
+    int baseFare = 8;
+    int farePerKM = 5;
+    log("totalDistance ${totalDistance.toUpperCase()}");
+    double distanceIntoDouble =
+        double.parse(totalDistance.toUpperCase().replaceAll("KM", ""));
+    log("distanceIntoDouble $distanceIntoDouble");
+    double fareWithTotalDistance = farePerKM * distanceIntoDouble;
+    double totalFare = fareWithTotalDistance + baseFare;
+
+    return totalFare;
   }
 }
 // distaance  2.7 km

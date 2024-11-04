@@ -6,6 +6,12 @@ final class UserMapInitial extends UserMapState {}
 
 final class UserMapLoadingState extends UserMapState {}
 
+final class UserMapFailureState extends UserMapState {
+  final String errorMessage;
+
+  UserMapFailureState({required this.errorMessage});
+}
+
 final class UpdateMapState extends UserMapState {}
 
 final class OnDirectionRequestState extends UserMapState {}
