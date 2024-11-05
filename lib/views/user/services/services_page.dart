@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
+import 'package:taxi_finder/components/logout_button.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 
-import 'package:taxi_finder/views/bridge/bridge.dart';
 import 'package:taxi_finder/views/user/taxi_finder/taxi_finder_service.dart';
 
 class ServicesPage extends StatelessWidget {
@@ -19,20 +19,7 @@ class ServicesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(selectService),
-        actions: [
-          BlocListener<AuthBloc, AuthState>(
-            listener: (context, state) {
-              if (state is SuccessfullySignOut) {
-                context.pushAndRemoveUntil(const BridgeScreen());
-              }
-            },
-            child: IconButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(SignouEvent());
-                },
-                icon: const Icon(Icons.logout)),
-          )
-        ],
+        actions: const [LogoutButton()],
       ),
       body: Center(
         child: Column(

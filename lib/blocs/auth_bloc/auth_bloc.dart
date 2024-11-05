@@ -43,11 +43,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
                 String status = driverInfo.status ?? "";
                 if (status == FirebaseStrings.pending) {
                   emit(DriverAccountPendingState());
-                } else {
-                  await _prefrences.setBool(
-                      FirebaseStrings.driverStoreKey, true);
-
+                } else if (status == FirebaseStrings.rejected) {
+                  emit(DriverRejectedState());
                   // drriver account accepted state
+                } else {
+                  emit(DriverAuthorizedState());
                 }
               } else {
                 emit(AuthFailureState(failureMessage: drvrNotFnd));

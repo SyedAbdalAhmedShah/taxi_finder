@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -12,8 +14,10 @@ import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/utils.dart';
 import 'package:taxi_finder/utils/validator.dart';
 import 'package:taxi_finder/views/auth/email_not_verified.dart';
-import 'package:taxi_finder/views/auth/pending_screen.dart';
+import 'package:taxi_finder/views/driver/driver_home.dart';
+import 'package:taxi_finder/views/driver/pending_screen.dart';
 import 'package:taxi_finder/views/auth/sign_up_view.dart';
+import 'package:taxi_finder/views/driver/rejected_screen.dart';
 import 'package:taxi_finder/views/user/services/services_page.dart';
 
 import '../../components/forgot_password.dart';
@@ -107,9 +111,10 @@ class _SignInButtonStates extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authBloc = context.read<AuthBloc>();
-read
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
+        log("auth state is $state", name: "SignInView");
         if (state is AuthFailureState) {
           Utils.showErrortoast(errorMessage: state.failureMessage);
         } else if (state is NonVerifiedEmailState) {
@@ -118,6 +123,10 @@ read
           ));
         } else if (state is DriverAccountPendingState) {
           context.push(const PendingScreen());
+        } else if (state is DriverRejectedState) {
+          context.push(const RejectedScreen());
+        } else if (state is DriverAuthorizedState) {
+          context.push(const DriverHome());
         } else if (state is UserAuthSuccessState) {
           context.pushAndRemoveUntil(const ServicesPage());
         }

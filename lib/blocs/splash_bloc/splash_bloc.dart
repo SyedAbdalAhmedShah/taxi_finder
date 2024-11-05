@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
@@ -33,7 +32,13 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
             DriverInfo? driverInfo = await getDriverData(currentUser.uid);
             if (driverInfo != null) {
               loggedRole.setDriver(driverInfo);
-              emit(DriverAuthenticatedState());
+              if (driverInfo.status == FirebaseStrings.accepted) {
+                emit(DriverAuthenticatedState());
+              } else if (driverInfo.status == FirebaseStrings.pending) {
+                emit(DriverPendingState());
+              } else {
+                emit(DriverRejectedState());
+              }
             } else {
               await _auth.signOut();
               emit(SplashFilureState(errorMessage: logout));

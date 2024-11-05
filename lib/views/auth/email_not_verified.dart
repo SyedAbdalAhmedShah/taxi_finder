@@ -6,7 +6,6 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/auth/sign_in_view.dart';
-import 'package:taxi_finder/views/user/components/request_sheet.dart';
 
 class EmailNotVerified extends StatelessWidget {
   final bool isDriver;
@@ -28,8 +27,7 @@ class EmailNotVerified extends StatelessWidget {
               ),
               Gap(5.h),
               Lottie.asset(verificationLottie, onLoaded: (p0) {
-
-
+// context.read<SubjectBloc>()
                 Timer(
                   const Duration(seconds: 5),
                   () => Navigator.of(context).pushAndRemoveUntil(
