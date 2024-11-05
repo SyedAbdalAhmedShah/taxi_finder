@@ -45,7 +45,6 @@ class LocationSearchSection extends StatelessWidget {
                       Gap(1.h),
                       Autocomplete(
                         optionsViewBuilder: (context, onSelected, options) {
-
                           return Card(
                             child: ListView(
                               children: options.map(
@@ -73,6 +72,9 @@ class LocationSearchSection extends StatelessWidget {
                           return TextField(
                             focusNode: focusNode,
                             onEditingComplete: onFieldSubmitted,
+                            onSubmitted: (value) {
+                              focusNode.unfocus();
+                            },
                             controller: textEditingController,
                             decoration: InputDecoration(
                                 hintText: "Destination",

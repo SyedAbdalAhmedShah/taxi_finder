@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({super.key});
@@ -50,39 +51,45 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserMapBloc, UserMapState>(
-      builder: (context, state) {
-        log("State $state");
-        return state is UserMapLoadingState
-            ? const Center(
-                child: CircularProgressIndicator.adaptive(),
-              )
-            : GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: userMapBloc.cameraPosition,
-                onMapCreated: (GoogleMapController controller) async {
-                  _controller.complete(controller);
-                },
-                buildingsEnabled: true,
-                fortyFiveDegreeImageryEnabled: true,
-                polylines: userMapBloc.polylineSet,
-                onCameraMoveStarted: () => log("message"),
-                markers: userMapBloc.markers,
-                myLocationButtonEnabled: true,
-                trafficEnabled: true,
-                
-                myLocationEnabled: true,
-                onTap: (LatLng latLng) {
-                  // Hide info window when tapping on the map
-                  setState(() {
-                    for (var marker in markers) {
-                      markers.remove(
-                          marker.copyWith(infoWindowParam: InfoWindow.noText));
-                    }
-                  });
-                },  
-              );
+    return BlocListener<UserMapBloc, UserMapState>(
+      listener: (context, state) {
+        if (state is UserMapFailureState) {
+          Utils.showErrortoast(errorMessage: state.errorMessage);
+        }
       },
+      child: BlocBuilder<UserMapBloc, UserMapState>(
+        builder: (context, state) {
+          log("State $state");
+          return state is UserMapLoadingState
+              ? const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              : GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: userMapBloc.cameraPosition,
+                  onMapCreated: (GoogleMapController controller) async {
+                    _controller.complete(controller);
+                  },
+                  buildingsEnabled: true,
+                  fortyFiveDegreeImageryEnabled: true,
+                  polylines: userMapBloc.polylineSet,
+                  onCameraMoveStarted: () => log("message"),
+                  markers: userMapBloc.markers,
+                  myLocationButtonEnabled: true,
+                  trafficEnabled: true,
+                  myLocationEnabled: true,
+                  onTap: (LatLng latLng) {
+                    // Hide info window when tapping on the map
+                    setState(() {
+                      for (var marker in markers) {
+                        markers.remove(marker.copyWith(
+                            infoWindowParam: InfoWindow.noText));
+                      }
+                    });
+                  },
+                );
+        },
+      ),
     );
   }
 

@@ -21,6 +21,16 @@ class Validator {
     }
   }
 
+  static String? emptyAndGreaterZerogValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return emptyField;
+    } else if (double.parse(value) <= 0) {
+      return greaterThanZero;
+    } else {
+      return null;
+    }
+  }
+
   static String? passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
       return emptyField;
