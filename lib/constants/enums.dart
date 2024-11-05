@@ -1,0 +1,1 @@
+enum ServiceSelected { taxiFinder, shuttleFinder }

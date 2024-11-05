@@ -29,18 +29,17 @@ class MapSampleState extends State<MapSample> {
       width: 4,
     ),
   };
-  Set<Marker> markers = {};
 
 // Cargar imagen del Marker
-  getIcons() async {
-    var icon = await BitmapDescriptor.asset(
-      const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
-      "assets/pngwing.com.png",
-    );
-    setState(() {
-      this.icon = icon;
-    });
-  }
+  // getIcons() async {
+  //   var icon = await BitmapDescriptor.asset(
+  //     const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
+  //     "assets/pngwing.com.png",
+  //   );
+  //   setState(() {
+  //     this.icon = icon; 
+  //   });
+  // }
 
   @override
   void initState() {
@@ -80,12 +79,12 @@ class MapSampleState extends State<MapSample> {
                   myLocationEnabled: true,
                   onTap: (LatLng latLng) {
                     // Hide info window when tapping on the map
-                    setState(() {
-                      for (var marker in markers) {
-                        markers.remove(marker.copyWith(
-                            infoWindowParam: InfoWindow.noText));
-                      }
-                    });
+                    // setState(() {
+                    //   for (var marker in markers) {
+                    //     markers.remove(marker.copyWith(
+                    //         infoWindowParam: InfoWindow.noText));
+                    //   }
+                    // });
                   },
                 );
         },
@@ -93,8 +92,8 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  // Future<void> _goToTheLake() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

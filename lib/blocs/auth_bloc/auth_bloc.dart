@@ -81,6 +81,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
       }
     });
 
+    on<SignouEvent>(
+      (event, emit) async {
+        SharedPreferences prefrences = await SharedPreferences.getInstance();
+        await prefrences.clear();
+        await signOut();
+        emit(SuccessfullySignOut());
+      },
+    );
     on<SignupEvent>(
       (event, emit) async {
         emit(AuthLoadingState());

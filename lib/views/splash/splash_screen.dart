@@ -9,7 +9,7 @@ import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/utils.dart';
 import 'package:taxi_finder/views/bridge/bridge.dart';
 import 'package:taxi_finder/views/driver/driver_home.dart';
-import 'package:taxi_finder/views/user/map_view/home_page.dart';
+import 'package:taxi_finder/views/user/services/services_page.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -29,7 +29,7 @@ class SplashScreen extends StatelessWidget {
         if (state is DriverAuthenticatedState) {
           context.pushReplacment(const DriverHome());
         } else if (state is UserAuthenticatedState) {
-          context.pushReplacment(const MyHomePage());
+          context.pushReplacment(const ServicesPage());
         } else if (state is RoleNotAuthenticatedState) {
           context.pushReplacment(const BridgeScreen());
         } else if (state is SplashFilureState) {

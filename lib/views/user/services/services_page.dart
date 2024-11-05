@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/constants/enums.dart';
+import 'package:taxi_finder/utils/extensions.dart';
+
+import 'package:taxi_finder/views/bridge/bridge.dart';
+import 'package:taxi_finder/views/user/taxi_finder/taxi_finder_service.dart';
 
 class ServicesPage extends StatelessWidget {
   const ServicesPage({super.key});
@@ -11,7 +18,21 @@ class ServicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select Service"),
+        title: const Text(selectService),
+        actions: [
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is SuccessfullySignOut) {
+                context.pushAndRemoveUntil(const BridgeScreen());
+              }
+            },
+            child: IconButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(SignouEvent());
+                },
+                icon: const Icon(Icons.logout)),
+          )
+        ],
       ),
       body: Center(
         child: Column(
@@ -21,7 +42,9 @@ class ServicesPage extends StatelessWidget {
             ServiceCard(
               imagePath: taxiFinderImage,
               title: taxiFinderS,
-              onTap: () {},
+              onTap: () => context.push(const TaxiFinderscreen(
+                selectedService: ServiceSelected.taxiFinder,
+              )),
             ),
             Gap(1.h),
             Text(
@@ -32,7 +55,9 @@ class ServicesPage extends StatelessWidget {
             ServiceCard(
               imagePath: shuttleFinderImage,
               title: shuttleFinderS,
-              onTap: () {},
+              onTap: () {
+                // context.push(const TaxiFinderscreen());
+              },
             )
           ],
         ),

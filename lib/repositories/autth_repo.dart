@@ -52,4 +52,8 @@ mixin AuthRepo {
       return null;
     }
   }
+
+  Future signOut () async {
+    await _auth.signOut();
+  }
 }

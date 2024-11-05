@@ -84,7 +84,10 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           totalfare =
               userMapRepo.getTotalFare(totalLocationDistance).toString();
           polylineSet.add(polyline);
-
+          cameraPosition = CameraPosition(
+              target: LatLng(currentLocationPosition.latitude,
+                  currentLocationPosition.longitude),
+              zoom: 10.0);
           markers.add(destinationMarker);
           emit(OnDirectionRequestState());
         } catch (error) {

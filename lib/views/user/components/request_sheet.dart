@@ -5,10 +5,12 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/components/primary_button.dart';
+import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/utils/validator.dart';
 
 class RequestSheet extends StatelessWidget {
-  const RequestSheet({super.key});
+  final ServiceSelected selectedService;
+  const RequestSheet({required this.selectedService, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,23 +72,31 @@ class RequestSheet extends StatelessWidget {
                         ],
                       ),
                       Gap(1.h),
-                      Form(
-                        key: key,
-                        child: AppTextField(
-                            validator: Validator.emptyAndGreaterZerogValidator,
-                            keyboardType: TextInputType.number,
-                            fillColor: Colors.white,
-                            hintText: "Total seat you want to book",
-                            onTapOutside: (p0) {
-                              FocusScope.of(context).unfocus();
-                            },
-                            controller: userMapBloc.totalSeatBookController),
+                      Visibility(
+                        visible:
+                            selectedService == ServiceSelected.shuttleFinder,
+                        child: Form(
+                          key: key,
+                          child: AppTextField(
+                              validator:
+                                  Validator.emptyAndGreaterZerogValidator,
+                              keyboardType: TextInputType.number,
+                              fillColor: Colors.white,
+                              hintText: "Total seat you want to book",
+                              onTapOutside: (p0) {
+                                FocusScope.of(context).unfocus();
+                              },
+                              controller: userMapBloc.totalSeatBookController),
+                        ),
                       ),
                       Gap(1.h),
                       PrimaryButton(
                           text: "Request",
                           onPressed: () {
-                            if (key.currentState?.validate() ?? false) {}
+                            if (selectedService ==
+                                ServiceSelected.shuttleFinder) {
+                              if (key.currentState?.validate() ?? false) {}
+                            } else {}
                           })
                     ],
                   ),

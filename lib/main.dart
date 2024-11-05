@@ -10,7 +10,6 @@ import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/firebase_options.dart';
 import 'package:taxi_finder/views/splash/splash_screen.dart';
-import 'package:taxi_finder/views/user/services/services_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,11 +47,11 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Taxi Finder',
           theme: ThemeData(
-            appBarTheme: AppBarTheme(backgroundColor: primaryColor),
+            appBarTheme: const AppBarTheme(backgroundColor: primaryColor),
             scaffoldBackgroundColor: scaffoldColor,
             useMaterial3: true,
           ),
-          home: const ServicesPage(),
+          home: const SplashScreen(),
         ),
       );
     });

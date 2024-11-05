@@ -10,3 +10,5 @@ class SignInEvent extends AuthEvent {
 }
 
 class SignupEvent extends AuthEvent {}
+
+class SignouEvent extends AuthEvent {}

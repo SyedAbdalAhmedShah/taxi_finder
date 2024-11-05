@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/constants/enums.dart';
 
 import 'package:taxi_finder/views/user/components/location_search_section.dart';
 import 'package:taxi_finder/views/user/components/request_sheet.dart';
-import 'package:taxi_finder/views/user/map_view/map_view.dart';
+import 'package:taxi_finder/views/user/taxi_finder/map_view.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class TaxiFinderscreen extends StatefulWidget {
+  final ServiceSelected selectedService;
+  const TaxiFinderscreen({required this.selectedService, super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<TaxiFinderscreen> createState() => _TaxiFinderscreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _TaxiFinderscreenState extends State<TaxiFinderscreen> {
   late UserMapBloc userMapBloc;
 
   @override
@@ -26,13 +28,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Stack(
+    return Scaffold(
+        body: const Stack(
           children: [
             MapSample(),
             LocationSearchSection(),
           ],
         ),
-        bottomSheet: RequestSheet());
+        bottomSheet: RequestSheet(
+          selectedService: widget.selectedService,
+        ));
   }
 }
