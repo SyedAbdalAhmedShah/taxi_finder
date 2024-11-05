@@ -65,7 +65,7 @@ class UserMapRepo {
   }
 
   Future<(String totalDistance, Polyline polyLine, Marker maarker)>
-      getPolyLinesAndMarket(
+      getPolyLinesAndMarker(
           {required Position currentLocationPosition,
           required LatLng destLocationPosition}) async {
     List<LatLng> routeCoords = [];
