@@ -1,15 +1,12 @@
 import 'dart:developer';
 
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
-import 'package:taxi_finder/models/driver_info.dart';
-import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/repositories/autth_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
@@ -27,43 +24,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
     on<SignInEvent>((event, emit) async {
       emit(AuthLoadingState());
       try {
-        SharedPreferences _prefrences = await SharedPreferences.getInstance();
         UserCredential? userCredential = await signInWithEmailAndPassword(
             email: email.text, password: password.text);
         if (userCredential != null) {
           bool isVerified = userCredential.user?.emailVerified ?? false;
           if (isVerified) {
-            //check if driver or user
+            //? check if driver or user
             log("is driver ${event.isDriver}");
-            // if driver
+            //? if driver
             if (event.isDriver) {
-              DriverInfo? driverInfo =
-                  await getDriverData(userCredential.user?.uid ?? "");
-              if (driverInfo != null) {
-                String status = driverInfo.status ?? "";
-                if (status == FirebaseStrings.pending) {
-                  emit(DriverAccountPendingState());
-                } else if (status == FirebaseStrings.rejected) {
-                  emit(DriverRejectedState());
-                  // drriver account accepted state
-                } else {
-                  emit(DriverAuthorizedState());
-                }
-              } else {
-                emit(AuthFailureState(failureMessage: drvrNotFnd));
-              }
+              await driverStateHandler(emit, userCredential);
             } else {
-              UserModel? userModel =
-                  await getUserDataa(uid: userCredential.user?.uid ?? "");
-              if (userModel != null) {
-                await _prefrences.setBool(
-                    FirebaseStrings.driverStoreKey, false);
-
-                emit(UserAuthSuccessState());
-              } else {
-                emit(AuthFailureState(failureMessage: usrNotFnd));
-              }
-              // user sign in
+              //? if user
+              await userStateHandler(emit, userCredential);
             }
           } else {
             await userCredential.user?.sendEmailVerification();

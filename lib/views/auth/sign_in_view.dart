@@ -126,7 +126,7 @@ class _SignInButtonStates extends StatelessWidget {
         } else if (state is DriverRejectedState) {
           context.push(const RejectedScreen());
         } else if (state is DriverAuthorizedState) {
-          context.push(const DriverHome());
+          context.pushReplacment(const DriverHome());
         } else if (state is UserAuthSuccessState) {
           context.pushAndRemoveUntil(const ServicesPage());
         }

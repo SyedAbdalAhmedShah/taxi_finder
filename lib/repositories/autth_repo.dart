@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
@@ -41,7 +45,7 @@ mixin AuthRepo {
     }
   }
 
-  Future<UserModel?>  getUserDataa({required String uid}) async {
+  Future<UserModel?> getUserDataa({required String uid}) async {
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await _firestore.collection(FirebaseStrings.usersColl).doc(uid).get();
     if (documentSnapshot.exists) {
@@ -53,7 +57,43 @@ mixin AuthRepo {
     }
   }
 
-  Future signOut () async {
+  Future signOut() async {
     await _auth.signOut();
+  }
+
+  driverStateHandler(
+      Emitter<AuthState> emit, UserCredential userCredential) async {
+    SharedPreferences prefrences = await SharedPreferences.getInstance();
+    DriverInfo? driverInfo =
+        await getDriverData(userCredential.user?.uid ?? "");
+    if (driverInfo != null) {
+      String status = driverInfo.status ?? "";
+      if (status == FirebaseStrings.pending) {
+        emit(DriverAccountPendingState());
+      } else if (status == FirebaseStrings.rejected) {
+        //?? drriver account Rejected state
+        emit(DriverRejectedState());
+      } else {
+        //? drriver account accepted state
+        await prefrences.setBool(FirebaseStrings.driverStoreKey, true);
+        emit(DriverAuthorizedState());
+      }
+    } else {
+      emit(AuthFailureState(failureMessage: drvrNotFnd));
+    }
+  }
+
+  userStateHandler(
+      Emitter<AuthState> emit, UserCredential userCredential) async {
+    SharedPreferences prefrences = await SharedPreferences.getInstance();
+    UserModel? userModel =
+        await getUserDataa(uid: userCredential.user?.uid ?? "");
+    if (userModel != null) {
+      await prefrences.setBool(FirebaseStrings.driverStoreKey, false);
+
+      emit(UserAuthSuccessState());
+    } else {
+      emit(AuthFailureState(failureMessage: usrNotFnd));
+    }
   }
 }

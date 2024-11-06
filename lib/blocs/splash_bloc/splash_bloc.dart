@@ -27,8 +27,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
       try {
         bool? isDriver =
             sharedPrefDep.preferences.getBool(FirebaseStrings.driverStoreKey);
+        log("IS driver  $isDriver");
         if (currentUser != null) {
           if (isDriver != null && isDriver) {
+            log("current user id ${currentUser.uid}");
             DriverInfo? driverInfo = await getDriverData(currentUser.uid);
             if (driverInfo != null) {
               loggedRole.setDriver(driverInfo);
