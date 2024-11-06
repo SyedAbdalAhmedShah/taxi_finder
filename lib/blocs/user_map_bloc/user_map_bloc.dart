@@ -40,13 +40,11 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
       try {
         LocationPermission isPermissionEnable =
             await Geolocator.checkPermission();
-        bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
         if (isPermissionEnable == LocationPermission.always ||
             isPermissionEnable == LocationPermission.whileInUse) {
-          log("message $serviceEnabled");
-
           currentLocationPosition = await Geolocator.getCurrentPosition();
-
+      userMapRepo.getNearByDrivers(currentLocationPosition);
           List<gc.Placemark> placemarks = await gc.GeocodingPlatform.instance!
               .placemarkFromCoordinates(currentLocationPosition.latitude,
                   currentLocationPosition.longitude);
@@ -56,6 +54,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           countryISO = placemark.isoCountryCode ?? "PK";
 
           myLocationController.text = address;
+
           cameraPosition = CameraPosition(
             target: LatLng(currentLocationPosition.latitude,
                 currentLocationPosition.longitude),

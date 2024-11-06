@@ -53,6 +53,7 @@ dependencies:
   google_maps_places_autocomplete_widgets: ^1.2.3
   flutter_polyline_points: ^2.1.0
   http: ^1.2.2
+  geoflutterfire_plus: ^0.0.31
 
 
 dev_dependencies:

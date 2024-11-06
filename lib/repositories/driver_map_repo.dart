@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
@@ -17,9 +18,15 @@ mixin DriverMapRepo {
     );
   }
 
-  Future updateDriverLocation() async {
+  Future updateDriverLocation(Position position) async {
     DriverInfo driverInfo = loggedRole.driverInfo;
     log("Driver uid ${driverInfo.driverUid}");
-    //  _firebaseFirestore.collection(FirebaseStrings.driverColl).doc()
+    log("Driver latlong ${driverInfo.latLong}");
+    final ref = _firebaseFirestore.collection(FirebaseStrings.driverColl);
+    await GeoCollectionReference(ref).updatePoint(
+      id: driverInfo.driverUid ?? "",
+      field: FirebaseStrings.latLong,
+      geopoint: GeoPoint(position.latitude, position.longitude),
+    );
   }
 }

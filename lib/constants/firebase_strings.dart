@@ -26,6 +26,10 @@ class FirebaseStrings {
   static const String pending = "Pending";
   static const String accepted = "Accepted";
   static const String rejected = "Rejected";
+  static const String latitude = "latitude";
+  static const String latLong = "latLong";
+  static const String geoPoint = "geopoint";
+  static const String longitude = "longitude";
 
   static const String driverStoreKey = "isDriver";
 }

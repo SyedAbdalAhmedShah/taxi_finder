@@ -23,8 +23,10 @@ class _DriverMapViewState extends State<DriverMapView> {
     driverBloc = context.read<DriverBloc>();
     driverBloc.add(DriverCurrentLocationEvent());
 
-    Geolocator.getPositionStream().listen(
-      (event) {},
+    driverBloc.positionStream?.onData(
+      (position) {
+        driverBloc.updateDriverLocation(position);
+      },
     );
     super.initState();
   }

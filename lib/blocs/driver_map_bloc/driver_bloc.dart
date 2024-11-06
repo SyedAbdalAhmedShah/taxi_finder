@@ -9,9 +9,9 @@ import 'package:taxi_finder/repositories/driver_map_repo.dart';
 part 'driver_event.dart';
 part 'driver_state.dart';
 
-class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo{
+class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
   late GoogleMapController mapController;
-   StreamSubscription<Position>? positionStream;
+  StreamSubscription<Position>? positionStream;
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -26,10 +26,11 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo{
         if (isPermissionEnable == LocationPermission.always ||
             isPermissionEnable == LocationPermission.whileInUse) {
           bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-          if (serviceEnabled) { 
+          if (serviceEnabled) {
             positionStream = getPositionListner();
-            driverCurrentPosition = await Geolocator.getCurrentPosition();
 
+            driverCurrentPosition = await Geolocator.getCurrentPosition();
+            await updateDriverLocation(driverCurrentPosition);
             cameraPosition = CameraPosition(
               target: LatLng(driverCurrentPosition.latitude,
                   driverCurrentPosition.longitude),
@@ -38,7 +39,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo{
 
             mapController
                 .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-                
+
             emit(DriverCurrentLocationUpdatedState());
           } else {
             Geolocator.requestPermission();

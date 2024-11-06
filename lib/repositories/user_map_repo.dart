@@ -1,17 +1,24 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' as math;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
+import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 
 class UserMapRepo {
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   PolylinePoints polylinePoints = PolylinePoints();
+
   Future getDirection(
       {required LatLng source, required LatLng destination}) async {
     final String url = 'https://maps.googleapis.com/maps/api/directions/json?'
@@ -104,7 +111,7 @@ class UserMapRepo {
 
   double getTotalFare(String totalDistance) {
     int baseFare = 8;
-    int farePerKM = 5;
+    int farePerKM = 4;
     log("totalDistance ${totalDistance.toUpperCase()}");
     double distanceIntoDouble =
         double.parse(totalDistance.toUpperCase().replaceAll("KM", ""));
@@ -113,6 +120,71 @@ class UserMapRepo {
     double totalFare = fareWithTotalDistance + baseFare;
 
     return totalFare;
+  }
+
+  getNearByDrivers(Position positionns) async {
+    GeoPoint location = GeoPoint(positionns.latitude, positionns.longitude);
+    final GeoFirePoint center = GeoFirePoint(location);
+    const double radiusInKm = 50;
+    final ref = firebaseFirestore.collection(FirebaseStrings.driverColl);
+    Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
+        GeoCollectionReference<Map<String, dynamic>>(ref).subscribeWithin(
+      center: center,
+      radiusInKm: radiusInKm,
+      field: FirebaseStrings.latLong,
+      strictMode: true,
+      geopointFrom: (obj) {
+        log("OBJ =========   ${obj}");
+        return obj[FirebaseStrings.latLong][FirebaseStrings.geoPoint];
+      },
+    );
+    stream.asBroadcastStream(
+      onListen: (subscription) {
+        log("HIII");
+      },
+    );
+    stream.listen(
+      (event) {
+        log("event ${event.length}");
+      },
+    );
+    // final boundingBox =
+    //     calculateBoundingBox(positionns.latitude, positionns.longitude, 20);
+    // final docss = await firebaseFirestore
+    //     .collection(FirebaseStrings.driverColl)
+    //     .where(
+    //       FirebaseStrings.latLong,
+    //     )
+    //     .where('latitude', isGreaterThanOrEqualTo: boundingBox['minLat'])
+    //     .where('latitude', isLessThanOrEqualTo: boundingBox['maxLat'])
+    //     .snapshots();
+    //     docss.map((event) => event.docs.map((e) {
+    //       DriverInfo driverInfo = DriverInfo.fromJson(e.data());
+    //       if()
+    //     },),);
+    // final nearbyDrivers = docss.docs.where((doc) {
+    //   final lat = doc['latitude'];
+    //   final lon = doc['longitude'];
+    //   return lon >= boundingBox['minLon']! && lon <= boundingBox['maxLon']!;
+    // }).toList();
+    // log("Docs lenght ${nearbyDrivers.length}");
+  }
+
+  Map<String, double> calculateBoundingBox(
+      double lat, double lon, double distanceInKm) {
+    const earthRadius = 6371;
+    double latDelta = distanceInKm / earthRadius * (180 / math.pi);
+    double lonDelta = distanceInKm /
+        earthRadius *
+        (180 / math.pi) /
+        math.cos(lat * math.pi / 180);
+
+    return {
+      "minLat": lat - latDelta,
+      "maxLat": lat + latDelta,
+      "minLon": lon - lonDelta,
+      "maxLon": lon + lonDelta,
+    };
   }
 }
 // distaance  2.7 km

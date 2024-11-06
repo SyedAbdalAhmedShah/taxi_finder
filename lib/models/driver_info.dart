@@ -21,6 +21,7 @@ class DriverInfo {
   String? licenseImageUrl;
   String? profileUrl;
   String? carInsceptionReport;
+  GeoPoint? latLong;
 
   DriverInfo(
       {this.driverUid,
@@ -41,6 +42,7 @@ class DriverInfo {
       this.carInsceptionReport,
       this.licenseImageUrl,
       this.profileUrl,
+      this.latLong,
       this.licenseNumber});
 
   // Convert from JSON
@@ -76,6 +78,7 @@ class DriverInfo {
       licenseImageUrl: json[FirebaseStrings.licenseImageUrl],
       profileUrl: json[FirebaseStrings.profileUrl],
       status: json[FirebaseStrings.status],
+      latLong: json[FirebaseStrings.latLong]
     );
   }
 
