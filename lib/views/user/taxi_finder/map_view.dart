@@ -37,7 +37,7 @@ class MapSampleState extends State<MapSample> {
   //     "assets/pngwing.com.png",
   //   );
   //   setState(() {
-  //     this.icon = icon; 
+  //     this.icon = icon;
   //   });
   // }
 
@@ -77,15 +77,7 @@ class MapSampleState extends State<MapSample> {
                   myLocationButtonEnabled: true,
                   trafficEnabled: true,
                   myLocationEnabled: true,
-                  onTap: (LatLng latLng) {
-                    // Hide info window when tapping on the map
-                    // setState(() {
-                    //   for (var marker in markers) {
-                    //     markers.remove(marker.copyWith(
-                    //         infoWindowParam: InfoWindow.noText));
-                    //   }
-                    // });
-                  },
+                  onTap: (LatLng latLng) {},
                 );
         },
       ),

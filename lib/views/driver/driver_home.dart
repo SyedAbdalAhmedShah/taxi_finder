@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:taxi_finder/components/logout_button.dart';
+import 'package:taxi_finder/views/driver/driver_map_view.dart';
 
 class DriverHome extends StatelessWidget {
   const DriverHome({super.key});
@@ -8,10 +10,12 @@ class DriverHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [LogoutButton()],
+        actions: const [LogoutButton()],
       ),
-      body: Column(
-        children: [Text('HI There ')],
+      body: const Stack(
+        children: [
+          DriverMapView(),
+        ],
       ),
     );
   }

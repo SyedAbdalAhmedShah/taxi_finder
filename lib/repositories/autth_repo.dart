@@ -5,10 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
 
 mixin AuthRepo {
+  final loggedRole = locator.get<CurrentUserDependency>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -67,6 +70,7 @@ mixin AuthRepo {
     DriverInfo? driverInfo =
         await getDriverData(userCredential.user?.uid ?? "");
     if (driverInfo != null) {
+      loggedRole.setDriver(driverInfo);
       String status = driverInfo.status ?? "";
       if (status == FirebaseStrings.pending) {
         emit(DriverAccountPendingState());
@@ -89,6 +93,7 @@ mixin AuthRepo {
     UserModel? userModel =
         await getUserDataa(uid: userCredential.user?.uid ?? "");
     if (userModel != null) {
+      loggedRole.setUser(userModel);
       await prefrences.setBool(FirebaseStrings.driverStoreKey, false);
 
       emit(UserAuthSuccessState());

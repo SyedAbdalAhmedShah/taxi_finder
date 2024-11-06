@@ -6,7 +6,7 @@ final locator = GetIt.instance;
 
 class DependencySetup {
   static setupDependencies() async {
-    locator.registerSingleton<CurrentUserDependency>(CurrentUserDependency());
+    locator .registerSingleton<CurrentUserDependency>(CurrentUserDependency());
     final sharedPrefDependency =
         locator.registerSingleton<SharedPrefrencesDependency>(
             SharedPrefrencesDependency());

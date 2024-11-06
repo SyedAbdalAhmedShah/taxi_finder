@@ -30,7 +30,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
           bool isVerified = userCredential.user?.emailVerified ?? false;
           if (isVerified) {
             //? check if driver or user
-            log("is driver ${event.isDriver}");
             //? if driver
             if (event.isDriver) {
               await driverStateHandler(emit, userCredential);

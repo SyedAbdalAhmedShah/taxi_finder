@@ -1,4 +1,5 @@
 part of 'driver_bloc.dart';
 
-@immutable
-sealed class DriverEvent {}
+abstract class DriverEvent {}
+
+class DriverCurrentLocationEvent extends DriverEvent {}

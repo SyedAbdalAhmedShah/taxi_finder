@@ -1,6 +1,11 @@
 part of 'driver_bloc.dart';
 
-@immutable
-sealed class DriverState {}
+abstract class DriverState {}
 
 final class DriverInitial extends DriverState {}
+
+final class DriverMapLoadingState extends DriverState {}
+
+final class DriverMapFailureState extends DriverState {}
+
+final class DriverCurrentLocationUpdatedState extends DriverState {}

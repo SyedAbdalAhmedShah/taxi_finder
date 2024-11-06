@@ -5,9 +5,11 @@ import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
 import 'package:taxi_finder/blocs/splash_bloc/splash_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/firebase_options.dart';
 import 'package:taxi_finder/views/splash/splash_screen.dart';
 
@@ -22,6 +24,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+    await DependencySetup.setupDependencies();
   runApp(const MyApp());
 }
 
@@ -42,6 +45,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => UserMapBloc(),
+          ),
+          BlocProvider(
+            create: (context) => DriverBloc(),
           ),
         ],
         child: MaterialApp(
