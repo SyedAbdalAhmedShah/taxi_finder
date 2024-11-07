@@ -39,7 +39,7 @@ class RequestSheet extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "Total distance:",
+                            "Total distance",
                             style: TextStyle(
                                 color: Colors.green.shade800,
                                 fontWeight: FontWeight.bold,
@@ -57,14 +57,14 @@ class RequestSheet extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "Total Fears:",
+                            "Cost",
                             style: TextStyle(
                                 color: Colors.green.shade800,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp),
                           ),
                           Gap(2.w),
-                          Text("${userMapBloc.totalfare}R",
+                          Text("R${userMapBloc.totalfare}",
                               style: TextStyle(
                                   color: Colors.green.shade800,
                                   fontWeight: FontWeight.bold,
