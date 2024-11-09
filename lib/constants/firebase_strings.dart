@@ -14,6 +14,8 @@ class FirebaseStrings {
   static const String licenseExpiryDate = "licenseExpiryDate";
   static const String carRegNumber = "carRegNumber";
   static const String numOfSeats = "numberOfSeats";
+  static const String geohash = "geohash";
+  static const String geopoint = "geopoint";
   static const String companyName = "companyName";
   static const String carModel = "carModel";
   static const String carColor = "carColor";

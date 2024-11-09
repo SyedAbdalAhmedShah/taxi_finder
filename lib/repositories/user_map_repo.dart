@@ -11,7 +11,6 @@ import 'package:http/http.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
-import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 
@@ -134,7 +133,6 @@ class UserMapRepo {
       field: FirebaseStrings.latLong,
       strictMode: true,
       geopointFrom: (obj) {
-        log("OBJ =========   ${obj}");
         return obj[FirebaseStrings.latLong][FirebaseStrings.geoPoint];
       },
     );
@@ -148,26 +146,6 @@ class UserMapRepo {
         log("event ${event.length}");
       },
     );
-    // final boundingBox =
-    //     calculateBoundingBox(positionns.latitude, positionns.longitude, 20);
-    // final docss = await firebaseFirestore
-    //     .collection(FirebaseStrings.driverColl)
-    //     .where(
-    //       FirebaseStrings.latLong,
-    //     )
-    //     .where('latitude', isGreaterThanOrEqualTo: boundingBox['minLat'])
-    //     .where('latitude', isLessThanOrEqualTo: boundingBox['maxLat'])
-    //     .snapshots();
-    //     docss.map((event) => event.docs.map((e) {
-    //       DriverInfo driverInfo = DriverInfo.fromJson(e.data());
-    //       if()
-    //     },),);
-    // final nearbyDrivers = docss.docs.where((doc) {
-    //   final lat = doc['latitude'];
-    //   final lon = doc['longitude'];
-    //   return lon >= boundingBox['minLon']! && lon <= boundingBox['maxLon']!;
-    // }).toList();
-    // log("Docs lenght ${nearbyDrivers.length}");
   }
 
   Map<String, double> calculateBoundingBox(

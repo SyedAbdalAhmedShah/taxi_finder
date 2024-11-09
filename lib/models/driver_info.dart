@@ -21,7 +21,7 @@ class DriverInfo {
   String? licenseImageUrl;
   String? profileUrl;
   String? carInsceptionReport;
-  GeoPoint? latLong;
+  LatLong? latLong;
 
   DriverInfo(
       {this.driverUid,
@@ -59,27 +59,26 @@ class DriverInfo {
       expireDateTime = expireTimeStamp.toDate();
     }
     return DriverInfo(
-      driverUid: json[FirebaseStrings.driverUid],
-      fullName: json[FirebaseStrings.fullName],
-      address: json[FirebaseStrings.address],
-      contactNumber: json[FirebaseStrings.contactNumber],
-      idCardNumber: json[FirebaseStrings.idCardNumber],
-      email: json[FirebaseStrings.email],
-      licenseNumber: json[FirebaseStrings.licenseNumber],
-      licenseIssueDate: issueDateTime,
-      licenseExpiryDate: expireDateTime,
-      carRegNumber: json[FirebaseStrings.carRegNumber],
-      numberOfSeats: json[FirebaseStrings.numOfSeats],
-      companyName: json[FirebaseStrings.companyName],
-      carModel: json[FirebaseStrings.carModel],
-      carColor: json[FirebaseStrings.carColor],
-      carDocUrl: json[FirebaseStrings.carDocUrl],
-      carInsceptionReport: json[FirebaseStrings.carInsceptionReport],
-      licenseImageUrl: json[FirebaseStrings.licenseImageUrl],
-      profileUrl: json[FirebaseStrings.profileUrl],
-      status: json[FirebaseStrings.status],
-      latLong: json[FirebaseStrings.latLong]
-    );
+        driverUid: json[FirebaseStrings.driverUid],
+        fullName: json[FirebaseStrings.fullName],
+        address: json[FirebaseStrings.address],
+        contactNumber: json[FirebaseStrings.contactNumber],
+        idCardNumber: json[FirebaseStrings.idCardNumber],
+        email: json[FirebaseStrings.email],
+        licenseNumber: json[FirebaseStrings.licenseNumber],
+        licenseIssueDate: issueDateTime,
+        licenseExpiryDate: expireDateTime,
+        carRegNumber: json[FirebaseStrings.carRegNumber],
+        numberOfSeats: json[FirebaseStrings.numOfSeats],
+        companyName: json[FirebaseStrings.companyName],
+        carModel: json[FirebaseStrings.carModel],
+        carColor: json[FirebaseStrings.carColor],
+        carDocUrl: json[FirebaseStrings.carDocUrl],
+        carInsceptionReport: json[FirebaseStrings.carInsceptionReport],
+        licenseImageUrl: json[FirebaseStrings.licenseImageUrl],
+        profileUrl: json[FirebaseStrings.profileUrl],
+        status: json[FirebaseStrings.status],
+        latLong: LatLong.fromJson(json[FirebaseStrings.latLong]));
   }
 
   // Convert to JSON
@@ -105,5 +104,30 @@ class DriverInfo {
       FirebaseStrings.status: status,
       FirebaseStrings.numOfSeats: numberOfSeats
     };
+  }
+}
+
+class LatLong {
+  final String? geoHash;
+  final GeoPoint? geoPoint;
+
+  LatLong({this.geoHash, this.geoPoint});
+  Map<String, dynamic> toJson() {
+    return {
+      FirebaseStrings.geohash: geoHash,
+      FirebaseStrings.geoPoint: geoPoint != null
+          ? {'latitude': geoPoint!.latitude, 'longitude': geoPoint!.longitude}
+          : null,
+    };
+  }
+
+  // Create a LatLong instance from a JSON object
+  factory LatLong.fromJson(Map<String, dynamic> json) {
+    return LatLong(
+        geoHash: json[FirebaseStrings.geohash],
+        // ignore: prefer_if_null_operators
+        geoPoint: json[FirebaseStrings.geoPoint] != null
+            ? json[FirebaseStrings.geoPoint]
+            : null);
   }
 }
