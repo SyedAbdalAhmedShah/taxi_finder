@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
+import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
 
@@ -14,7 +16,7 @@ part 'user_map_state.dart';
 
 class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   UserMapRepo userMapRepo = UserMapRepo();
-
+  late StreamSubscription<List<DriverInfo>> nearByDriversStream;
   Geolocator location = Geolocator();
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
@@ -44,7 +46,8 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         if (isPermissionEnable == LocationPermission.always ||
             isPermissionEnable == LocationPermission.whileInUse) {
           currentLocationPosition = await Geolocator.getCurrentPosition();
-      userMapRepo.getNearByDrivers(currentLocationPosition);
+          nearByDriversStream =
+              userMapRepo.getNearByDrivers(currentLocationPosition);
           List<gc.Placemark> placemarks = await gc.GeocodingPlatform.instance!
               .placemarkFromCoordinates(currentLocationPosition.latitude,
                   currentLocationPosition.longitude);

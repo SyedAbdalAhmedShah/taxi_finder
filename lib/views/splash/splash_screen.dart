@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
@@ -30,7 +27,6 @@ class SplashScreen extends StatelessWidget {
         fontSize: 32.sp, fontFamily: 'Horizon', fontWeight: FontWeight.w600);
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
-        log("Splash state $state ", name: "Splash Screen");
         if (state is DriverAuthenticatedState) {
           context.pushReplacment(const DriverHome());
         } else if (state is UserAuthenticatedState) {
@@ -45,6 +41,7 @@ class SplashScreen extends StatelessWidget {
           Utils.showErrortoast(errorMessage: state.errorMessage);
           Future.delayed(
             const Duration(seconds: 2),
+            // ignore: use_build_context_synchronously
             () => context.pushReplacment(const BridgeScreen()),
           );
         }
@@ -65,9 +62,6 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ],
                 isRepeatingAnimation: true,
-                onTap: () {
-                  print("Tap Event");
-                },
               ),
               Gap(5.h),
               const CircularProgressIndicator.adaptive(

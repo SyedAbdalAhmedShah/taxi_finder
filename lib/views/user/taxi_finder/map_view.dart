@@ -54,6 +54,12 @@ class MapSampleState extends State<MapSample> {
       listener: (context, state) {
         if (state is UserMapFailureState) {
           Utils.showErrortoast(errorMessage: state.errorMessage);
+        } else if (state is UpdateMapState) {
+          userMapBloc.nearByDriversStream.onData(
+            (data) {
+              log('driver streammmmmms ======= ${data.length}');
+            },
+          );
         }
       },
       child: BlocBuilder<UserMapBloc, UserMapState>(

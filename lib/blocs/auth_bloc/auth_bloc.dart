@@ -49,7 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
         emit(AuthFailureState(failureMessage: athError));
       } catch (error) {
         log("gernel error $error", name: "sign in event");
-        emit(AuthFailureState(failureMessage: usrNotFnd));
+        emit(AuthFailureState(failureMessage: somethingwrong));
       }
     });
 

@@ -78,7 +78,9 @@ class DriverInfo {
         licenseImageUrl: json[FirebaseStrings.licenseImageUrl],
         profileUrl: json[FirebaseStrings.profileUrl],
         status: json[FirebaseStrings.status],
-        latLong: LatLong.fromJson(json[FirebaseStrings.latLong]));
+        latLong: json[FirebaseStrings.latLong] != null
+            ? LatLong.fromJson(json[FirebaseStrings.latLong])
+            : null);
   }
 
   // Convert to JSON

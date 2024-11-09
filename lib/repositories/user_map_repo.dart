@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
@@ -11,6 +12,7 @@ import 'package:http/http.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
+import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 
@@ -121,7 +123,7 @@ class UserMapRepo {
     return totalFare;
   }
 
-  getNearByDrivers(Position positionns) async {
+  StreamSubscription<List<DriverInfo>> getNearByDrivers(Position positionns) {
     GeoPoint location = GeoPoint(positionns.latitude, positionns.longitude);
     final GeoFirePoint center = GeoFirePoint(location);
     const double radiusInKm = 50;
@@ -136,16 +138,16 @@ class UserMapRepo {
         return obj[FirebaseStrings.latLong][FirebaseStrings.geoPoint];
       },
     );
-    stream.asBroadcastStream(
-      onListen: (subscription) {
-        log("HIII");
-      },
+    Stream<List<DriverInfo>> driverInfo = stream.map(
+      (event) => event
+          .map(
+            (e) => DriverInfo.fromJson(e.data() ?? {}),
+          )
+          .toList(),
     );
-    stream.listen(
-      (event) {
-        log("event ${event.length}");
-      },
-    );
+
+    final driverSteamSubscriptions = driverInfo.listen((driverInfo) {});
+    return driverSteamSubscriptions;
   }
 
   Map<String, double> calculateBoundingBox(

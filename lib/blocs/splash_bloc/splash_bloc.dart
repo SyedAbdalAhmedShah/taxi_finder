@@ -19,8 +19,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
 
   SplashBloc() : super(SplashInitial()) {
     on<CheckUserAuthentication>((event, emit) async {
-    
-
       final sharedPrefDep = locator.get<SharedPrefrencesDependency>();
       final loggedRole = locator.get<CurrentUserDependency>();
       final currentUser = _auth.currentUser;
@@ -34,7 +32,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
             DriverInfo? driverInfo = await getDriverData(currentUser.uid);
             if (driverInfo != null) {
               loggedRole.setDriver(driverInfo);
-              if (driverInfo.status == FirebaseStrings.accepted) {
+              if (driverInfo.status == FirebaseStrings.approved) {
                 emit(DriverAuthenticatedState());
               } else if (driverInfo.status == FirebaseStrings.pending) {
                 emit(DriverPendingState());
