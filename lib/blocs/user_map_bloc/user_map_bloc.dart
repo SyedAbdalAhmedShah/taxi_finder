@@ -16,7 +16,8 @@ part 'user_map_state.dart';
 
 class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   UserMapRepo userMapRepo = UserMapRepo();
-  late StreamSubscription<List<DriverInfo>> nearByDriversStream;
+  late Stream<List<DriverInfo>> nearByDriversStream;
+  Set<Marker> nearByDriverMarker = {};
   Geolocator location = Geolocator();
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
@@ -63,6 +64,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                 currentLocationPosition.longitude),
             zoom: 15.4746,
           );
+
           emit(UpdateMapState());
         } else {
           await Geolocator.requestPermission();
@@ -123,6 +125,32 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         } catch (error) {
           log("error occur in catch $error", name: "OnLocationSelectedEvent");
         }
+      },
+    );
+    on<NearByDriverAddedEvent>(
+      (event, emit) async {
+        final updatedMarkers = <Marker>{};
+        final currentDriverIds =
+            event.nearByDrivers.map((driver) => driver.driverUid ?? "").toSet();
+
+        var icon = await BitmapDescriptor.asset(
+          const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
+          "assets/pngwing.com.png",
+        );
+
+        for (final driver in event.nearByDrivers) {
+          Marker driverMarker = Marker(
+              markerId: MarkerId(driver.driverUid ?? ""),
+              position: LatLng(driver.latLong?.geoPoint?.latitude ?? 0.0,
+                  driver.latLong?.geoPoint?.longitude ?? 0.0),
+              icon: icon);
+          updatedMarkers.add(driverMarker);
+        }
+        nearByDriverMarker = updatedMarkers;
+        nearByDriverMarker.removeWhere(
+            (marker) => !currentDriverIds.contains(marker.markerId.value));
+
+        emit(OnNearByDriverAdded());
       },
     );
   }

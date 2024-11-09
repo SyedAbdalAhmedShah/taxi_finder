@@ -55,9 +55,10 @@ class MapSampleState extends State<MapSample> {
         if (state is UserMapFailureState) {
           Utils.showErrortoast(errorMessage: state.errorMessage);
         } else if (state is UpdateMapState) {
-          userMapBloc.nearByDriversStream.onData(
-            (data) {
-              log('driver streammmmmms ======= ${data.length}');
+          userMapBloc.nearByDriversStream.listen(
+            (event) {
+              log("hi triggered ${event.length}");
+              userMapBloc.add(NearByDriverAddedEvent(nearByDrivers: event));
             },
           );
         }
@@ -72,18 +73,22 @@ class MapSampleState extends State<MapSample> {
               : GoogleMap(
                   mapType: MapType.normal,
                   initialCameraPosition: userMapBloc.cameraPosition,
-                  onMapCreated: (GoogleMapController controller) async {
-                    _controller.complete(controller);
-                  },
+                  onMapCreated: (GoogleMapController controller) async {},
                   buildingsEnabled: true,
                   fortyFiveDegreeImageryEnabled: true,
                   polylines: userMapBloc.polylineSet,
                   onCameraMoveStarted: () => log("message"),
-                  markers: userMapBloc.markers,
+                  markers: {
+                    ...userMapBloc.nearByDriverMarker,
+                    ...userMapBloc.markers
+                  },
                   myLocationButtonEnabled: true,
                   trafficEnabled: true,
                   myLocationEnabled: true,
-                  onTap: (LatLng latLng) {},
+                  onTap: (LatLng latLng) {
+                    log('latitude ${latLng.latitude}');
+                    log('longitude ${latLng.longitude}');
+                  },
                 );
         },
       ),

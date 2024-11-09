@@ -123,7 +123,7 @@ class UserMapRepo {
     return totalFare;
   }
 
-  StreamSubscription<List<DriverInfo>> getNearByDrivers(Position positionns) {
+  Stream<List<DriverInfo>> getNearByDrivers(Position positionns) {
     GeoPoint location = GeoPoint(positionns.latitude, positionns.longitude);
     final GeoFirePoint center = GeoFirePoint(location);
     const double radiusInKm = 50;
@@ -138,16 +138,18 @@ class UserMapRepo {
         return obj[FirebaseStrings.latLong][FirebaseStrings.geoPoint];
       },
     );
-    Stream<List<DriverInfo>> driverInfo = stream.map(
-      (event) => event
-          .map(
-            (e) => DriverInfo.fromJson(e.data() ?? {}),
-          )
-          .toList(),
-    );
 
-    final driverSteamSubscriptions = driverInfo.listen((driverInfo) {});
-    return driverSteamSubscriptions;
+    Stream<List<DriverInfo>> driverInfo = stream.asBroadcastStream().map(
+          (event) => event
+              .map(
+                (e) => DriverInfo.fromJson(e.data() ?? {}),
+              )
+              .toList(),
+        );
+
+   
+    // final driverSteamSubscriptions = driverInfo.listen((driverInfo) {});
+    return driverInfo;
   }
 
   Map<String, double> calculateBoundingBox(

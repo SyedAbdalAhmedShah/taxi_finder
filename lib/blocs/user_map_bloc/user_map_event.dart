@@ -16,6 +16,13 @@ class OnLocationSearchEvent extends UserMapEvent {
   OnLocationSearchEvent({required this.query});
 }
 
+
+class NearByDriverAddedEvent extends UserMapEvent {
+  final List<DriverInfo> nearByDrivers;
+
+  NearByDriverAddedEvent({required this.nearByDrivers});
+}
+
 class OnLocationSelectedEvent extends UserMapEvent {
   final Prediction prediction;
 
