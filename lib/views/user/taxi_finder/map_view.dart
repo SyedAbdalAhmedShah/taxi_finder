@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,8 +13,6 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
   late UserMapBloc userMapBloc;
 
   late BitmapDescriptor icon;
@@ -29,17 +25,6 @@ class MapSampleState extends State<MapSample> {
       width: 4,
     ),
   };
-
-// Cargar imagen del Marker
-  // getIcons() async {
-  //   var icon = await BitmapDescriptor.asset(
-  //     const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
-  //     "assets/pngwing.com.png",
-  //   );
-  //   setState(() {
-  //     this.icon = icon;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -57,8 +42,9 @@ class MapSampleState extends State<MapSample> {
         } else if (state is UpdateMapState) {
           userMapBloc.nearByDriversStream.listen(
             (event) {
-              log("hi triggered ${event.length}");
-              userMapBloc.add(NearByDriverAddedEvent(nearByDrivers: event));
+              userMapBloc.add(
+                NearByDriverAddedEvent(nearByDrivers: event),
+              );
             },
           );
         }
