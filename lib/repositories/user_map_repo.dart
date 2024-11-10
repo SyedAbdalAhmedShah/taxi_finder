@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -147,7 +148,6 @@ class UserMapRepo {
               .toList(),
         );
 
-   
     // final driverSteamSubscriptions = driverInfo.listen((driverInfo) {});
     return driverInfo;
   }
@@ -167,6 +167,25 @@ class UserMapRepo {
       "minLon": lon - lonDelta,
       "maxLon": lon + lonDelta,
     };
+  }
+
+  Future<(String address, String isoCode)> getFullStringAddress(
+      Position currentLocationPosition) async {
+    List<Placemark> placemarks = await GeocodingPlatform.instance!
+        .placemarkFromCoordinates(currentLocationPosition.latitude,
+            currentLocationPosition.longitude);
+    Placemark placemark = placemarks.first;
+    String address =
+        "${placemark.street ?? ""}${placemark.subLocality ?? ""} ${placemark.locality ?? ""} ${placemark.administrativeArea ?? ""} ${placemark.country ?? ""}";
+    String countryISOCode = placemark.isoCountryCode ?? "PK";
+    return (address, countryISOCode);
+  }
+
+  Future requestToNearByDriver(Position userCurrentPosition) async {
+    GeoPoint userGeoPoinnt =
+        GeoPoint(userCurrentPosition.latitude, userCurrentPosition.longitude);
+    final GeoFirePoint userLocation = GeoFirePoint(userGeoPoinnt);
+    // userLocation.distanceBetweenInKm(geopoint: geopoint)
   }
 }
 // distaance  2.7 km

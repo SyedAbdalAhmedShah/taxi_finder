@@ -11,9 +11,9 @@ class LogoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
             listener: (context, state) {
-              if (state is SuccessfullySignOut) {
-                context.pushAndRemoveUntil(const BridgeScreen());
-              }
+                if (state is SuccessfullySignOut) {
+                  context.pushAndRemoveUntil(const BridgeScreen());
+                }
             },
             child: IconButton(
                 onPressed: () {

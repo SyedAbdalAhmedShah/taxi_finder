@@ -49,16 +49,10 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           currentLocationPosition = await Geolocator.getCurrentPosition();
           nearByDriversStream =
               userMapRepo.getNearByDrivers(currentLocationPosition);
-          List<gc.Placemark> placemarks = await gc.GeocodingPlatform.instance!
-              .placemarkFromCoordinates(currentLocationPosition.latitude,
-                  currentLocationPosition.longitude);
-          gc.Placemark placemark = placemarks.first;
-          String address =
-              "${placemark.street ?? ""}${placemark.subLocality ?? ""} ${placemark.locality ?? ""} ${placemark.administrativeArea ?? ""} ${placemark.country ?? ""}";
-          countryISO = placemark.isoCountryCode ?? "PK";
-
-          myLocationController.text = address;
-
+          final placeMarkers =
+              await userMapRepo.getFullStringAddress(currentLocationPosition);
+          countryISO = placeMarkers.$2;
+          destinationController.text = placeMarkers.$1;
           cameraPosition = CameraPosition(
             target: LatLng(currentLocationPosition.latitude,
                 currentLocationPosition.longitude),
@@ -151,6 +145,14 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
             (marker) => !currentDriverIds.contains(marker.markerId.value));
 
         emit(OnNearByDriverAdded());
+      },
+    );
+
+    on<OnRequestForRiding>(
+      (event, emit) {
+        try {
+          emit(OnRidingRequestLoadingState());
+        } catch (error) {}
       },
     );
   }
