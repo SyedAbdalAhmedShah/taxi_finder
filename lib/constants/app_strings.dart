@@ -7,14 +7,16 @@ const createAccount = 'Create your account';
 const email = 'Email Address';
 const fullName = 'Full Name';
 const logout = 'Something went wrong, User logout';
-const taxiFinderS ="Taxi Finder Service";
-const shuttleFinderS ="Shuttle Finder Service";
-const selectService ="Select Service";
+const taxiFinderS = "Taxi Finder Service";
+const shuttleFinderS = "Shuttle Finder Service";
+const selectService = "Select Service";
 const String validEmail = 'Please enter a valid email';
 const String emptyField = 'Field can not be empty';
 const String greaterThanZero = 'Value must be greater than zero';
 const String routeNotFount = 'Route Not found';
-
+const String noRiderAvail = 'No rider is available ';
+const String technicalIssue =
+    'Opps! Something went wrong because of some technical issue';
 
 const enterFullName = 'Enter your full name';
 const whoUR = 'Who You Are';

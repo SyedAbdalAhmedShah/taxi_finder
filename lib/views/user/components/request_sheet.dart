@@ -96,7 +96,9 @@ class RequestSheet extends StatelessWidget {
                             if (selectedService ==
                                 ServiceSelected.shuttleFinder) {
                               if (key.currentState?.validate() ?? false) {}
-                            } else {}
+                            } else {
+                              userMapBloc.add(OnRequestForRiding());
+                            }
                           })
                     ],
                   ),

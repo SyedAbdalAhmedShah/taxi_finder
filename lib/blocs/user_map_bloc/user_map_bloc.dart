@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart' as gc;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
@@ -18,6 +18,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   UserMapRepo userMapRepo = UserMapRepo();
   late Stream<List<DriverInfo>> nearByDriversStream;
   Set<Marker> nearByDriverMarker = {};
+  List<DriverInfo> nearByDrivers = [];
   Geolocator location = Geolocator();
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
@@ -49,10 +50,15 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           currentLocationPosition = await Geolocator.getCurrentPosition();
           nearByDriversStream =
               userMapRepo.getNearByDrivers(currentLocationPosition);
+          GeoPoint currentGeoPoint = GeoPoint(currentLocationPosition.latitude,
+              currentLocationPosition.longitude);
           final placeMarkers =
-              await userMapRepo.getFullStringAddress(currentLocationPosition);
+              await userMapRepo.getFullStringAddress(currentGeoPoint);
+
+          log("s1 ${placeMarkers.$1}");
+          log("s2 ${placeMarkers.$2}");
           countryISO = placeMarkers.$2;
-          destinationController.text = placeMarkers.$1;
+          myLocationController.text = placeMarkers.$1;
           cameraPosition = CameraPosition(
             target: LatLng(currentLocationPosition.latitude,
                 currentLocationPosition.longitude),
@@ -131,7 +137,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
           "assets/pngwing.com.png",
         );
-
+        nearByDrivers = event.nearByDrivers;
         for (final driver in event.nearByDrivers) {
           Marker driverMarker = Marker(
               markerId: MarkerId(driver.driverUid ?? ""),
@@ -149,10 +155,23 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     );
 
     on<OnRequestForRiding>(
-      (event, emit) {
+      (event, emit) async {
         try {
           emit(OnRidingRequestLoadingState());
-        } catch (error) {}
+          if (nearByDriverMarker.isNotEmpty) {
+            for (final drivers in nearByDrivers) {
+              await userMapRepo.requestToNearByDriver(
+                  drivers.latLong?.geoPoint ?? const GeoPoint(0.0, 0.0),
+                  drivers.driverUid ?? "");
+            }
+            emit(OnRidingRequestSendState());
+          } else {
+            emit(UserMapFailureState(errorMessage: noRiderAvail));
+          }
+        } catch (error) {
+          log("Error occure $error", name: "OnRequestForRiding");
+          emit(UserMapFailureState(errorMessage: technicalIssue));
+        }
       },
     );
   }

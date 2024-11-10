@@ -4,6 +4,8 @@ abstract class UserMapState {}
 
 class OnRidingRequestLoadingState extends UserMapState {}
 
+class OnRidingRequestSendState extends UserMapState {}
+
 final class UserMapInitial extends UserMapState {}
 
 final class UserMapLoadingState extends UserMapState {}

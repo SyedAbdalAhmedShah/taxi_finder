@@ -1,8 +1,11 @@
 class FirebaseStrings {
   static const String driverColl = "Drivers";
+  static const String availableRidesColl = "availableRides";
   static const String usersColl = "Users";
 
   static const String driverUid = "driverUid";
+  static const String userLatlong = "userLatLong";
+
   static const String fullName = "fullName";
   static const String uid = "uid";
   static const String address = "address";

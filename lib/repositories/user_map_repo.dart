@@ -170,7 +170,7 @@ class UserMapRepo {
   }
 
   Future<(String address, String isoCode)> getFullStringAddress(
-      Position currentLocationPosition) async {
+      GeoPoint currentLocationPosition) async {
     List<Placemark> placemarks = await GeocodingPlatform.instance!
         .placemarkFromCoordinates(currentLocationPosition.latitude,
             currentLocationPosition.longitude);
@@ -181,11 +181,22 @@ class UserMapRepo {
     return (address, countryISOCode);
   }
 
-  Future requestToNearByDriver(Position userCurrentPosition) async {
-    GeoPoint userGeoPoinnt =
-        GeoPoint(userCurrentPosition.latitude, userCurrentPosition.longitude);
-    final GeoFirePoint userLocation = GeoFirePoint(userGeoPoinnt);
-    // userLocation.distanceBetweenInKm(geopoint: geopoint)
+  Future requestToNearByDriver(GeoPoint geoPoint, String driverId) async {
+    final GeoFirePoint userLocation = GeoFirePoint(geoPoint);
+    double distance = userLocation.distanceBetweenInKm(geopoint: geoPoint);
+    log("Distance $distance ");
+    log("user location ======= ${userLocation.data}");
+    final stringAddress = await getFullStringAddress(geoPoint);
+    final ref = firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(driverId)
+        .collection(FirebaseStrings.availableRidesColl)
+        .doc();
+    ref.set({
+      FirebaseStrings.userLatlong: userLocation.data,
+      FirebaseStrings.address: stringAddress.$1,
+      FirebaseStrings.uid: ref.id,
+    });
   }
 }
 // distaance  2.7 km
