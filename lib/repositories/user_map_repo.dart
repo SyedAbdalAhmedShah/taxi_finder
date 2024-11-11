@@ -199,7 +199,7 @@ class UserMapRepo {
       FirebaseStrings.userLatlong: userLocation.data,
       FirebaseStrings.address: stringAddress.$1,
       FirebaseStrings.uid: ref.id,
-      FirebaseStrings.status: FirebaseStrings.pending,
+      FirebaseStrings.status: FirebaseStrings.inProcess,
     });
   }
 }

@@ -1,14 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/driver_info.dart'; // For GeoPoint
 
-class UserLocation {
+class UserRequestModel {
   String address;
   String status;
   String uid;
   LatLong? userLatLong;
 
-  UserLocation({
+  UserRequestModel({
     required this.address,
     required this.status,
     required this.uid,
@@ -16,8 +16,8 @@ class UserLocation {
   });
 
   // Convert JSON to UserLocation object
-  factory UserLocation.fromJson(Map<String, dynamic> json) {
-    return UserLocation(
+  factory UserRequestModel.fromJson(Map<String, dynamic> json) {
+    return UserRequestModel(
       address: json[FirebaseStrings.address] as String,
       status: json[FirebaseStrings.status] as String,
       uid: json[FirebaseStrings.uid] as String,

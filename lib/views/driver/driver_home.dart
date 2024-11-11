@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/driver/components/driver_drawer.dart';
+import 'package:taxi_finder/views/driver/components/users_requests.dart';
 import 'package:taxi_finder/views/driver/driver_map_view.dart';
 
 class DriverHome extends StatelessWidget {
@@ -18,10 +19,7 @@ class DriverHome extends StatelessWidget {
         ),
       ),
       body: const Stack(
-        children: [
-          
-          DriverMapView(),
-        ],
+        children: [DriverMapView(), UsersRequestsSection()],
       ),
     );
   }

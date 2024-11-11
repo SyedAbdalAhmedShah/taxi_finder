@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
 
 part 'driver_event.dart';
@@ -11,7 +12,7 @@ part 'driver_state.dart';
 
 class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
   late GoogleMapController mapController;
-  List<>
+  late List<UserRequestModel> userRequest;
   StreamSubscription<Position>? positionStream;
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -55,9 +56,10 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
       }
     });
 
-on<OnRideRequestRecieveEvent>((event, emit) {
-  
-},);
-
+    on<OnRideRequestRecieveEvent>(
+      (event, emit) {
+        
+      },
+    );
   }
 }
