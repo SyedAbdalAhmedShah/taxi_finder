@@ -1,6 +1,6 @@
 class FirebaseStrings {
   static const String driverColl = "Drivers";
-  static const String availableRidesColl = "availableRides";
+  static const String ridesColl = "rides";
   static const String usersColl = "Users";
 
   static const String driverUid = "driverUid";
@@ -8,6 +8,7 @@ class FirebaseStrings {
 
   static const String fullName = "fullName";
   static const String uid = "uid";
+
   static const String address = "address";
   static const String contactNumber = "contactNumber";
   static const String idCardNumber = "idCardNumber";

@@ -181,21 +181,25 @@ class UserMapRepo {
     return (address, countryISOCode);
   }
 
-  Future requestToNearByDriver(GeoPoint geoPoint, String driverId) async {
-    final GeoFirePoint userLocation = GeoFirePoint(geoPoint);
-    double distance = userLocation.distanceBetweenInKm(geopoint: geoPoint);
+  Future requestToNearByDriver(
+      GeoPoint driverGeopoint, GeoPoint userGeoPoint, String driverId) async {
+    final GeoFirePoint userLocation = GeoFirePoint(userGeoPoint);
+
+    double distance =
+        userLocation.distanceBetweenInKm(geopoint: driverGeopoint);
     log("Distance $distance ");
     log("user location ======= ${userLocation.data}");
-    final stringAddress = await getFullStringAddress(geoPoint);
+    final stringAddress = await getFullStringAddress(userGeoPoint);
     final ref = firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(driverId)
-        .collection(FirebaseStrings.availableRidesColl)
+        .collection(FirebaseStrings.ridesColl)
         .doc();
     ref.set({
       FirebaseStrings.userLatlong: userLocation.data,
       FirebaseStrings.address: stringAddress.$1,
       FirebaseStrings.uid: ref.id,
+      FirebaseStrings.status: FirebaseStrings.pending,
     });
   }
 }

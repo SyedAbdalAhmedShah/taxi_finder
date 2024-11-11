@@ -11,6 +11,7 @@ part 'driver_state.dart';
 
 class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
   late GoogleMapController mapController;
+  List<>
   StreamSubscription<Position>? positionStream;
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -53,5 +54,10 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         emit(DriverMapFailureState());
       }
     });
+
+on<OnRideRequestRecieveEvent>((event, emit) {
+  
+},);
+
   }
 }

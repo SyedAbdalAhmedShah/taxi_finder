@@ -55,6 +55,7 @@ dependencies:
   http: ^1.2.2
   geoflutterfire_plus: ^0.0.31
   cached_network_image: ^3.4.1
+  modal_progress_hud_nsn: ^0.5.1
 
 
 dev_dependencies:

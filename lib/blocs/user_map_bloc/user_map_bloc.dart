@@ -16,6 +16,7 @@ part 'user_map_state.dart';
 
 class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   UserMapRepo userMapRepo = UserMapRepo();
+  late GoogleMapController gController;
   late Stream<List<DriverInfo>> nearByDriversStream;
   Set<Marker> nearByDriverMarker = {};
   List<DriverInfo> nearByDrivers = [];
@@ -59,12 +60,14 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           log("s2 ${placeMarkers.$2}");
           countryISO = placeMarkers.$2;
           myLocationController.text = placeMarkers.$1;
+
           cameraPosition = CameraPosition(
             target: LatLng(currentLocationPosition.latitude,
                 currentLocationPosition.longitude),
             zoom: 15.4746,
           );
-
+          gController
+              .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
           emit(UpdateMapState());
         } else {
           await Geolocator.requestPermission();
@@ -157,11 +160,14 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     on<OnRequestForRiding>(
       (event, emit) async {
         try {
+          GeoPoint userGeoPoint = GeoPoint(currentLocationPosition.latitude,
+              currentLocationPosition.longitude);
           emit(OnRidingRequestLoadingState());
           if (nearByDriverMarker.isNotEmpty) {
             for (final drivers in nearByDrivers) {
               await userMapRepo.requestToNearByDriver(
                   drivers.latLong?.geoPoint ?? const GeoPoint(0.0, 0.0),
+                  userGeoPoint,
                   drivers.driverUid ?? "");
             }
             emit(OnRidingRequestSendState());
