@@ -12,6 +12,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
@@ -20,7 +22,7 @@ import 'package:taxi_finder/utils/api_helper.dart';
 class UserMapRepo {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   PolylinePoints polylinePoints = PolylinePoints();
-
+  final loggedRole = locator.get<CurrentUserDependency>();
   Future getDirection(
       {required LatLng source, required LatLng destination}) async {
     final String url = 'https://maps.googleapis.com/maps/api/directions/json?'
@@ -181,8 +183,8 @@ class UserMapRepo {
     return (address, countryISOCode);
   }
 
-  Future requestToNearByDriver(
-      GeoPoint driverGeopoint, GeoPoint userGeoPoint, String driverId) async {
+  Future requestToNearByDriver(GeoPoint driverGeopoint, GeoPoint userGeoPoint,
+      String driverId, String destination) async {
     final GeoFirePoint userLocation = GeoFirePoint(userGeoPoint);
 
     double distance =
@@ -198,7 +200,9 @@ class UserMapRepo {
     ref.set({
       FirebaseStrings.userLatlong: userLocation.data,
       FirebaseStrings.address: stringAddress.$1,
+      FirebaseStrings.destination: destination,
       FirebaseStrings.uid: ref.id,
+      FirebaseStrings.userId: loggedRole.userModel.uid,
       FirebaseStrings.status: FirebaseStrings.inProcess,
     });
   }

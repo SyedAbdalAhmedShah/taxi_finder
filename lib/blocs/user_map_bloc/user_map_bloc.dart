@@ -168,7 +168,8 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
               await userMapRepo.requestToNearByDriver(
                   drivers.latLong?.geoPoint ?? const GeoPoint(0.0, 0.0),
                   userGeoPoint,
-                  drivers.driverUid ?? "");
+                  drivers.driverUid ?? "",
+                  destinationController.text);
             }
             emit(OnRidingRequestSendState());
           } else {

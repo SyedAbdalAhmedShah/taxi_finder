@@ -8,6 +8,7 @@ import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
+import 'package:taxi_finder/models/user_request_model.dart';
 
 mixin DriverMapRepo {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -28,5 +29,31 @@ mixin DriverMapRepo {
       field: FirebaseStrings.latLong,
       geopoint: GeoPoint(position.latitude, position.longitude),
     );
+  }
+
+  Stream<List<UserRequestModel>> requestbyUserToDriver() {
+    final ref = _firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedRole.driverInfo.driverUid)
+        .collection(FirebaseStrings.ridesColl)
+        .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.inProcess);
+    final snapshot = ref.snapshots();
+    Stream<List<UserRequestModel>> requestStream = snapshot.map(
+      (event) => event.docs
+          .map(
+            (e) => UserRequestModel.fromJson(e.data()),
+          )
+          .toList(),
+    );
+    return requestStream;
+  }
+
+  Future expireRequest({required String docId}) async {
+    await _firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedRole.driverInfo.driverUid)
+        .collection(FirebaseStrings.ridesColl)
+        .doc(docId)
+        .update({FirebaseStrings.status: FirebaseStrings.expired});
   }
 }

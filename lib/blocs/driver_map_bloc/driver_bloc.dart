@@ -55,10 +55,10 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         emit(DriverMapFailureState());
       }
     });
-
-    on<OnRideRequestRecieveEvent>(
-      (event, emit) {
-        
+    on<OnRequestExpireEvent>(
+      (event, emit) async {
+        await expireRequest(docId: event.docId);
+        emit(ExpiredRequestState());
       },
     );
   }

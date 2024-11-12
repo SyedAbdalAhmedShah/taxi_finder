@@ -5,3 +5,9 @@ abstract class DriverEvent {}
 class DriverCurrentLocationEvent extends DriverEvent {}
 
 class OnRideRequestRecieveEvent extends DriverEvent {}
+
+class OnRequestExpireEvent extends DriverEvent {
+  final String docId;
+
+  OnRequestExpireEvent({required this.docId});
+}
