@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
@@ -24,7 +25,6 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
   String? countryISO;
-  FocusNode destinationFocusNode = FocusNode();
   String totalLocationDistance = "";
   String totalfare = "";
   bool showRequestSheet = false;
@@ -138,7 +138,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
 
         var icon = await BitmapDescriptor.asset(
           const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
-          "assets/pngwing.com.png",
+          vanImage,
         );
         nearByDrivers = event.nearByDrivers;
         for (final driver in event.nearByDrivers) {

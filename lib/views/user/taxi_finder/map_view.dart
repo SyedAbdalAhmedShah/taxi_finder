@@ -18,17 +18,6 @@ class MapSample extends StatefulWidget {
 class MapSampleState extends State<MapSample> {
   late UserMapBloc userMapBloc;
 
-  late BitmapDescriptor icon;
-
-  Set<Polyline> polylines = {
-    const Polyline(
-      polylineId: PolylineId('route1'),
-      points: [LatLng(37.7749, -122.4194), LatLng(34.0522, -118.2437)],
-      color: Colors.blue,
-      width: 4,
-    ),
-  };
-
   @override
   void initState() {
     userMapBloc = context.read<UserMapBloc>();
@@ -65,7 +54,6 @@ class MapSampleState extends State<MapSample> {
               initialCameraPosition: userMapBloc.cameraPosition,
               onMapCreated: (GoogleMapController controller) async {
                 userMapBloc.gController = controller;
-                
               },
               buildingsEnabled: true,
               fortyFiveDegreeImageryEnabled: true,
