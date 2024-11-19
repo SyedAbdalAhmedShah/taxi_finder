@@ -33,9 +33,9 @@ mixin DriverMapRepo {
 
   Stream<List<UserRequestModel>> requestbyUserToDriver() {
     final ref = _firebaseFirestore
-        .collection(FirebaseStrings.driverColl)
-        .doc(loggedRole.driverInfo.driverUid)
-        .collection(FirebaseStrings.ridesColl)
+        .collectionGroup(FirebaseStrings.ridesColl)
+        .where(FirebaseStrings.driverUid,
+            isEqualTo: loggedRole.driverInfo.driverUid)
         .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.inProcess);
     final snapshot = ref.snapshots();
     Stream<List<UserRequestModel>> requestStream = snapshot.map(
@@ -48,12 +48,20 @@ mixin DriverMapRepo {
     return requestStream;
   }
 
-  Future expireRequest({required String docId}) async {
+  Future updateRideRequestedDoc(
+      {required String docId, required String status}) async {
     await _firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(loggedRole.driverInfo.driverUid)
         .collection(FirebaseStrings.ridesColl)
         .doc(docId)
-        .update({FirebaseStrings.status: FirebaseStrings.expired});
+        .update({FirebaseStrings.status: status});
+  }
+
+  acceptRequest(String docId) async {
+    final ref = _firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedRole.driverInfo.driverUid);
+    ref.set({FirebaseStrings.activeRide: docId}, SetOptions(merge: true));
   }
 }

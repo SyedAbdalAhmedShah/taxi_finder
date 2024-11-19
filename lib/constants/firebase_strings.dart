@@ -31,7 +31,10 @@ class FirebaseStrings {
   static const String profileUrl = "profileUrl";
   static const String carDocUrl = "carDocUrl";
   static const String status = "status";
+  static const String activeRide = "activeRide";
+  static const String activeRideI = "activeRide";
   static const String expired = "expired";
+  static const String accepted = "accepted";
   static const String pending = "Pending";
   static const String inProcess = "inProcess";
   static const String approved = "Approved";

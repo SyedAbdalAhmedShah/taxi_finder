@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
 
@@ -38,7 +39,6 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
                   driverCurrentPosition.longitude),
               zoom: 16.4746,
             );
-
             mapController
                 .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
@@ -57,8 +57,18 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
     });
     on<OnRequestExpireEvent>(
       (event, emit) async {
-        await expireRequest(docId: event.docId);
+        await updateRideRequestedDoc(
+            docId: event.docId, status: FirebaseStrings.expired);
+
         emit(ExpiredRequestState());
+      },
+    );
+    on<OnAcceptRide>(
+      (event, emit) async {
+        await acceptRequest(event.docId);
+        await updateRideRequestedDoc(
+            docId: event.docId, status: FirebaseStrings.accepted);
+        emit(RideAcceptedState());
       },
     );
   }

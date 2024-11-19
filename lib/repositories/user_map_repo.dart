@@ -197,6 +197,7 @@ class UserMapRepo {
         .doc(driverId)
         .collection(FirebaseStrings.ridesColl)
         .doc();
+
     ref.set({
       FirebaseStrings.userLatlong: userLocation.data,
       FirebaseStrings.address: stringAddress.$1,

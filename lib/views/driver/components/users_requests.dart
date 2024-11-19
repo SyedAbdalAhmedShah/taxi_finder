@@ -29,6 +29,7 @@ class _UsersRequestsSectionState extends State<UsersRequestsSection> {
     return StreamBuilder<List<UserRequestModel>>(
         stream: driverBloc.requestbyUserToDriver(),
         builder: (context, snapshot) {
+          log('error ${snapshot.error}');
           if (snapshot.connectionState == ConnectionState.active ||
               snapshot.connectionState == ConnectionState.done) {
             List<UserRequestModel>? userRequestModel = snapshot.data;
@@ -44,7 +45,7 @@ class _UsersRequestsSectionState extends State<UsersRequestsSection> {
                         ));
               }
             } else {
-              throw "Request getting null";
+              return SizedBox.shrink();
             }
           } else {
             return const SizedBox.shrink();
@@ -108,7 +109,13 @@ class UserRequestCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text("Accept"))
+                ElevatedButton(
+                    onPressed: () {
+                      context
+                          .read<DriverBloc>()
+                          .add(OnAcceptRide(docId: userRequestModel.uid ?? ""));
+                    },
+                    child: Text("Accept"))
               ],
             )
           ],
