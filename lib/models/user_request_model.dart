@@ -7,7 +7,8 @@ class UserRequestModel {
   String? uid;
   String? destination;
   String? userId;
-  LatLong? userLatLong;
+  LatLong? userPickUpLocation;
+  LatLong? userDropOffLocation;
 
   UserRequestModel({
     this.destination,
@@ -15,7 +16,8 @@ class UserRequestModel {
     this.address,
     this.status,
     this.uid,
-    this.userLatLong,
+    this.userPickUpLocation,
+    this.userDropOffLocation,
   });
 
   // Convert JSON to UserLocation object
@@ -26,8 +28,11 @@ class UserRequestModel {
       status: json[FirebaseStrings.status] as String,
       userId: json[FirebaseStrings.userId] as String,
       uid: json[FirebaseStrings.uid] as String,
-      userLatLong: json[FirebaseStrings.latLong] != null
-          ? LatLong.fromJson(json[FirebaseStrings.latLong])
+      userPickUpLocation: json[FirebaseStrings.userPickUpLocation] != null
+          ? LatLong.fromJson(json[FirebaseStrings.userPickUpLocation])
+          : null,
+      userDropOffLocation: json[FirebaseStrings.userDropOffLocation] != null
+          ? LatLong.fromJson(json[FirebaseStrings.userDropOffLocation])
           : null,
     );
   }
@@ -40,7 +45,8 @@ class UserRequestModel {
       FirebaseStrings.status: status,
       FirebaseStrings.uid: uid,
       FirebaseStrings.userId: userId,
-      FirebaseStrings.userLatlong: userLatLong,
+      FirebaseStrings.userPickUpLocation: userPickUpLocation,
+      FirebaseStrings.userDropOffLocation: userDropOffLocation,
     };
   }
 }

@@ -183,15 +183,15 @@ class UserMapRepo {
     return (address, countryISOCode);
   }
 
-  Future requestToNearByDriver(GeoPoint driverGeopoint, GeoPoint userGeoPoint,
-      String driverId, String destination) async {
-    final GeoFirePoint userLocation = GeoFirePoint(userGeoPoint);
+  Future requestToNearByDriver(GeoPoint driverGeopoint, GeoPoint pickUpLocation,
+      String driverId, String destination, GeoPoint  dropOffLocation) async {
+    final GeoFirePoint userPickUpLocation = GeoFirePoint(pickUpLocation);
+    final GeoFirePoint userDropOffLocation = GeoFirePoint(dropOffLocation);
 
     double distance =
-        userLocation.distanceBetweenInKm(geopoint: driverGeopoint);
-    log("Distance $distance ");
-    log("user location ======= ${userLocation.data}");
-    final stringAddress = await getFullStringAddress(userGeoPoint);
+        userPickUpLocation.distanceBetweenInKm(geopoint: driverGeopoint);
+  
+    final stringAddress = await getFullStringAddress(pickUpLocation);
     final ref = firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(driverId)
@@ -199,7 +199,7 @@ class UserMapRepo {
         .doc();
 
     ref.set({
-      FirebaseStrings.userLatlong: userLocation.data,
+      FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
       FirebaseStrings.address: stringAddress.$1,
       FirebaseStrings.destination: destination,
       FirebaseStrings.uid: ref.id,
