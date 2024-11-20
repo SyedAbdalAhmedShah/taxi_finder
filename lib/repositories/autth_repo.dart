@@ -36,12 +36,13 @@ mixin AuthRepo {
   }
 
   Future<DriverInfo?> getDriverData(String driverUid) async {
-    DocumentSnapshot<Map<String, dynamic>> docsnap = await _firestore
-        .collection(FirebaseStrings.driverColl)
-        .doc(driverUid)
-        .get();
-    if (docsnap.exists) {
-      DriverInfo driverInfo = DriverInfo.fromJson(docsnap.data() ?? {});
+    final docsnap =
+        _firestore.collection(FirebaseStrings.driverColl).doc(driverUid);
+    final driverData = await docsnap.get();
+
+    if (driverData.exists) {
+      await docsnap.update({FirebaseStrings.activeRide: null});
+      DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
       return driverInfo;
     } else {
       return null;

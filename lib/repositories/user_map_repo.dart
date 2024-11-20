@@ -136,6 +136,9 @@ class UserMapRepo {
       center: center,
       radiusInKm: radiusInKm,
       field: FirebaseStrings.latLong,
+      queryBuilder: (query) {
+        return query.where(FirebaseStrings.activeRide, isNull: true);
+      },
       strictMode: true,
       geopointFrom: (obj) {
         return obj[FirebaseStrings.latLong][FirebaseStrings.geoPoint];
