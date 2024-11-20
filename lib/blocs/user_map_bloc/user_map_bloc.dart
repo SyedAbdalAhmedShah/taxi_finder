@@ -88,7 +88,8 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
               await userMapRepo.getPolyLinesAndMarker(
                   currentLocationPosition: currentLocationPosition,
                   destLocationPosition: event.latLng);
-                  destinationLocation = GeoPoint(event.latLng.latitude, event.latLng.longitude);
+          destinationLocation =
+              GeoPoint(event.latLng.latitude, event.latLng.longitude);
           totalLocationDistance = totalDistance;
 
           totalfare =
@@ -172,8 +173,11 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                   drivers.latLong?.geoPoint ?? const GeoPoint(0.0, 0.0),
                   userGeoPoint,
                   drivers.driverUid ?? "",
-                  destinationController.text,destinationLocation);
+                  destinationController.text,
+                  destinationLocation);
             }
+            
+            await Future.delayed(const Duration(minutes: 4));
             emit(OnRidingRequestSendState());
           } else {
             emit(UserMapFailureState(errorMessage: noRiderAvail));

@@ -8,14 +8,14 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
-class MapSample extends StatefulWidget {
-  const MapSample({super.key});
+class UserMapView extends StatefulWidget {
+  const UserMapView({super.key});
 
   @override
-  State<MapSample> createState() => MapSampleState();
+  State<UserMapView> createState() => UserMapViewState();
 }
 
-class MapSampleState extends State<MapSample> {
+class UserMapViewState extends State<UserMapView> {
   late UserMapBloc userMapBloc;
 
   @override

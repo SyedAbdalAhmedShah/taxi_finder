@@ -31,7 +31,7 @@ class _TaxiFinderscreenState extends State<TaxiFinderscreen> {
     return Scaffold(
         body: const Stack(
           children: [
-            MapSample(),
+            UserMapView(),
             LocationSearchSection(),
           ],
         ),
