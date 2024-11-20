@@ -22,6 +22,7 @@ class DriverInfo {
   String? profileUrl;
   String? carInsceptionReport;
   LatLong? latLong;
+  String? activeRide;
 
   DriverInfo(
       {this.driverUid,
@@ -42,6 +43,7 @@ class DriverInfo {
       this.carInsceptionReport,
       this.licenseImageUrl,
       this.profileUrl,
+      this.activeRide,
       this.latLong,
       this.licenseNumber});
 
@@ -63,6 +65,7 @@ class DriverInfo {
         fullName: json[FirebaseStrings.fullName],
         address: json[FirebaseStrings.address],
         contactNumber: json[FirebaseStrings.contactNumber],
+        activeRide: json[FirebaseStrings.activeRide],
         idCardNumber: json[FirebaseStrings.idCardNumber],
         email: json[FirebaseStrings.email],
         licenseNumber: json[FirebaseStrings.licenseNumber],
@@ -104,7 +107,8 @@ class DriverInfo {
       FirebaseStrings.licenseImageUrl: licenseImageUrl,
       FirebaseStrings.profileUrl: profileUrl,
       FirebaseStrings.status: status,
-      FirebaseStrings.numOfSeats: numberOfSeats
+      FirebaseStrings.numOfSeats: numberOfSeats,
+      FirebaseStrings.activeRide: activeRide,
     };
   }
 }

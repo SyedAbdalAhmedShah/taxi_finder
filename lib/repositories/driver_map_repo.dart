@@ -33,18 +33,33 @@ mixin DriverMapRepo {
 
   Stream<List<UserRequestModel>> requestbyUserToDriver() {
     final ref = _firebaseFirestore
-        .collectionGroup(FirebaseStrings.ridesColl)
-        .where(FirebaseStrings.driverUid,
-            isEqualTo: loggedRole.driverInfo.driverUid)
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedRole.driverInfo.driverUid)
+        .collection(FirebaseStrings.ridesColl)
         .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.inProcess);
     final snapshot = ref.snapshots();
-    Stream<List<UserRequestModel>> requestStream = snapshot.map(
-      (event) => event.docs
-          .map(
-            (e) => UserRequestModel.fromJson(e.data()),
-          )
-          .toList(),
-    );
+    Stream<List<UserRequestModel>> requestStream =
+        snapshot.asyncMap((event) async {
+      List<UserRequestModel> requestModel = [];
+      final doc = await _firebaseFirestore
+          .collection(FirebaseStrings.driverColl)
+          .doc(loggedRole.driverInfo.driverUid)
+          .get();
+      DriverInfo driverInfo = DriverInfo.fromJson(doc.data() ?? {});
+
+      if (driverInfo.activeRide == null) {
+        requestModel = event.docs
+            .map(
+              (e) => UserRequestModel.fromJson(e.data()),
+            )
+            .toList();
+      } else {
+        requestModel = [];
+      }
+
+      return requestModel;
+    });
+
     return requestStream;
   }
 
