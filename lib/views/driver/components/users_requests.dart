@@ -111,9 +111,8 @@ class UserRequestCard extends StatelessWidget {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      context
-                          .read<DriverBloc>()
-                          .add(OnAcceptRide(docId: userRequestModel.uid ?? ""));
+                      context.read<DriverBloc>().add(
+                          OnAcceptRide(userRequestModel: userRequestModel));
                     },
                     child: Text("Accept"))
               ],
@@ -121,6 +120,7 @@ class UserRequestCard extends StatelessWidget {
           ],
         ),
       ),
+        
     );
   }
 }

@@ -13,7 +13,8 @@ class OnRequestExpireEvent extends DriverEvent {
 }
 
 class OnAcceptRide extends DriverEvent {
-  final String docId;
+  final UserRequestModel userRequestModel;
 
-  OnAcceptRide({required this.docId});
+
+  OnAcceptRide({required this.userRequestModel});
 }

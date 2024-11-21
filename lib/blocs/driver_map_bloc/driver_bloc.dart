@@ -50,7 +50,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
           await Geolocator.requestPermission();
         }
       } catch (error) {
-        log('ERROR IS $Error HAPPENED IN DRIVER BLOC ',
+        log('ERROR IS $error HAPPENED IN DRIVER BLOC ',
             name: "DriverCurrentLocationEvent");
         emit(DriverMapFailureState());
       }
@@ -65,9 +65,11 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
     );
     on<OnAcceptRide>(
       (event, emit) async {
-        await acceptRequest(event.docId);
+        await acceptRequest(event.userRequestModel.uid ?? "");
         await updateRideRequestedDoc(
-            docId: event.docId, status: FirebaseStrings.accepted);
+            docId: event.userRequestModel.uid ?? "",
+            status: FirebaseStrings.accepted);
+            
         emit(RideAcceptedState());
       },
     );
