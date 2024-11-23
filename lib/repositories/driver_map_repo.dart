@@ -79,6 +79,4 @@ mixin DriverMapRepo {
         .doc(loggedRole.driverInfo.driverUid);
     ref.set({FirebaseStrings.activeRide: docId}, SetOptions(merge: true));
   }
-
-  
 }

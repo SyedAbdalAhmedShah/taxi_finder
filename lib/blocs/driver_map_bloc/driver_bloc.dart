@@ -7,7 +7,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
-import 'package:taxi_finder/utils/utils.dart';
 
 part 'driver_event.dart';
 part 'driver_state.dart';
@@ -70,13 +69,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         await updateRideRequestedDoc(
             docId: event.userRequestModel.uid ?? "",
             status: FirebaseStrings.accepted);
-        Polyline polyline;
-        Marker destinationMarker;
-        String totalDistance;
-        (totalDistance, polyline, destinationMarker) =
-            await Utils.getPolyLinesAndMarker(
-                currentLocationPosition: driverCurrentPosition,
-                destLocationPosition: event.latLng);
+            
         emit(RideAcceptedState());
       },
     );
