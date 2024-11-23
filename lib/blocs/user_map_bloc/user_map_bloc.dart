@@ -51,10 +51,10 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         if (isPermissionEnable == LocationPermission.always ||
             isPermissionEnable == LocationPermission.whileInUse) {
           currentLocationPosition = await Geolocator.getCurrentPosition();
-          nearByDriversStream =
-              userMapRepo.getNearByDrivers(currentLocationPosition);
-          GeoPoint currentGeoPoint = GeoPoint(currentLocationPosition.latitude,
-              currentLocationPosition.longitude);
+          LatLng currentLatLong = LatLng(34.023, 71.5922);
+          nearByDriversStream = userMapRepo.getNearByDrivers(currentLatLong);
+          GeoPoint currentGeoPoint =
+              GeoPoint(currentLatLong.latitude, currentLatLong.longitude);
           final placeMarkers =
               await userMapRepo.getFullStringAddress(currentGeoPoint);
 
@@ -64,8 +64,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           myLocationController.text = placeMarkers.$1;
 
           cameraPosition = CameraPosition(
-            target: LatLng(currentLocationPosition.latitude,
-                currentLocationPosition.longitude),
+            target: currentLatLong,
             zoom: 15.4746,
           );
           gController
@@ -176,7 +175,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                   destinationController.text,
                   destinationLocation);
             }
-            
+
             await Future.delayed(const Duration(minutes: 4));
             emit(OnRidingRequestSendState());
           } else {

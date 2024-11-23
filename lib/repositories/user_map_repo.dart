@@ -126,7 +126,7 @@ class UserMapRepo {
     return totalFare;
   }
 
-  Stream<List<DriverInfo>> getNearByDrivers(Position positionns) {
+  Stream<List<DriverInfo>> getNearByDrivers(LatLng positionns) {
     GeoPoint location = GeoPoint(positionns.latitude, positionns.longitude);
     final GeoFirePoint center = GeoFirePoint(location);
     const double radiusInKm = 50;
