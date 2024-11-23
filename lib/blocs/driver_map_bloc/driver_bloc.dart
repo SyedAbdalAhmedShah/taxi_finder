@@ -73,10 +73,10 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         Polyline polyline;
         Marker destinationMarker;
         String totalDistance;
-        // (totalDistance, polyline, destinationMarker) =
-            // await Utils.getPolyLinesAndMarker(
-            //     currentLocationPosition: driverCurrentPosition,
-            //     destLocationPosition: event.latLng);
+        (totalDistance, polyline, destinationMarker) =
+            await Utils.getPolyLinesAndMarker(
+                currentLocationPosition: driverCurrentPosition,
+                destLocationPosition: event.latLng);
         emit(RideAcceptedState());
       },
     );

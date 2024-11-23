@@ -29,12 +29,11 @@ if (flutterVersionName == null) {
 android {
     namespace = "com.example.taxi_finder"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.120779733"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
-
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
@@ -56,7 +55,6 @@ android {
         }
     }
 }
-
 
 flutter {
     source = "../.."
