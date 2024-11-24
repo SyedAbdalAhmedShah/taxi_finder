@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,18 +17,23 @@ import 'package:taxi_finder/firebase_options.dart';
 import 'package:taxi_finder/views/splash/splash_screen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final GoogleMapsFlutterPlatform mapsImplementation =
-      GoogleMapsFlutterPlatform.instance;
-  if (mapsImplementation is GoogleMapsFlutterAndroid) {
-    // Force Hybrid Composition mode.
-    mapsImplementation.useAndroidViewSurface = true;
-  }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final GoogleMapsFlutterPlatform mapsImplementation =
+        GoogleMapsFlutterPlatform.instance;
+    if (mapsImplementation is GoogleMapsFlutterAndroid) {
+      // Force Hybrid Composition mode.
+      mapsImplementation.useAndroidViewSurface = true;
+    }
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await DependencySetup.setupDependencies();
-  runApp(const MyApp());
+    runApp(const MyApp());
+  }, (error, stack) {
+    log("error happened in run zoned gurarded $error , $stack",
+        name: "RunZoned");
+  });
 }
 
 class MyApp extends StatelessWidget {
