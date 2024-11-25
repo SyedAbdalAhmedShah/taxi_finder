@@ -35,7 +35,7 @@ mixin DriverMapRepo {
     final ref = _firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(loggedRole.driverInfo.driverUid)
-        .collection(FirebaseStrings.ridesColl)
+        .collection(FirebaseStrings.rideRequestColl)
         .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.inProcess);
     final snapshot = ref.snapshots();
     Stream<List<UserRequestModel>> requestStream =

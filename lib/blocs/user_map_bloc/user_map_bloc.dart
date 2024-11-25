@@ -11,6 +11,7 @@ import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
+import 'package:taxi_finder/utils/driver_response.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
 part 'user_map_event.dart';
@@ -164,6 +165,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
     on<OnRequestForRiding>(
       (event, emit) async {
         try {
+          final completer = Completer<DriverResponse>();
           GeoPoint userGeoPoint = GeoPoint(currentLocationPosition.latitude,
               currentLocationPosition.longitude);
           emit(OnRidingRequestLoadingState());
@@ -171,6 +173,18 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           if (nearByDriverMarker.isNotEmpty) {
             String requestId = await userMapRepo.addRideRequest(
                 userGeoPoint, destinationController.text, destinationLocation);
+            Timer(const Duration(minutes: 2), () {
+              if (!completer.isCompleted) {
+                completer.complete(DriverResponse.noDriversAvailable);
+              }
+            });
+            for (final drivers in nearByDrivers) {
+              await userMapRepo.notifyNearByDriver(
+                  driverId: drivers.driverUid ?? "",
+                  requestId: requestId,
+                  pickUpLocation: userGeoPoint,
+                  dropOffLocation: destinationLocation);
+            }
             final requestStrem = userMapRepo.getRequestStream(docId: requestId);
             requestStrem.listen((snapshot) {
               for (final changes in snapshot.docChanges) {
@@ -179,14 +193,6 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                 }
               }
             });
-            for (final drivers in nearByDrivers) {
-              await userMapRepo.requestToNearByDriver(
-                  drivers.latLong?.geoPoint ?? const GeoPoint(0.0, 0.0),
-                  userGeoPoint,
-                  drivers.driverUid ?? "",
-                  destinationController.text,
-                  destinationLocation);
-            }
 
             emit(OnRidingRequestSendState());
           } else {

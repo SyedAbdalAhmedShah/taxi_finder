@@ -11,6 +11,7 @@ class FirebaseStrings {
 
   static const String fullName = "fullName";
   static const String docId = "docId";
+  static const String requestId = "requestId";
   static const String uid = "uid";
   static const String timStamp = "timestamp";
   static const String userId = "userId";
@@ -40,9 +41,11 @@ class FirebaseStrings {
   static const String expired = "expired";
   static const String accepted = "accepted";
   static const String pending = "Pending";
+  static const String createdAt = "createdAt";
   static const String inProcess = "inProcess";
   static const String approved = "Approved";
-  static const String rejected = "Rejected";
+  static const String rejected = "rejected";
+  static const String timeout = "timeout";
   static const String latitude = "latitude";
   static const String latLong = "latLong";
   static const String rideRequests = "rideRequests";

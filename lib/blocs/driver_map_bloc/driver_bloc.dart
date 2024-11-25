@@ -68,9 +68,9 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
     );
     on<OnAcceptRide>(
       (event, emit) async {
-        await acceptRequest(event.userRequestModel.uid ?? "");
+        await acceptRequest(event.userRequestModel.requestId ?? "");
         await updateRideRequestedDoc(
-            docId: event.userRequestModel.uid ?? "",
+            docId: event.userRequestModel.requestId ?? "",
             status: FirebaseStrings.accepted);
         LatLng userPickupPoint = LatLng(
             event.userRequestModel.userPickUpLocation?.geoPoint?.latitude ??

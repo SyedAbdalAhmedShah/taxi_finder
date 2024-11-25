@@ -169,7 +169,30 @@ class UserMapRepo {
       FirebaseStrings.destination: destination,
       FirebaseStrings.docId: ref.id,
       FirebaseStrings.userId: loggedRole.userModel.uid,
-      FirebaseStrings.status: FirebaseStrings.inProcess,
+      FirebaseStrings.status: FirebaseStrings.pending,
+    });
+  }
+
+  Future notifyNearByDriver(
+      {required String driverId,
+      required String requestId,
+      required GeoPoint pickUpLocation,
+      required GeoPoint dropOffLocation}) async {
+    final GeoFirePoint userPickUpLocation = GeoFirePoint(pickUpLocation);
+    final GeoFirePoint userDropOffLocation = GeoFirePoint(dropOffLocation);
+    final stringAddress = await getFullStringAddress(pickUpLocation);
+    await firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(driverId)
+        .collection(FirebaseStrings.rideRequestColl)
+        .doc(requestId)
+        .set({
+      FirebaseStrings.requestId: requestId,
+      FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
+      FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
+      FirebaseStrings.address: stringAddress.$1,
+      FirebaseStrings.status: FirebaseStrings.pending,
+      FirebaseStrings.createdAt: FieldValue.serverTimestamp(),
     });
   }
 
@@ -185,7 +208,7 @@ class UserMapRepo {
       FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
       FirebaseStrings.docId: doc.id,
       FirebaseStrings.timStamp: FieldValue.serverTimestamp(),
-      FirebaseStrings.status: FirebaseStrings.inProcess,
+      FirebaseStrings.status: FirebaseStrings.pending,
     });
     return doc.id;
   }
