@@ -167,10 +167,35 @@ class UserMapRepo {
       FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
       FirebaseStrings.address: stringAddress.$1,
       FirebaseStrings.destination: destination,
-      FirebaseStrings.uid: ref.id,
+      FirebaseStrings.docId: ref.id,
       FirebaseStrings.userId: loggedRole.userModel.uid,
       FirebaseStrings.status: FirebaseStrings.inProcess,
     });
+  }
+
+  Future<String> addRideRequest(GeoPoint pickUpLocation, String destination,
+      GeoPoint dropOffLocation) async {
+    final GeoFirePoint userPickUpLocation = GeoFirePoint(pickUpLocation);
+    final GeoFirePoint userDropOffLocation = GeoFirePoint(dropOffLocation);
+    DocumentReference<Map<String, dynamic>> doc =
+        firebaseFirestore.collection(FirebaseStrings.rideRequestColl).doc();
+
+    await doc.set({
+      FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
+      FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
+      FirebaseStrings.docId: doc.id,
+      FirebaseStrings.timStamp: FieldValue.serverTimestamp(),
+      FirebaseStrings.status: FirebaseStrings.inProcess,
+    });
+    return doc.id;
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getRequestStream(
+      {required String docId}) {
+    return firebaseFirestore
+        .collection(FirebaseStrings.rideRequestColl)
+        .where(FirebaseStrings.docId, isEqualTo: docId)
+        .snapshots();
   }
 }
 // distaance  2.7 km

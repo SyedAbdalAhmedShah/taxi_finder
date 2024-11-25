@@ -167,7 +167,18 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           GeoPoint userGeoPoint = GeoPoint(currentLocationPosition.latitude,
               currentLocationPosition.longitude);
           emit(OnRidingRequestLoadingState());
+
           if (nearByDriverMarker.isNotEmpty) {
+            String requestId = await userMapRepo.addRideRequest(
+                userGeoPoint, destinationController.text, destinationLocation);
+            final requestStrem = userMapRepo.getRequestStream(docId: requestId);
+            requestStrem.listen((snapshot) {
+              for (final changes in snapshot.docChanges) {
+                if (changes.type == DocumentChangeType.added) {
+                  log("doc data ${changes.doc.data()}");
+                }
+              }
+            });
             for (final drivers in nearByDrivers) {
               await userMapRepo.requestToNearByDriver(
                   drivers.latLong?.geoPoint ?? const GeoPoint(0.0, 0.0),
@@ -177,7 +188,6 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                   destinationLocation);
             }
 
-            await Future.delayed(const Duration(minutes: 4));
             emit(OnRidingRequestSendState());
           } else {
             emit(UserMapFailureState(errorMessage: noRiderAvail));

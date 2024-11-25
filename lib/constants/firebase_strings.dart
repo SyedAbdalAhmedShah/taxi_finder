@@ -2,6 +2,7 @@ class FirebaseStrings {
   static const String driverColl = "Drivers";
   static const String ridesColl = "rides";
   static const String usersColl = "Users";
+  static const String rideRequestColl = "RideRequests";
 
   static const String driverUid = "driverUid";
   static const String userLatlong = "userLatLong";
@@ -9,7 +10,9 @@ class FirebaseStrings {
   static const String userDropOffLocation = "userDropOffLocation";
 
   static const String fullName = "fullName";
+  static const String docId = "docId";
   static const String uid = "uid";
+  static const String timStamp = "timestamp";
   static const String userId = "userId";
 
   static const String address = "address";
@@ -42,6 +45,7 @@ class FirebaseStrings {
   static const String rejected = "Rejected";
   static const String latitude = "latitude";
   static const String latLong = "latLong";
+  static const String rideRequests = "rideRequests";
   static const String geoPoint = "geopoint";
   static const String longitude = "longitude";
 
