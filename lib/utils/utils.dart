@@ -75,4 +75,18 @@ class Utils {
         visible: true);
     return (totalDistance, polyline, destinationMarker);
   }
+
+  static getDriver({required String driverUid}) {
+     final docsnap =
+        _firestore.collection(FirebaseStrings.driverColl).doc(driverUid);
+    final driverData = await docsnap.get();
+
+    if (driverData.exists) {
+      await docsnap.update({FirebaseStrings.activeRide: null});
+      DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
+      return driverInfo;
+    } else {
+      return null;
+    }
+  }
 }

@@ -68,7 +68,8 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
     );
     on<OnAcceptRide>(
       (event, emit) async {
-        await acceptRequest(event.userRequestModel.requestId ?? "");
+        await acceptRequestAndUpdateDriverColl(
+            event.userRequestModel.requestId ?? "");
         await updateRideRequestedDoc(
             docId: event.userRequestModel.requestId ?? "",
             status: FirebaseStrings.accepted);

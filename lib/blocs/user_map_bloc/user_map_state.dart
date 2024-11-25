@@ -23,3 +23,5 @@ final class OnDirectionRequestState extends UserMapState {}
 final class OnLocationSearchState extends UserMapState {}
 
 class OnNearByDriverAdded extends UserMapState {}
+
+class OnNearByDriverAdded extends UserMapState {}

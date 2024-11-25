@@ -9,6 +9,7 @@ import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 mixin AuthRepo {
   final loggedRole = locator.get<CurrentUserDependency>();
@@ -35,20 +36,6 @@ mixin AuthRepo {
     await _firestore.collection(FirebaseStrings.usersColl).doc(uid).set(data);
   }
 
-  Future<DriverInfo?> getDriverData(String driverUid) async {
-    final docsnap =
-        _firestore.collection(FirebaseStrings.driverColl).doc(driverUid);
-    final driverData = await docsnap.get();
-
-    if (driverData.exists) {
-      await docsnap.update({FirebaseStrings.activeRide: null});
-      DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
-      return driverInfo;
-    } else {
-      return null;
-    }
-  }
-
   Future<UserModel?> getUserDataa({required String uid}) async {
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await _firestore.collection(FirebaseStrings.usersColl).doc(uid).get();
@@ -69,7 +56,7 @@ mixin AuthRepo {
       Emitter<AuthState> emit, UserCredential userCredential) async {
     SharedPreferences prefrences = await SharedPreferences.getInstance();
     DriverInfo? driverInfo =
-        await getDriverData(userCredential.user?.uid ?? "");
+        await Utils.getDriver(driverUid: userCredential.user?.uid ?? "");
     if (driverInfo != null) {
       loggedRole.setDriver(driverInfo);
       String status = driverInfo.status ?? "";

@@ -10,6 +10,7 @@ import 'package:taxi_finder/dependency_injection/shared_prefrences.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/repositories/autth_repo.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';
@@ -28,8 +29,8 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
         log("IS driver  $isDriver");
         if (currentUser != null) {
           if (isDriver != null && isDriver) {
-            log("current user id ${currentUser.uid}");
-            DriverInfo? driverInfo = await getDriverData(currentUser.uid);
+            DriverInfo? driverInfo =
+                await Utils.getDriver(driverUid: currentUser.uid);
             if (driverInfo != null) {
               loggedRole.setDriver(driverInfo);
               if (driverInfo.status == FirebaseStrings.approved) {

@@ -29,3 +29,9 @@ class OnLocationSelectedEvent extends UserMapEvent {
 }
 
 class OnRequestForRiding extends UserMapEvent {}
+
+class RideAcceptedByDriverEvent extends UserMapEvent {
+  final String driverUid;
+
+  RideAcceptedByDriverEvent({required this.driverUid});
+}

@@ -73,10 +73,18 @@ mixin DriverMapRepo {
         .update({FirebaseStrings.status: status});
   }
 
-  acceptRequest(String docId) async {
-    final ref = _firebaseFirestore
-        .collection(FirebaseStrings.driverColl)
-        .doc(loggedRole.driverInfo.driverUid);
-    ref.set({FirebaseStrings.activeRide: docId}, SetOptions(merge: true));
+  acceptRequestAndUpdateDriverColl(String requestId) async {
+    final driverDoc = _firebaseFirestore.collection(FirebaseStrings.driverColl);
+
+    driverDoc
+        .doc(loggedRole.driverInfo.driverUid)
+        .set({FirebaseStrings.activeRide: requestId}, SetOptions(merge: true));
+    _firebaseFirestore
+        .collection(FirebaseStrings.rideRequestColl)
+        .doc(requestId)
+        .set({
+      FirebaseStrings.status: FirebaseStrings.accepted,
+      FirebaseStrings.driverUid: loggedRole.driverInfo.driverUid
+    }, SetOptions(merge: true));
   }
 }

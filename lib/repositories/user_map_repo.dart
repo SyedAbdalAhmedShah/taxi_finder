@@ -17,6 +17,7 @@ import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
+import 'package:taxi_finder/models/ride_request_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 
 class UserMapRepo {
@@ -215,12 +216,13 @@ class UserMapRepo {
     return doc.id;
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getRequestStream(
-      {required String docId}) {
+  Stream<List<RideRequest>> getRequestStream({required String docId}) {
     return firebaseFirestore
         .collection(FirebaseStrings.rideRequestColl)
         .where(FirebaseStrings.docId, isEqualTo: docId)
-        .snapshots();
+        .snapshots()
+        .map((event) =>
+            event.docs.map((e) => RideRequest.fromJson(e.data())).toList());
   }
 }
 // distaance  2.7 km
