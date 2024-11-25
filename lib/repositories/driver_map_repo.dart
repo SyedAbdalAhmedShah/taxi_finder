@@ -36,7 +36,7 @@ mixin DriverMapRepo {
         .collection(FirebaseStrings.driverColl)
         .doc(loggedRole.driverInfo.driverUid)
         .collection(FirebaseStrings.rideRequestColl)
-        .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.inProcess);
+        .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.pending);
     final snapshot = ref.snapshots();
     Stream<List<UserRequestModel>> requestStream =
         snapshot.asyncMap((event) async {
@@ -68,7 +68,7 @@ mixin DriverMapRepo {
     await _firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(loggedRole.driverInfo.driverUid)
-        .collection(FirebaseStrings.ridesColl)
+        .collection(FirebaseStrings.rideRequestColl)
         .doc(docId)
         .update({FirebaseStrings.status: status});
   }

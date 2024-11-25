@@ -180,6 +180,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
             });
             for (final drivers in nearByDrivers) {
               await userMapRepo.notifyNearByDriver(
+                  destination: destinationController.text,
                   driverId: drivers.driverUid ?? "",
                   requestId: requestId,
                   pickUpLocation: userGeoPoint,

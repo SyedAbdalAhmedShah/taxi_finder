@@ -174,7 +174,8 @@ class UserMapRepo {
   }
 
   Future notifyNearByDriver(
-      {required String driverId,
+      {required String destination,
+      required String driverId,
       required String requestId,
       required GeoPoint pickUpLocation,
       required GeoPoint dropOffLocation}) async {
@@ -191,6 +192,7 @@ class UserMapRepo {
       FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
       FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
       FirebaseStrings.address: stringAddress.$1,
+      FirebaseStrings.destination: destination,
       FirebaseStrings.status: FirebaseStrings.pending,
       FirebaseStrings.createdAt: FieldValue.serverTimestamp(),
     });

@@ -71,8 +71,8 @@ class UserRequestCard extends StatelessWidget {
               duration: const Duration(seconds: 10),
               backgroundColor: primaryColor,
               onTimerEnd: () {
-                context.read<DriverBloc>().add(
-                    OnRequestExpireEvent(docId: userRequestModel.uid ?? ""));
+                context.read<DriverBloc>().add(OnRequestExpireEvent(
+                    docId: userRequestModel.requestId ?? ""));
               },
             ),
             Gap(1.h),
@@ -120,7 +120,6 @@ class UserRequestCard extends StatelessWidget {
           ],
         ),
       ),
-        
     );
   }
 }

@@ -7,14 +7,12 @@ class UserRequestModel {
   String? status;
   String? requestId;
   String? destination;
-  String? userId;
   LatLong? userPickUpLocation;
   LatLong? userDropOffLocation;
   Timestamp? createdAt;
 
   UserRequestModel({
     this.destination,
-    this.userId,
     this.address,
     this.status,
     this.requestId,
@@ -29,7 +27,6 @@ class UserRequestModel {
       address: json[FirebaseStrings.address],
       destination: json[FirebaseStrings.destination],
       status: json[FirebaseStrings.status] as String,
-      userId: json[FirebaseStrings.userId] as String,
       createdAt: json[FirebaseStrings.createdAt] as Timestamp,
       requestId: json[FirebaseStrings.requestId] as String,
       userPickUpLocation: json[FirebaseStrings.userPickUpLocation] != null
@@ -48,7 +45,6 @@ class UserRequestModel {
       FirebaseStrings.destination: destination,
       FirebaseStrings.status: status,
       FirebaseStrings.requestId: requestId,
-      FirebaseStrings.userId: userId,
       FirebaseStrings.userPickUpLocation: userPickUpLocation,
       FirebaseStrings.userDropOffLocation: userDropOffLocation,
     };
