@@ -11,6 +11,7 @@ import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 part 'user_map_event.dart';
 part 'user_map_state.dart';
@@ -84,7 +85,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           Marker destinationMarker;
           String totalDistance;
           (totalDistance, polyline, destinationMarker) =
-              await userMapRepo.getPolyLinesAndMarker(
+              await Utils.getPolyLinesAndMarker(
                   currentLocationPosition: currentLocationPosition,
                   destLocationPosition: event.latLng);
           destinationLocation =

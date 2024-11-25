@@ -21,7 +21,6 @@ import 'package:taxi_finder/utils/api_helper.dart';
 
 class UserMapRepo {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  PolylinePoints polylinePoints = PolylinePoints();
   final loggedRole = locator.get<CurrentUserDependency>();
   Future getDirection(
       {required LatLng source, required LatLng destination}) async {
@@ -73,44 +72,6 @@ class UserMapRepo {
     } else {
       throw "Something went wrong, No place detail found";
     }
-  }
-
-  Future<(String totalDistance, Polyline polyLine, Marker maarker)>
-      getPolyLinesAndMarker(
-          {required Position currentLocationPosition,
-          required LatLng destLocationPosition}) async {
-    List<LatLng> routeCoords = [];
-    PointLatLng currentLocPoint = PointLatLng(
-        currentLocationPosition.latitude, currentLocationPosition.longitude);
-    PointLatLng destinationLocPoint = PointLatLng(
-        destLocationPosition.latitude, destLocationPosition.longitude);
-    PolylineResult points = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey: ApiHelper().placesApiKey,
-        request: PolylineRequest(
-            origin: currentLocPoint,
-            destination: destinationLocPoint,
-            mode: TravelMode.driving));
-
-    log('error= = = = = = ${points.errorMessage}');
-    if (points.points.isNotEmpty) {
-      routeCoords =
-          points.points.map((p) => LatLng(p.latitude, p.longitude)).toList();
-    } else {
-      log('Error: ${points.errorMessage}');
-    }
-    log("distance ${(points.distanceTexts)}");
-    String totalDistance = points.distanceTexts?.first ?? "";
-    Polyline polyline = Polyline(
-      polylineId: const PolylineId("Direction Route 1"),
-      points: routeCoords,
-      color: secondaryColor,
-    );
-    Marker destinationMarker = Marker(
-        markerId: const MarkerId("destination"),
-        infoWindow: InfoWindow(title: "${points.endAddress}"),
-        position: LatLng(routeCoords.last.latitude, routeCoords.last.longitude),
-        visible: true);
-    return (totalDistance, polyline, destinationMarker);
   }
 
   double getTotalFare(String totalDistance) {

@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 part 'driver_event.dart';
 part 'driver_state.dart';
@@ -20,6 +21,8 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
     zoom: 14.4746,
   );
   late Position driverCurrentPosition;
+  Set<Polyline> polylineSet = {};
+  Set<Marker> markers = {};
   DriverBloc() : super(DriverInitial()) {
     on<DriverCurrentLocationEvent>((event, emit) async {
       emit(DriverMapLoadingState());
@@ -69,7 +72,21 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         await updateRideRequestedDoc(
             docId: event.userRequestModel.uid ?? "",
             status: FirebaseStrings.accepted);
-            
+        LatLng userPickupPoint = LatLng(
+            event.userRequestModel.userPickUpLocation?.geoPoint?.latitude ??
+                0.0,
+            event.userRequestModel.userPickUpLocation?.geoPoint?.longitude ??
+                0.0);
+        Polyline polyline;
+        Marker destinationMarker;
+        String totalDistance;
+        LatLng userPickupLocation =
+            LatLng(34.02683073625116, 71.58831853419542);
+        (totalDistance, polyline, destinationMarker) =
+            await Utils.getPolyLinesAndMarker(
+                currentLocationPosition: driverCurrentPosition,
+                destLocationPosition: userPickupLocation);
+        polylineSet.add(polyline);
         emit(RideAcceptedState());
       },
     );

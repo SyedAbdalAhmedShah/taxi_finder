@@ -47,6 +47,7 @@ class _DriverMapViewState extends State<DriverMapView> {
                 onMapCreated: (GoogleMapController controller) async {
                   driverBloc.mapController = controller;
                 },
+                polylines: driverBloc.polylineSet,
                 buildingsEnabled: true,
                 fortyFiveDegreeImageryEnabled: true,
                 // polylines: userMapBloc.polylineSet,
