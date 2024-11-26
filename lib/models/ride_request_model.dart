@@ -26,6 +26,7 @@ class RideRequest {
       docId: json[FirebaseStrings.docId],
       status: json[FirebaseStrings.status],
       timestamp: json[FirebaseStrings.timStamp] as Timestamp,
+      driverUid: json[FirebaseStrings.driverUid] ,
       userDropOffLocation:
           LatLong.fromJson(json[FirebaseStrings.userDropOffLocation]),
       userPickUpLocation:

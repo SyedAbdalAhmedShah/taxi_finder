@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,11 +8,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 
 class Utils {
   static PolylinePoints polylinePoints = PolylinePoints();
-
+ static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   static String firebaseSignInErrors(String code) {
     final errorMessage = switch (code) {
       ('invalid-email') => 'Invalid email format.',
@@ -76,9 +79,9 @@ class Utils {
     return (totalDistance, polyline, destinationMarker);
   }
 
-  static getDriver({required String driverUid}) {
+  static getDriver({required String driverUid}) async{
      final docsnap =
-        _firestore.collection(FirebaseStrings.driverColl).doc(driverUid);
+        firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverUid);
     final driverData = await docsnap.get();
 
     if (driverData.exists) {

@@ -13,7 +13,6 @@ import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/models/ride_request_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
-import 'package:taxi_finder/utils/driver_response.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
 part 'user_map_event.dart';
@@ -207,6 +206,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
       emit(OnRidingRequestLoadingState());
       try {
         cancleRidesThings();
+
       } catch (error) {}
     });
   }

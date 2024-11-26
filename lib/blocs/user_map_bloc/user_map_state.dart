@@ -24,4 +24,4 @@ final class OnLocationSearchState extends UserMapState {}
 
 class OnNearByDriverAdded extends UserMapState {}
 
-class OnNearByDriverAdded extends UserMapState {}
+

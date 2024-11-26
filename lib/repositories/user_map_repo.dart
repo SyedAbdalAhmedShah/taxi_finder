@@ -216,7 +216,7 @@ class UserMapRepo {
     return doc.id;
   }
 
-  Stream<List<RideRequest>> getRequestStream({required String docId}) {
+  Stream<List<RideRequest >> getRequestStream({required String docId}) {
     return firebaseFirestore
         .collection(FirebaseStrings.rideRequestColl)
         .where(FirebaseStrings.docId, isEqualTo: docId)
