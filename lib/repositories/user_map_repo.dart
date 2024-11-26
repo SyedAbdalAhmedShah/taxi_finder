@@ -10,7 +10,6 @@ import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
-import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
@@ -216,13 +215,21 @@ class UserMapRepo {
     return doc.id;
   }
 
-  Stream<List<RideRequest >> getRequestStream({required String docId}) {
+  Stream<List<RideRequest>> getRequestStream({required String docId}) {
     return firebaseFirestore
         .collection(FirebaseStrings.rideRequestColl)
         .where(FirebaseStrings.docId, isEqualTo: docId)
         .snapshots()
         .map((event) =>
             event.docs.map((e) => RideRequest.fromJson(e.data())).toList());
+  }
+
+  updateUserWhenAcceptRideByDriver(
+      {required String uid, required String requestId}) async {
+    await firebaseFirestore
+        .collection(FirebaseStrings.usersColl)
+        .doc(uid)
+        .set({FirebaseStrings.activeRide: requestId}, SetOptions(merge: true));
   }
 }
 // distaance  2.7 km

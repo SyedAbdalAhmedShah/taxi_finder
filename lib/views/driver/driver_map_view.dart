@@ -48,6 +48,7 @@ class _DriverMapViewState extends State<DriverMapView> {
                   driverBloc.mapController = controller;
                 },
                 polylines: driverBloc.polylineSet,
+                markers: driverBloc.markers,
                 buildingsEnabled: true,
                 fortyFiveDegreeImageryEnabled: true,
                 // polylines: userMapBloc.polylineSet,

@@ -22,7 +22,7 @@ mixin DriverMapRepo {
   Future updateDriverLocation(Position position) async {
     DriverInfo driverInfo = loggedRole.driverInfo;
     log("Driver uid ${driverInfo.driverUid}");
-    log("Driver latlong ${driverInfo.latLong}");
+    log("Driver latlong ${driverInfo.latLong?.geoPoint?.latitude}  == ${driverInfo.latLong?.geoPoint?.longitude}");
     final ref = _firebaseFirestore.collection(FirebaseStrings.driverColl);
     await GeoCollectionReference(ref).updatePoint(
       id: driverInfo.driverUid ?? "",

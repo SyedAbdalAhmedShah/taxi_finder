@@ -30,7 +30,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
         if (currentUser != null) {
           if (isDriver != null && isDriver) {
             DriverInfo? driverInfo =
-                await Utils.getDriver(driverUid: currentUser.uid);
+                await Utils.updateUser(driverUid: currentUser.uid);
             if (driverInfo != null) {
               loggedRole.setDriver(driverInfo);
               if (driverInfo.status == FirebaseStrings.approved) {

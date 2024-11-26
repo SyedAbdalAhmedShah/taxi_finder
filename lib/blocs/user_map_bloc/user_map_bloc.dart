@@ -8,6 +8,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
@@ -190,8 +192,8 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           requestStrem.listen((request) {
             RideRequest rideRequest = request.first;
             if (rideRequest.status == FirebaseStrings.accepted) {
-              add(RideAcceptedByDriverEvent(
-                  driverUid: rideRequest.driverUid ?? ""));
+              log('Ride accepted');
+              add(RideAcceptedByDriverEvent(rideRequest: rideRequest));
             }
           });
         } else {
@@ -202,12 +204,39 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         emit(UserMapFailureState(errorMessage: technicalIssue));
       }
     });
-    on<RideAcceptedByDriverEvent>((event, emit) {
+    on<RideAcceptedByDriverEvent>((event, emit) async {
       emit(OnRidingRequestLoadingState());
+      CurrentUserDependency currentUser = locator.get<CurrentUserDependency>();
       try {
+        log("RideAcceptedByDriverEvent triggered");
+        Polyline polyline;
+        Marker driverMarker;
+        String totalDistance;
         cancleRidesThings();
+        await userMapRepo.updateUserWhenAcceptRideByDriver(
+            uid: currentUser.userModel.uid ?? "",
+            requestId: event.rideRequest.docId ?? "");
 
-      } catch (error) {}
+        DriverInfo? driverInfo =
+            await Utils.driver(driverUid: event.rideRequest.driverUid ?? "");
+        LatLng driverLocationLatLong = LatLng(
+          driverInfo?.latLong?.geoPoint?.latitude ?? 0.0,
+          driverInfo?.latLong?.geoPoint?.longitude ?? 0.0,
+        );
+        (totalDistance, polyline, driverMarker) =
+            await Utils.getPolyLinesAndMarker(
+                currentLocationPosition: currentLocationPosition,
+                destLocationPosition: driverLocationLatLong,
+                iconPath: vanImage);
+        markers.clear();
+        polylineSet.clear();
+        polylineSet.add(polyline);
+        markers.add(driverMarker);
+        emit(OnRideRequestAcceptState());
+      } catch (error) {
+        log("error happened in RideAcceptedByDriverEvent $error",
+            name: "User bloc");
+      }
     });
   }
 

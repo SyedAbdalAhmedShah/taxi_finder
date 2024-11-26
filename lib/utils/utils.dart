@@ -14,7 +14,7 @@ import 'package:taxi_finder/utils/api_helper.dart';
 
 class Utils {
   static PolylinePoints polylinePoints = PolylinePoints();
- static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   static String firebaseSignInErrors(String code) {
     final errorMessage = switch (code) {
       ('invalid-email') => 'Invalid email format.',
@@ -43,7 +43,14 @@ class Utils {
   static Future<(String totalDistance, Polyline polyLine, Marker maarker)>
       getPolyLinesAndMarker(
           {required Position currentLocationPosition,
-          required LatLng destLocationPosition}) async {
+          required LatLng destLocationPosition,
+          String? iconPath}) async {
+    var icon = iconPath != null
+        ? await BitmapDescriptor.asset(
+            const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
+            iconPath,
+          )
+        : BitmapDescriptor.defaultMarker;
     List<LatLng> routeCoords = [];
     PointLatLng currentLocPoint = PointLatLng(
         currentLocationPosition.latitude, currentLocationPosition.longitude);
@@ -72,6 +79,7 @@ class Utils {
       color: secondaryColor,
     );
     Marker destinationMarker = Marker(
+        icon: icon,
         markerId: const MarkerId("destination"),
         infoWindow: InfoWindow(title: "${points.endAddress}"),
         position: LatLng(routeCoords.last.latitude, routeCoords.last.longitude),
@@ -79,13 +87,27 @@ class Utils {
     return (totalDistance, polyline, destinationMarker);
   }
 
-  static getDriver({required String driverUid}) async{
-     final docsnap =
+  static updateUser({required String driverUid}) async {
+    final docsnap =
         firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverUid);
     final driverData = await docsnap.get();
 
     if (driverData.exists) {
       await docsnap.update({FirebaseStrings.activeRide: null});
+      DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
+      return driverInfo;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<DriverInfo?> driver({required String driverUid}) async {
+    final docsnap =
+        firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverUid);
+    final driverData = await docsnap.get();
+
+    if (driverData.exists) {
+      log('driver exisit');
       DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
       return driverInfo;
     } else {

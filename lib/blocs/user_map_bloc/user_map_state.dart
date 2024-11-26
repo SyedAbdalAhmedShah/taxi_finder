@@ -6,6 +6,8 @@ class OnRidingRequestLoadingState extends UserMapState {}
 
 class OnRidingRequestSendState extends UserMapState {}
 
+class OnRideRequestAcceptState extends UserMapState {}
+
 final class UserMapInitial extends UserMapState {}
 
 final class UserMapLoadingState extends UserMapState {}
@@ -23,5 +25,3 @@ final class OnDirectionRequestState extends UserMapState {}
 final class OnLocationSearchState extends UserMapState {}
 
 class OnNearByDriverAdded extends UserMapState {}
-
-

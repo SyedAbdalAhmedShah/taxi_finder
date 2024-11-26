@@ -56,7 +56,7 @@ mixin AuthRepo {
       Emitter<AuthState> emit, UserCredential userCredential) async {
     SharedPreferences prefrences = await SharedPreferences.getInstance();
     DriverInfo? driverInfo =
-        await Utils.getDriver(driverUid: userCredential.user?.uid ?? "");
+        await Utils.updateUser(driverUid: userCredential.user?.uid ?? "");
     if (driverInfo != null) {
       loggedRole.setDriver(driverInfo);
       String status = driverInfo.status ?? "";

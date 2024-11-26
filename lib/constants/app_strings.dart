@@ -41,3 +41,4 @@ const enterEmail = "Enter your email";
 const enterPassword = "Enter password";
 const orContinueWith = 'Or continue with';
 const continueWithGoogle = 'Google';
+const reachedUserLoc = 'Reached on user location';

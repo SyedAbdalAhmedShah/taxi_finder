@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
+import 'package:taxi_finder/components/primary_button.dart';
+import 'package:taxi_finder/components/secondary_button.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/driver/components/driver_drawer.dart';
 import 'package:taxi_finder/views/driver/components/users_requests.dart';
@@ -20,6 +25,17 @@ class DriverHome extends StatelessWidget {
       ),
       body: const Stack(
         children: [DriverMapView(), UsersRequestsSection()],
+      ),
+      bottomSheet: BlocBuilder<DriverBloc, DriverState>(
+        builder: (context, state) {
+          if (state is RideAcceptedState) {
+            return Padding(
+                padding: EdgeInsets.all(5.w),
+                child: PrimaryButton(text: reachedUserLoc, onPressed: () {}));
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }
