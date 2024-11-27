@@ -32,9 +32,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   TextEditingController myLocationController = TextEditingController();
   TextEditingController destinationController = TextEditingController();
   String? countryISO;
-  String totalLocationDistance = "";
-  String totalfare = "";
-  bool showRequestSheet = false;
+
   TextEditingController totalSeatBookController = TextEditingController();
   List<Prediction> searchLocations = [];
   CameraPosition cameraPosition = const CameraPosition(
@@ -96,9 +94,9 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                   destLocationPosition: event.latLng);
           destinationLocation =
               GeoPoint(event.latLng.latitude, event.latLng.longitude);
-          totalLocationDistance = totalDistance;
+          final totalLocationDistance = totalDistance;
 
-          totalfare =
+          final totalfare =
               userMapRepo.getTotalFare(totalLocationDistance).toString();
           polylineSet.add(polyline);
           cameraPosition = CameraPosition(
@@ -106,7 +104,10 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                   currentLocationPosition.longitude),
               zoom: 10.0);
           markers.add(destinationMarker);
-          emit(OnDirectionRequestState());
+          emit(OnDirectionRequestState(
+              totalFare: totalfare,
+              totalLocationDistance: totalDistance,
+              totalSeatBookController: totalSeatBookController.text));
         } catch (error) {
           log("error $error", name: "OnDirectionEvent");
           emit(UserMapFailureState(errorMessage: routeNotFount));
@@ -129,7 +130,6 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
           if (location != null) {
             LatLng latLng = LatLng(location.lat!, location.lng!);
 
-            showRequestSheet = true;
             add(OnDirectionEvent(latLng: latLng));
           } else {
             // error message
@@ -232,7 +232,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         polylineSet.clear();
         polylineSet.add(polyline);
         markers.add(driverMarker);
-        emit(OnRideRequestAcceptState());
+        emit(OnRideRequestAcceptState(driverInfo: driverInfo!));
       } catch (error) {
         log("error happened in RideAcceptedByDriverEvent $error",
             name: "User bloc");

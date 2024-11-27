@@ -6,7 +6,11 @@ class OnRidingRequestLoadingState extends UserMapState {}
 
 class OnRidingRequestSendState extends UserMapState {}
 
-class OnRideRequestAcceptState extends UserMapState {}
+class OnRideRequestAcceptState extends UserMapState {
+  final DriverInfo driverInfo;
+
+  OnRideRequestAcceptState({required this.driverInfo});
+}
 
 final class UserMapInitial extends UserMapState {}
 
@@ -20,7 +24,16 @@ final class UserMapFailureState extends UserMapState {
 
 final class UpdateMapState extends UserMapState {}
 
-final class OnDirectionRequestState extends UserMapState {}
+final class OnDirectionRequestState extends UserMapState {
+  final String totalLocationDistance;
+  final String totalFare;
+  final String totalSeatBookController;
+
+  OnDirectionRequestState(
+      {required this.totalLocationDistance,
+      required this.totalFare,
+      required this.totalSeatBookController});
+}
 
 final class OnLocationSearchState extends UserMapState {}
 

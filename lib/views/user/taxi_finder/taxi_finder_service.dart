@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/constants/enums.dart';
+import 'package:taxi_finder/views/user/components/driver_rider_sheet.dart';
 
 import 'package:taxi_finder/views/user/components/location_search_section.dart';
 import 'package:taxi_finder/views/user/components/request_sheet.dart';
@@ -35,8 +36,21 @@ class _TaxiFinderscreenState extends State<TaxiFinderscreen> {
             LocationSearchSection(),
           ],
         ),
-        bottomSheet: RequestSheet(
-          selectedService: widget.selectedService,
-        ));
+        bottomSheet:
+            BlocBuilder<UserMapBloc, UserMapState>(builder: (context, state) {
+          if (state is OnDirectionRequestState) {
+            return RequestSheet(
+              selectedService: widget.selectedService,
+              totalLocationDistance: state.totalLocationDistance,
+              totalfare: state.totalFare,
+            );
+          } else if (state is OnRideRequestAcceptState) {
+            return DriverRiderSheet(
+              driverInfo: state.driverInfo,
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }));
   }
 }
