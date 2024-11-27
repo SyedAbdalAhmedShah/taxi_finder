@@ -91,5 +91,9 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         emit(RideAcceptedState());
       },
     );
+
+    on<OnUserPickupLocationReached>((event, emit) {
+      emit(DriverMapLoadingState());
+    });
   }
 }

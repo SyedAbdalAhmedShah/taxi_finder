@@ -45,7 +45,7 @@ class _UsersRequestsSectionState extends State<UsersRequestsSection> {
                         ));
               }
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           } else {
             return const SizedBox.shrink();

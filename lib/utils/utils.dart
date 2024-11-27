@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,11 @@ import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class Utils {
   static PolylinePoints polylinePoints = PolylinePoints();
+  static DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   static FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   static String firebaseSignInErrors(String code) {
     final errorMessage = switch (code) {
@@ -87,7 +90,7 @@ class Utils {
     return (totalDistance, polyline, destinationMarker);
   }
 
-  static updateUser({required String driverUid}) async {
+  static updateDriver({required String driverUid}) async {
     final docsnap =
         firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverUid);
     final driverData = await docsnap.get();
@@ -113,5 +116,18 @@ class Utils {
     } else {
       return null;
     }
+  }
+
+  static Future<String> getPlatformDeviceID() async {
+    String deviceId = "";
+    if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceId = iosInfo.identifierForVendor ?? "";
+    } else {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      deviceId = androidDeviceInfo.id;
+    }
+    log('deviceId $deviceId');
+    return deviceId;
   }
 }

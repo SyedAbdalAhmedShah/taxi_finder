@@ -209,6 +209,7 @@ class UserMapRepo {
       FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
       FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
       FirebaseStrings.docId: doc.id,
+      FirebaseStrings.userId: loggedRole.userModel.uid,
       FirebaseStrings.timStamp: FieldValue.serverTimestamp(),
       FirebaseStrings.status: FirebaseStrings.pending,
     });

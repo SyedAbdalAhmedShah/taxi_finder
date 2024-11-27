@@ -10,11 +10,13 @@ import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/utils/utils.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 mixin AuthRepo {
   final loggedRole = locator.get<CurrentUserDependency>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final fcm = FirebaseMessaging.instance;
 
   Future<UserCredential?> signInWithEmailAndPassword(
       {required String email, required String password}) async {
@@ -34,9 +36,11 @@ mixin AuthRepo {
   Future storeUserDatee(
       {required String uid, required Map<String, dynamic> data}) async {
     await _firestore.collection(FirebaseStrings.usersColl).doc(uid).set(data);
+    await updateUserFcmTokenAndDeviceId(uid);
   }
 
   Future<UserModel?> getUserDataa({required String uid}) async {
+    await updateUserFcmTokenAndDeviceId(uid);
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await _firestore.collection(FirebaseStrings.usersColl).doc(uid).get();
     if (documentSnapshot.exists) {
@@ -48,6 +52,15 @@ mixin AuthRepo {
     }
   }
 
+  updateUserFcmTokenAndDeviceId(String userId) async {
+    String? fcmToken = await fcm.getToken();
+    String deviceId = await Utils.getPlatformDeviceID();
+    _firestore.collection(FirebaseStrings.usersColl).doc(userId).update({
+      FirebaseStrings.token: fcmToken,
+      FirebaseStrings.deviceId: deviceId,
+    });
+  }
+
   Future signOut() async {
     await _auth.signOut();
   }
@@ -56,7 +69,7 @@ mixin AuthRepo {
       Emitter<AuthState> emit, UserCredential userCredential) async {
     SharedPreferences prefrences = await SharedPreferences.getInstance();
     DriverInfo? driverInfo =
-        await Utils.updateUser(driverUid: userCredential.user?.uid ?? "");
+        await Utils.updateDriver(driverUid: userCredential.user?.uid ?? "");
     if (driverInfo != null) {
       loggedRole.setDriver(driverInfo);
       String status = driverInfo.status ?? "";
@@ -78,6 +91,7 @@ mixin AuthRepo {
   userStateHandler(
       Emitter<AuthState> emit, UserCredential userCredential) async {
     SharedPreferences prefrences = await SharedPreferences.getInstance();
+    await updateUserFcmTokenAndDeviceId(userCredential.user?.uid ?? "");
     UserModel? userModel =
         await getUserDataa(uid: userCredential.user?.uid ?? "");
     if (userModel != null) {

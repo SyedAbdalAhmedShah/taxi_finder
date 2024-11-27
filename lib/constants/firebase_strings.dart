@@ -5,6 +5,8 @@ class FirebaseStrings {
   static const String rideRequestColl = "RideRequests";
 
   static const String driverUid = "driverUid";
+  static const String token = "token";
+  static const String deviceId = "deviceId";
   static const String userLatlong = "userLatLong";
   static const String userPickUpLocation = "userPickUpLocation";
   static const String userDropOffLocation = "userDropOffLocation";
