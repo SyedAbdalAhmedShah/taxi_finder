@@ -6,10 +6,12 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />       
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="taxi_finder"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+      
 
         <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyAcuUyHo8Ml8KOIk4qhlfBMQ75mUEcuYl8"/>
@@ -41,6 +43,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:permission_handler/permission_handler.dart';
 
 class LocalNotificationService {
   // Singleton pattern
@@ -20,6 +23,7 @@ class LocalNotificationService {
   Future<void> init() async {
     // Initialize time zones for scheduling
     tz.initializeTimeZones();
+    var status = await Permission.notification.request();
 
     // Android initialization
     const AndroidInitializationSettings initializationSettingsAndroid =
