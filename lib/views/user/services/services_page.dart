@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/logout_button.dart';
@@ -6,6 +7,7 @@ import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/utils/extensions.dart';
+import 'package:taxi_finder/utils/local_notificatioin_service.dart';
 
 import 'package:taxi_finder/views/user/taxi_finder/taxi_finder_service.dart';
 
@@ -41,6 +43,15 @@ class ServicesPage extends StatelessWidget {
               imagePath: shuttleFinderImage,
               title: shuttleFinderS,
               onTap: () {
+                FlutterLocalNotificationsPlugin
+                    flutterLocalNotificationsPlugin =
+                    FlutterLocalNotificationsPlugin();
+                flutterLocalNotificationsPlugin
+                    .resolvePlatformSpecificImplementation<
+                        AndroidFlutterLocalNotificationsPlugin>()!
+                    .requestNotificationsPermission();
+                LocalNotificationService().showNotification(
+                    id: 4, title: "hiiii", body: "i am body ");
                 // context.push(const TaxiFinderscreen());
               },
             )

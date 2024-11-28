@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/models/ride_request_model.dart';
+import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
@@ -23,6 +25,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
   late Position driverCurrentPosition;
   Set<Polyline> polylineSet = {};
   Set<Marker> markers = {};
+  late UserRequestModel currentRideRequest;
   DriverBloc() : super(DriverInitial()) {
     on<DriverCurrentLocationEvent>((event, emit) async {
       emit(DriverMapLoadingState());
@@ -73,6 +76,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         await updateRideRequestedDoc(
             docId: event.userRequestModel.requestId ?? "",
             status: FirebaseStrings.accepted);
+        currentRideRequest = event.userRequestModel;
         LatLng userPickupPoint = LatLng(
             event.userRequestModel.userPickUpLocation?.geoPoint?.latitude ??
                 0.0,
@@ -92,8 +96,21 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
       },
     );
 
-    on<OnUserPickupLocationReached>((event, emit) {
+    on<OnUserPickupLocationReached>((event, emit) async {
       emit(DriverMapLoadingState());
+      try {
+        String userId = currentRideRequest.userUid ?? "";
+        UserModel? userModel = await Utils.getUserData(uid: userId);
+        if (userModel != null) {
+        } else {
+          log('user is null');
+          emit(DriverMapFailureState());
+        }
+      } catch (e) {
+        log('error happened in OnUserPickupLocationReached $e',
+            name: "Driver bloc");
+        emit(DriverMapFailureState());
+      }
     });
   }
 }

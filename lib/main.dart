@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
@@ -14,7 +15,20 @@ import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/firebase_options.dart';
+import 'package:taxi_finder/utils/local_notificatioin_service.dart';
+import 'package:taxi_finder/utils/notification_service.dart';
 import 'package:taxi_finder/views/splash/splash_screen.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  log("Handling a background message: ${message.messageId}");
+  LocalNotificationService()
+      .showNotification(id: 10, title: "hiiii", body: "i am body ");
+}
 
 void main() async {
   runZonedGuarded(() async {
@@ -28,6 +42,8 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    await NotificationService.initializeNotification();
     await DependencySetup.setupDependencies();
     runApp(const MyApp());
   }, (error, stack) {

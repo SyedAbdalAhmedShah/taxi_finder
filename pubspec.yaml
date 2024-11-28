@@ -59,6 +59,8 @@ dependencies:
   linear_timer: ^2.0.0
   firebase_messaging: ^15.1.5
   device_info_plus: ^11.1.1
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:

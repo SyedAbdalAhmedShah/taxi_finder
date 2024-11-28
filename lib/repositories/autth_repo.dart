@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,6 +56,7 @@ mixin AuthRepo {
 
   updateUserFcmTokenAndDeviceId(String userId) async {
     String? fcmToken = await fcm.getToken();
+    log('fcm token is $fcmToken');
     String deviceId = await Utils.getPlatformDeviceID();
     _firestore.collection(FirebaseStrings.usersColl).doc(userId).update({
       FirebaseStrings.token: fcmToken,

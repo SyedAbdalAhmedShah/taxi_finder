@@ -11,6 +11,7 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/driver_info.dart';
+import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
@@ -113,6 +114,21 @@ class Utils {
       log('driver exisit');
       DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
       return driverInfo;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<UserModel?> getUserData({required String uid}) async {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await firebaseFirestore
+            .collection(FirebaseStrings.usersColl)
+            .doc(uid)
+            .get();
+    if (documentSnapshot.exists) {
+      UserModel userModel = UserModel.fromFirestore(documentSnapshot);
+
+      return userModel;
     } else {
       return null;
     }

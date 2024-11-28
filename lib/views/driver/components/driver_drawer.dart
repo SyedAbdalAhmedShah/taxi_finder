@@ -8,6 +8,7 @@ import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/utils/extensions.dart';
+import 'package:taxi_finder/utils/local_notificatioin_service.dart';
 import 'package:taxi_finder/views/bridge/bridge.dart';
 
 class DriverDrawer extends StatefulWidget {
@@ -46,7 +47,9 @@ class _DriverDrawerState extends State<DriverDrawer> {
               },
               child: ListTile(
                 onTap: () {
-                  context.read<AuthBloc>().add(SignouEvent());
+                  LocalNotificationService().showNotification(
+                      id: 2, title: "HI", body: "THIS is body  ");
+                  // context.read<AuthBloc>().add(SignouEvent());
                 },
                 leading: const Icon(Icons.logout_rounded),
                 title: const Text("Logout"),
