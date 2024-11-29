@@ -9,6 +9,7 @@ import 'package:taxi_finder/models/ride_request_model.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
+import 'package:taxi_finder/utils/notification_service.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
 part 'driver_event.dart';
@@ -103,7 +104,10 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         UserModel? userModel = await Utils.getUserData(uid: userId);
         if (userModel != null) {
         } else {
-          log('user is null');
+          await NotificationService.sendNotification(
+              driverName: loggedRole.driverInfo.fullName ?? "",
+              requestId: '123456',
+              fcmToken: userModel?.token ?? "");
           emit(DriverMapFailureState());
         }
       } catch (e) {
