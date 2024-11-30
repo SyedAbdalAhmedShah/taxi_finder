@@ -31,7 +31,7 @@ class UserMapRepo {
 
     Response response = await get(Uri.parse(url));
     final data = json.decode(response.body);
-    log("Url respponse data ${data}");
+    log("Url respponse data $data");
     final route = data['routes'][0];
     final leg = route['legs'][0];
     final distance = leg['distance']['text'];

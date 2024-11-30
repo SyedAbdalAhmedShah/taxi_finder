@@ -114,7 +114,7 @@ class UserRequestCard extends StatelessWidget {
                       context.read<DriverBloc>().add(
                           OnAcceptRide(userRequestModel: userRequestModel));
                     },
-                    child: Text("Accept"))
+                    child: const Text("Accept"))
               ],
             )
           ],

@@ -47,9 +47,7 @@ class _DriverDrawerState extends State<DriverDrawer> {
               },
               child: ListTile(
                 onTap: () {
-                  LocalNotificationService().showNotification(
-                      id: 2, title: "HI", body: "THIS is body  ");
-                  // context.read<AuthBloc>().add(SignouEvent());
+                  context.read<AuthBloc>().add(SignouEvent());
                 },
                 leading: const Icon(Icons.logout_rounded),
                 title: const Text("Logout"),

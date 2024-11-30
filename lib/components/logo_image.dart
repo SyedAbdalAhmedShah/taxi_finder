@@ -5,7 +5,7 @@ import 'package:taxi_finder/constants/app_assets.dart';
 class LogoImage extends StatelessWidget {
   final double size;
 
-  const LogoImage({Key? key, this.size = 100.0}) : super(key: key);
+  const LogoImage({super.key, this.size = 100.0});
 
   @override
   Widget build(BuildContext context) {

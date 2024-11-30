@@ -106,7 +106,7 @@ class SignInView extends StatelessWidget {
 
 class _SignInButtonStates extends StatelessWidget {
   final bool isDriver;
-  const _SignInButtonStates({required this.isDriver, super.key});
+  const _SignInButtonStates({required this.isDriver});
 
   @override
   Widget build(BuildContext context) {

@@ -69,7 +69,7 @@ class RequestSheet extends StatelessWidget {
                             fontSize: 18.sp),
                       ),
                       Gap(2.w),
-                      Text("R${totalfare}",
+                      Text("R$totalfare",
                           style: TextStyle(
                               color: Colors.green.shade800,
                               fontWeight: FontWeight.bold,

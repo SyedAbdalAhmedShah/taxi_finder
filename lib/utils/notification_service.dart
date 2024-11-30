@@ -32,7 +32,10 @@ class NotificationService {
       log('Message data: ${message.data}');
       log('id ${message.messageId}');
       if (message.notification != null) {
-        log('Message also contained a notification: ${message.notification}');
+        final title = message.notification?.title ?? "";
+        final body = message.notification?.body ?? "";
+        LocalNotificationService()
+            .showNotification(id: 10, title: title, body: body);
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -43,24 +46,26 @@ class NotificationService {
   static sendNotification(
       {required String fcmToken,
       required String driverName,
+      required String accessToken,
       required String requestId}) async {
     try {
+      var notificationData = {
+        message: {
+          token: fcmToken,
+          notification: {
+            title: "Driver Arrived ",
+            body: "Your driver $driverName is arrived on your location"
+          },
+          data: <String, String>{requestid: requestId},
+        }
+      };
       final response = await http.post(
         Uri.parse(fcmApi),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer cd4be432378cc3498727c8c669445f7e0af4e995',
+          'Authorization': 'Bearer $accessToken',
         },
-        body: jsonEncode({
-          "message": {
-            "topic": "news",
-            "notification": {
-              "title": "Breaking News",
-              "body": "New news story available."
-            },
-            "data": {"story_id": "story_12345"}
-          }
-        }),
+        body: jsonEncode(notificationData),
       );
       log('response notification ${response.body} === status code ${response.statusCode}');
     } catch (e) {

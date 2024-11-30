@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
 import 'package:taxi_finder/components/primary_button.dart';
-import 'package:taxi_finder/components/secondary_button.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/driver/components/driver_drawer.dart';
 import 'package:taxi_finder/views/driver/components/users_requests.dart';

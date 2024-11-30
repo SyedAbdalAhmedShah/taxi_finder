@@ -5,8 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
-import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+// import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+// import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
@@ -25,20 +25,20 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  log("Handling a background message: ${message.messageId}");
-  LocalNotificationService()
-      .showNotification(id: 10, title: "hiiii", body: "i am body ");
+  final title = message.notification?.title ?? "";
+  final body = message.notification?.body ?? "";
+  LocalNotificationService().showNotification(id: 10, title: title, body: body);
 }
 
 void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    final GoogleMapsFlutterPlatform mapsImplementation =
-        GoogleMapsFlutterPlatform.instance;
-    if (mapsImplementation is GoogleMapsFlutterAndroid) {
-      // Force Hybrid Composition mode.
-      mapsImplementation.useAndroidViewSurface = true;
-    }
+    // final GoogleMapsFlutterPlatform mapsImplementation =
+    //     GoogleMapsFlutterPlatform.instance;
+    // if (mapsImplementation is GoogleMapsFlutterAndroid) {
+    //   // Force Hybrid Composition mode.
+    //   mapsImplementation.useAndroidViewSurface = true;
+    // }
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

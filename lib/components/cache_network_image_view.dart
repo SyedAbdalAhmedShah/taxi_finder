@@ -22,7 +22,7 @@ class CacheNetworkImageView extends StatelessWidget {
           ),
         );
       },
-      errorWidget: (context, url, error) => CircleAvatar(
+      errorWidget: (context, url, error) => const CircleAvatar(
         child: Icon(Icons.person),
       ),
       progressIndicatorBuilder: (context, url, progress) {

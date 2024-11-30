@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
-import 'package:taxi_finder/models/ride_request_model.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
+import 'package:taxi_finder/utils/api_helper.dart';
 import 'package:taxi_finder/utils/notification_service.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
@@ -103,10 +103,12 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         log("cuser id $userId");
         UserModel? userModel = await Utils.getUserData(uid: userId);
         if (userModel != null) {
+          String accessToken = await ApiHelper().generateFCMAccessToken();
           await NotificationService.sendNotification(
+              accessToken: accessToken,
               driverName: loggedRole.driverInfo.fullName ?? "",
-              requestId: '123456',
-              fcmToken: userModel?.token ?? "");
+              requestId: currentRideRequest.requestId ?? "",
+              fcmToken: userModel.token ?? "");
         } else {
           emit(DriverMapFailureState());
         }
