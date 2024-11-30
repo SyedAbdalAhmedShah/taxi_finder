@@ -98,16 +98,16 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
     );
 
     on<OnUserPickupLocationReached>((event, emit) async {
-      emit(DriverMapLoadingState());
       try {
         String userId = currentRideRequest.userUid ?? "";
+        log("cuser id $userId");
         UserModel? userModel = await Utils.getUserData(uid: userId);
         if (userModel != null) {
-        } else {
           await NotificationService.sendNotification(
               driverName: loggedRole.driverInfo.fullName ?? "",
               requestId: '123456',
               fcmToken: userModel?.token ?? "");
+        } else {
           emit(DriverMapFailureState());
         }
       } catch (e) {

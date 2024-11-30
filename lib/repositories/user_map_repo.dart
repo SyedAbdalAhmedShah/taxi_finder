@@ -193,6 +193,7 @@ class UserMapRepo {
       FirebaseStrings.userDropOffLocation: userDropOffLocation.data,
       FirebaseStrings.address: stringAddress.$1,
       FirebaseStrings.destination: destination,
+      FirebaseStrings.userId: loggedRole.userModel.uid,
       FirebaseStrings.status: FirebaseStrings.pending,
       FirebaseStrings.createdAt: FieldValue.serverTimestamp(),
     });

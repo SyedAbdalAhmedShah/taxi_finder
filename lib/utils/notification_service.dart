@@ -7,7 +7,8 @@ import 'package:taxi_finder/utils/local_notificatioin_service.dart';
 import 'package:http/http.dart' as http;
 
 class NotificationService {
-  static String fcmApi = 'https://fcm.googleapis.com/fcm/send';
+  static String fcmApi =
+      'https://fcm.googleapis.com/v1/projects/taxi-finder-93d36/messages:send';
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
   static initializeNotification() async {
     NotificationSettings settings = await messaging.requestPermission(
@@ -48,17 +49,20 @@ class NotificationService {
         Uri.parse(fcmApi),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'key=YOUR_SERVER_KEY',
+          'Authorization': 'Bearer cd4be432378cc3498727c8c669445f7e0af4e995',
         },
         body: jsonEncode({
-          to: fcmToken,
-          notification: {
-            title: "Driver Arrived",
-            body: "Your driver $driverName has been arrived on your location ",
-          },
-          data: {"requestId": requestId},
+          "message": {
+            "topic": "news",
+            "notification": {
+              "title": "Breaking News",
+              "body": "New news story available."
+            },
+            "data": {"story_id": "story_12345"}
+          }
         }),
       );
+      log('response notification ${response.body} === status code ${response.statusCode}');
     } catch (e) {
       print('Error sending notification: $e');
     }
