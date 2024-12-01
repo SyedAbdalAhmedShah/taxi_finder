@@ -42,6 +42,7 @@ const enterPassword = "Enter password";
 const orContinueWith = 'Or continue with';
 const continueWithGoogle = 'Google';
 const reachedUserLoc = 'Reached on user location';
+const rideCompleted = 'Ride Completed ';
 const urRider = 'Your driver is comming';
 const request = 'Request';
 const requestid = 'requestId';

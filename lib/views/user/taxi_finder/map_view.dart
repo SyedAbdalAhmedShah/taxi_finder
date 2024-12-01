@@ -32,7 +32,8 @@ class UserMapViewState extends State<UserMapView> {
         if (state is UserMapFailureState) {
           Utils.showErrortoast(errorMessage: state.errorMessage);
         } else if (state is UpdateMapState) {
-          userMapBloc.nearByDriversStream.listen(
+          userMapBloc.nearByDriversStreamSubscription =
+              userMapBloc.nearByDriversStream.listen(
             (event) {
               userMapBloc.add(
                 NearByDriverAddedEvent(nearByDrivers: event),

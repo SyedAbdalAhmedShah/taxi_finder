@@ -24,6 +24,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   UserMapRepo userMapRepo = UserMapRepo();
   late GoogleMapController gController;
   late Stream<List<DriverInfo>> nearByDriversStream;
+  late StreamSubscription<List<DriverInfo>> nearByDriversStreamSubscription;
   StreamSubscription? rideRequestStream;
   Timer? rideRequestTimer;
   Set<Marker> nearByDriverMarker = {};
@@ -56,7 +57,8 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
         if (isPermissionEnable == LocationPermission.always ||
             isPermissionEnable == LocationPermission.whileInUse) {
           currentLocationPosition = await Geolocator.getCurrentPosition();
-          LatLng currentLatLong = LatLng(34.023, 71.5922);
+          LatLng currentLatLong = LatLng(currentLocationPosition.latitude,
+              currentLocationPosition.longitude);
           nearByDriversStream = userMapRepo.getNearByDrivers(currentLatLong);
           GeoPoint currentGeoPoint =
               GeoPoint(currentLatLong.latitude, currentLatLong.longitude);
@@ -193,6 +195,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
             RideRequest rideRequest = request.first;
             if (rideRequest.status == FirebaseStrings.accepted) {
               log('Ride accepted');
+              nearByDriversStreamSubscription.pause();
               add(RideAcceptedByDriverEvent(rideRequest: rideRequest));
             }
           });
@@ -228,7 +231,9 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                 currentLocationPosition: currentLocationPosition,
                 destLocationPosition: driverLocationLatLong,
                 iconPath: vanImage);
+
         markers.clear();
+        nearByDriverMarker.clear();
         polylineSet.clear();
         polylineSet.add(polyline);
         markers.add(driverMarker);
