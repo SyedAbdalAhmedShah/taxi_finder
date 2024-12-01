@@ -97,7 +97,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
       },
     );
 
-    on<OnUserPickupLocationReached>((event, emit) async {
+    on<ReachedOnUserPickupLocation>((event, emit) async {
       try {
         String userId = currentRideRequest.userUid ?? "";
         log("cuser id $userId");
@@ -109,6 +109,23 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
               driverName: loggedRole.driverInfo.fullName ?? "",
               requestId: currentRideRequest.requestId ?? "",
               fcmToken: userModel.token ?? "");
+          LatLng userPickupPoint = LatLng(
+              currentRideRequest.userDropOffLocation?.geoPoint?.latitude ?? 0.0,
+              currentRideRequest.userDropOffLocation?.geoPoint?.longitude ??
+                  0.0);
+          Polyline polyline;
+          Marker destinationMarker;
+          String totalDistance;
+
+          (totalDistance, polyline, destinationMarker) =
+              await Utils.getPolyLinesAndMarker(
+                  currentLocationPosition: driverCurrentPosition,
+                  destLocationPosition: userPickupPoint);
+          polylineSet = {};
+          markers = {};
+          polylineSet.add(polyline);
+          markers.add(destinationMarker);
+          emit(ReachedOnUserPickupLocationState());
         } else {
           emit(DriverMapFailureState());
         }

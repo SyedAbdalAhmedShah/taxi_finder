@@ -35,7 +35,7 @@ class DriverHome extends StatelessWidget {
                     onPressed: () {
                       context
                           .read<DriverBloc>()
-                          .add(OnUserPickupLocationReached());
+                          .add(ReachedOnUserPickupLocation());
                     }));
           } else {
             return const SizedBox.shrink();

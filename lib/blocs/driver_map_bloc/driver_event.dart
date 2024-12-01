@@ -6,7 +6,7 @@ class DriverCurrentLocationEvent extends DriverEvent {}
 
 class OnRideRequestRecieveEvent extends DriverEvent {}
 
-class OnUserPickupLocationReached extends DriverEvent {}
+class ReachedOnUserPickupLocation extends DriverEvent {}
 
 class OnRequestExpireEvent extends DriverEvent {
   final String docId;
