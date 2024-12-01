@@ -8,6 +8,8 @@ class OnRideRequestRecieveEvent extends DriverEvent {}
 
 class ReachedOnUserPickupLocation extends DriverEvent {}
 
+class OnRideCompletedEvent extends DriverEvent {}
+
 class OnRequestExpireEvent extends DriverEvent {
   final String docId;
 

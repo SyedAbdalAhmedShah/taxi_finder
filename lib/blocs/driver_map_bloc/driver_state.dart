@@ -12,6 +12,8 @@ final class RideAcceptedState extends DriverState {}
 
 final class ReachedOnUserPickupLocationState extends DriverState {}
 
+final class CompletedRideState extends DriverState {}
+
 final class DriverMapFailureState extends DriverState {}
 
 final class DriverCurrentLocationUpdatedState extends DriverState {}

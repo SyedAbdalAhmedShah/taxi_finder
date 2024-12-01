@@ -87,4 +87,26 @@ mixin DriverMapRepo {
       FirebaseStrings.driverUid: loggedRole.driverInfo.driverUid
     }, SetOptions(merge: true));
   }
+
+  markCompletedOfDriverRideRequestCollection(
+      {required String driverId, required String requestId}) async {
+    final driverDoc =
+        _firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverId);
+    final rideRequestCol =
+        driverDoc.collection(FirebaseStrings.rideRequestColl).doc(requestId);
+    await Future.wait([
+      driverDoc.update({FirebaseStrings.activeRide: null}),
+      rideRequestCol.update({FirebaseStrings.status: FirebaseStrings.completed})
+    ]);
+  }
+
+  markAsCompletedRideRequestCollection({required String requestId}) async {
+    final rideRequestCol = _firebaseFirestore
+        .collection(FirebaseStrings.rideRequestColl)
+        .doc(requestId);
+    await rideRequestCol.update({
+      FirebaseStrings.status: FirebaseStrings.completed,
+      FirebaseStrings.completeAt: Timestamp.now()
+    });
+  }
 }

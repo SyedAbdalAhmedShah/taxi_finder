@@ -43,9 +43,7 @@ class DriverHome extends StatelessWidget {
                 child: PrimaryButton(
                     text: rideCompleted,
                     onPressed: () {
-                      context
-                          .read<DriverBloc>()
-                          .add(ReachedOnUserPickupLocation());
+                      context.read<DriverBloc>().add(OnRideCompletedEvent());
                     }));
           } else {
             return const SizedBox.shrink();

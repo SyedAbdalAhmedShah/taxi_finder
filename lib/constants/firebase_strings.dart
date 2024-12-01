@@ -39,12 +39,14 @@ class FirebaseStrings {
   static const String profileUrl = "profileUrl";
   static const String carDocUrl = "carDocUrl";
   static const String status = "status";
+  static const String completeAt = "completedAt";
   static const String activeRide = "activeRide";
   static const String expired = "expired";
   static const String accepted = "accepted";
   static const String pending = "Pending";
   static const String createdAt = "createdAt";
   static const String inProcess = "inProcess";
+  static const String completed = "Completed";
   static const String approved = "Approved";
   static const String rejected = "rejected";
   static const String timeout = "timeout";

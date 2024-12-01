@@ -197,6 +197,12 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
               log('Ride accepted');
               nearByDriversStreamSubscription.pause();
               add(RideAcceptedByDriverEvent(rideRequest: rideRequest));
+            } else if (rideRequest.status == FirebaseStrings.completed) {
+              polylineSet.clear();
+              markers.clear();
+              add(FetchCurrentLocation());
+            } else {
+              log('Ride status ============================================== ${rideRequest.status}');
             }
           });
         } else {

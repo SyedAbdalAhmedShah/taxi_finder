@@ -135,5 +135,21 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         emit(DriverMapFailureState());
       }
     });
+
+    on<OnRideCompletedEvent>((event, emit) async {
+      try {
+        await markCompletedOfDriverRideRequestCollection(
+            driverId: loggedRole.driverInfo.driverUid ?? "",
+            requestId: currentRideRequest.requestId ?? "");
+        await markAsCompletedRideRequestCollection(
+            requestId: currentRideRequest.requestId ?? "");
+        polylineSet = {};
+        markers = {};
+        emit(CompletedRideState());
+      } catch (e) {
+        log('error happened in OnRideCompletedEvent $e', name: "Driver bloc");
+        emit(DriverMapFailureState());
+      }
+    });
   }
 }
