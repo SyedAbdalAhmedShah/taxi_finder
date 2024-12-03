@@ -190,6 +190,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
                 pickUpLocation: userGeoPoint,
                 dropOffLocation: destinationLocation);
           }
+
           final requestStrem = userMapRepo.getRequestStream(docId: requestId);
           requestStrem.listen((request) {
             RideRequest rideRequest = request.first;
