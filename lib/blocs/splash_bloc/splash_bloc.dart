@@ -23,45 +23,47 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> with AuthRepo {
       final sharedPrefDep = locator.get<SharedPrefrencesDependency>();
       final loggedRole = locator.get<CurrentUserDependency>();
       final currentUser = _auth.currentUser;
-      try {
-        bool? isDriver =
-            sharedPrefDep.preferences.getBool(FirebaseStrings.driverStoreKey);
-        log("IS driver  $isDriver");
-        if (currentUser != null) {
-          if (isDriver != null && isDriver) {
-            DriverInfo? driverInfo =
-                await Utils.updateDriver(driverUid: currentUser.uid);
-            if (driverInfo != null) {
-              loggedRole.setDriver(driverInfo);
-              if (driverInfo.status == FirebaseStrings.approved) {
-                emit(DriverAuthenticatedState());
-              } else if (driverInfo.status == FirebaseStrings.pending) {
-                emit(DriverPendingState());
-              } else {
-                emit(DriverRejectedState());
-              }
+      // try {
+      bool? isDriver =
+          sharedPrefDep.preferences.getBool(FirebaseStrings.driverStoreKey);
+      log("IS driver  $isDriver");
+      log('current User is ${currentUser?.uid}');
+      if (currentUser != null) {
+        if (isDriver != null && isDriver) {
+          DriverInfo? driverInfo =
+              await Utils.updateDriver(driverUid: currentUser.uid);
+          if (driverInfo != null) {
+            loggedRole.setDriver(driverInfo);
+            if (driverInfo.status == FirebaseStrings.approved) {
+              emit(DriverAuthenticatedState());
+            } else if (driverInfo.status == FirebaseStrings.pending) {
+              emit(DriverPendingState());
             } else {
-              await _auth.signOut();
-              emit(SplashFilureState(errorMessage: logout));
+              emit(DriverRejectedState());
             }
           } else {
-            UserModel? userModel = await getUserDataa(uid: currentUser.uid);
-            if (userModel != null) {
-              loggedRole.setUser(userModel);
-              emit(UserAuthenticatedState());
-            } else {
-              await _auth.signOut();
-              emit(SplashFilureState(errorMessage: logout));
-            }
+            await _auth.signOut();
+            emit(SplashFilureState(errorMessage: logout));
           }
         } else {
-          emit(RoleNotAuthenticatedState());
+          UserModel? userModel = await getUserDataa(uid: currentUser.uid);
+          if (userModel != null) {
+            await updateUserFcmTokenAndDeviceId(currentUser.uid);
+            loggedRole.setUser(userModel);
+            emit(UserAuthenticatedState());
+          } else {
+            await _auth.signOut();
+            emit(SplashFilureState(errorMessage: logout));
+          }
         }
-      } catch (error) {
-        log("error happened $error");
-        if (currentUser != null) _auth.signOut();
-        emit(SplashFilureState(errorMessage: logout));
+      } else {
+        emit(RoleNotAuthenticatedState());
       }
+      // } catch (error) {
+      //   log("error happened $error");
+      //   if (currentUser != null) _auth.signOut();
+      //   emit(SplashFilureState(errorMessage: logout));
+      // }
     });
   }
 }

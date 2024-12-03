@@ -16,11 +16,10 @@ import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/firebase_options.dart';
 import 'package:taxi_finder/utils/local_notificatioin_service.dart';
-import 'package:taxi_finder/utils/notification_service.dart';
 import 'package:taxi_finder/views/splash/splash_screen.dart';
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
@@ -42,8 +41,7 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    await NotificationService.initializeNotification();
+
     await DependencySetup.setupDependencies();
     runApp(const MyApp());
   }, (error, stack) {

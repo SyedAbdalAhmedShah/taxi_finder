@@ -31,7 +31,10 @@ class EmailNotVerified extends StatelessWidget {
                 Timer(
                   const Duration(seconds: 5),
                   () => Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (ctx) => const SignInView()),
+                    MaterialPageRoute(
+                        builder: (ctx) => SignInView(
+                              isDriver: isDriver,
+                            )),
                     (route) => false,
                   ),
                 );

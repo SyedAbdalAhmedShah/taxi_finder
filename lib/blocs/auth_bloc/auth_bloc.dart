@@ -23,34 +23,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
   AuthBloc() : super(AuthInitial()) {
     on<SignInEvent>((event, emit) async {
       emit(AuthLoadingState());
-      try {
-        UserCredential? userCredential = await signInWithEmailAndPassword(
-            email: email.text, password: password.text);
-        if (userCredential != null) {
-          bool isVerified = userCredential.user?.emailVerified ?? false;
-          if (isVerified) {
-            //? check if driver or user
-            //? if driver
-            if (event.isDriver) {
-              await driverStateHandler(emit, userCredential);
-            } else {
-              //? if user
-              await userStateHandler(emit, userCredential);
-            }
+      // try {
+      UserCredential? userCredential = await signInWithEmailAndPassword(
+          email: email.text, password: password.text);
+      if (userCredential != null) {
+        bool isVerified = userCredential.user?.emailVerified ?? false;
+        if (isVerified) {
+          //? check if driver or user
+          //? if driver
+          if (event.isDriver) {
+            await driverStateHandler(emit, userCredential);
           } else {
-            await userCredential.user?.sendEmailVerification();
-            emit(NonVerifiedEmailState(isDriver: event.isDriver));
+            //? if user
+            await userStateHandler(emit, userCredential);
           }
         } else {
-          emit(AuthFailureState(failureMessage: usrNotFnd));
+          await userCredential.user?.sendEmailVerification();
+          emit(NonVerifiedEmailState(isDriver: event.isDriver));
         }
-      } on FirebaseAuthException catch (authError) {
-        final athError = Utils.firebaseSignInErrors(authError.code);
-        emit(AuthFailureState(failureMessage: athError));
-      } catch (error) {
-        log("gernel error $error", name: "sign in event");
-        emit(AuthFailureState(failureMessage: somethingwrong));
+      } else {
+        emit(AuthFailureState(failureMessage: usrNotFnd));
       }
+      // } on FirebaseAuthException catch (authError) {
+      //   final athError = Utils.firebaseSignInErrors(authError.code);
+      //   emit(AuthFailureState(failureMessage: athError));
+      // } catch (error) {
+      //   log("gernel error $error", name: "sign in event");
+      //   emit(AuthFailureState(failureMessage: somethingwrong));
+      // }
     });
 
     on<SignouEvent>(

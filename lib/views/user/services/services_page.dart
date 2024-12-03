@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gap/gap.dart';
@@ -6,13 +7,30 @@ import 'package:taxi_finder/components/logout_button.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/enums.dart';
+import 'package:taxi_finder/main.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/local_notificatioin_service.dart';
+import 'package:taxi_finder/utils/notification_service.dart';
 
 import 'package:taxi_finder/views/user/taxi_finder/taxi_finder_service.dart';
 
-class ServicesPage extends StatelessWidget {
+class ServicesPage extends StatefulWidget {
   const ServicesPage({super.key});
+
+  @override
+  State<ServicesPage> createState() => _ServicesPageState();
+}
+
+class _ServicesPageState extends State<ServicesPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  initializeFirebaseMessaging() async {
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    await NotificationService.initializeNotification();
+  }
 
   @override
   Widget build(BuildContext context) {
