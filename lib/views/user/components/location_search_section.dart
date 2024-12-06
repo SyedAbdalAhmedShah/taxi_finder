@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/views/user/components/auto_complete_map_field.dart';
 
@@ -12,7 +11,7 @@ class LocationSearchSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserMapBloc userMapBloc = context.read<UserMapBloc>();
+    TaxiFinderUserBloc userMapBloc = context.read<TaxiFinderUserBloc>();
     return Container(
       height: 25.h,
       width: double.infinity,
@@ -27,7 +26,7 @@ class LocationSearchSection extends StatelessWidget {
         ),
       ], color: primaryColor),
       child: SafeArea(
-        child: BlocBuilder<UserMapBloc, UserMapState>(
+        child: BlocBuilder<TaxiFinderUserBloc, TaxiFinderUserState>(
           builder: (context, state) {
             return state is UserMapLoadingState ||
                     userMapBloc.countryISO == null

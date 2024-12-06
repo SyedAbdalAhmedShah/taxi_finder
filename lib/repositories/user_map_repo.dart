@@ -18,6 +18,7 @@ import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
 import 'package:taxi_finder/models/ride_request_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 class UserMapRepo {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -135,18 +136,6 @@ class UserMapRepo {
     };
   }
 
-  Future<(String address, String isoCode)> getFullStringAddress(
-      GeoPoint currentLocationPosition) async {
-    List<Placemark> placemarks = await GeocodingPlatform.instance!
-        .placemarkFromCoordinates(currentLocationPosition.latitude,
-            currentLocationPosition.longitude);
-    Placemark placemark = placemarks.first;
-    String address =
-        "${placemark.street ?? ""}${placemark.subLocality ?? ""} ${placemark.locality ?? ""} ${placemark.administrativeArea ?? ""} ${placemark.country ?? ""}";
-    String countryISOCode = placemark.isoCountryCode ?? "PK";
-    return (address, countryISOCode);
-  }
-
   Future requestToNearByDriver(GeoPoint driverGeopoint, GeoPoint pickUpLocation,
       String driverId, String destination, GeoPoint dropOffLocation) async {
     final GeoFirePoint userPickUpLocation = GeoFirePoint(pickUpLocation);
@@ -155,7 +144,7 @@ class UserMapRepo {
     double distance =
         userPickUpLocation.distanceBetweenInKm(geopoint: driverGeopoint);
 
-    final stringAddress = await getFullStringAddress(pickUpLocation);
+    final stringAddress = await Utils.getFullStringAddress(pickUpLocation);
     final ref = firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(driverId)
@@ -181,7 +170,7 @@ class UserMapRepo {
       required GeoPoint dropOffLocation}) async {
     final GeoFirePoint userPickUpLocation = GeoFirePoint(pickUpLocation);
     final GeoFirePoint userDropOffLocation = GeoFirePoint(dropOffLocation);
-    final stringAddress = await getFullStringAddress(pickUpLocation);
+    final stringAddress = await Utils.getFullStringAddress(pickUpLocation);
     await firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(driverId)

@@ -1,4 +1,4 @@
-part of 'user_map_bloc.dart';
+part of 'taxi_finder_user_bloc.dart';
 
 abstract class TaxiFinderUserState {}
 

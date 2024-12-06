@@ -52,11 +52,9 @@ class TaxiFinderUserBloc
     on<FetchCurrentLocation>((event, emit) async {
       emit(UserMapLoadingState());
       try {
-        LocationPermission isPermissionEnable =
-            await Geolocator.checkPermission();
+        bool isPermissionGranted = await Utils.isPermissionGranted();
 
-        if (isPermissionEnable == LocationPermission.always ||
-            isPermissionEnable == LocationPermission.whileInUse) {
+        if (isPermissionGranted) {
           currentLocationPosition = await Geolocator.getCurrentPosition();
           LatLng currentLatLong = LatLng(currentLocationPosition.latitude,
               currentLocationPosition.longitude);
@@ -64,10 +62,8 @@ class TaxiFinderUserBloc
           GeoPoint currentGeoPoint =
               GeoPoint(currentLatLong.latitude, currentLatLong.longitude);
           final placeMarkers =
-              await userMapRepo.getFullStringAddress(currentGeoPoint);
+              await Utils.getFullStringAddress(currentGeoPoint);
 
-          log("s1 ${placeMarkers.$1}");
-          log("s2 ${placeMarkers.$2}");
           countryISO = placeMarkers.$2;
           myLocationController.text = placeMarkers.$1;
 

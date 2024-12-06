@@ -11,7 +11,8 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
 import 'package:taxi_finder/blocs/splash_bloc/splash_bloc.dart';
-import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/firebase_options.dart';
@@ -66,10 +67,13 @@ class MyApp extends StatelessWidget {
             create: (context) => SplashBloc(),
           ),
           BlocProvider(
-            create: (context) => UserMapBloc(),
+            create: (context) => TaxiFinderUserBloc(),
           ),
           BlocProvider(
             create: (context) => DriverBloc(),
+          ),
+          BlocProvider(
+            create: (context) => ShuttleFinderBloc(),
           ),
         ],
         child: MaterialApp(

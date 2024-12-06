@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 
 // Custom Place class for clustering
 
@@ -7,19 +10,36 @@ class ShuttleService extends StatefulWidget {
   const ShuttleService({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ShuttleServiceState createState() => _ShuttleServiceState();
 }
 
 class _ShuttleServiceState extends State<ShuttleService> {
-  late GoogleMapController _controller;
+  late ShuttleFinderBloc _shuttleFinderBloc;
+
+  @override
+  void initState() {
+    _shuttleFinderBloc = context.read<ShuttleFinderBloc>();
+    _shuttleFinderBloc.add(GetUserCurrentLocation());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition:
-            const CameraPosition(target: LatLng(40.7128, -74.0060), zoom: 10),
-        onMapCreated: (GoogleMapController controller) {
-          _controller = controller;
+      appBar: AppBar(),
+      body: BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+        builder: (context, state) {
+          return ModalProgressHUD(
+            inAsyncCall: state is ShuttleFinderLoadingState,
+            child: GoogleMap(
+              initialCameraPosition: _shuttleFinderBloc.cameraPosition,
+              myLocationEnabled: true,
+              onMapCreated: (GoogleMapController controller) {
+                _shuttleFinderBloc.googleMapController = controller;
+              },
+            ),
+          );
         },
       ),
     );

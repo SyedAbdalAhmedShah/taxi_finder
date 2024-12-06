@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
@@ -21,7 +21,7 @@ class RequestSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserMapBloc userMapBloc = context.read<UserMapBloc>();
+    TaxiFinderUserBloc userMapBloc = context.read<TaxiFinderUserBloc>();
     final key = GlobalKey<FormState>();
     return ClipRRect(
       borderRadius: BorderRadius.only(

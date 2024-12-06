@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/views/user/components/driver_rider_sheet.dart';
 
@@ -17,12 +17,12 @@ class TaxiFinderscreen extends StatefulWidget {
 }
 
 class _TaxiFinderscreenState extends State<TaxiFinderscreen> {
-  late UserMapBloc userMapBloc;
+  late TaxiFinderUserBloc userMapBloc;
 
   @override
   void initState() {
     // checkLocationPermission();
-    userMapBloc = context.read<UserMapBloc>();
+    userMapBloc = context.read<TaxiFinderUserBloc>();
     userMapBloc.add(FetchCurrentLocation());
     super.initState();
   }
@@ -36,8 +36,8 @@ class _TaxiFinderscreenState extends State<TaxiFinderscreen> {
             LocationSearchSection(),
           ],
         ),
-        bottomSheet:
-            BlocBuilder<UserMapBloc, UserMapState>(builder: (context, state) {
+        bottomSheet: BlocBuilder<TaxiFinderUserBloc, TaxiFinderUserState>(
+            builder: (context, state) {
           if (state is OnDirectionRequestState) {
             return RequestSheet(
               selectedService: widget.selectedService,

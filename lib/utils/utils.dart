@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
@@ -145,5 +146,27 @@ class Utils {
     }
     log('deviceId $deviceId');
     return deviceId;
+  }
+
+  static Future<bool> isPermissionGranted() async {
+    LocationPermission isPermissionEnable = await Geolocator.checkPermission();
+    if (isPermissionEnable == LocationPermission.always ||
+        isPermissionEnable == LocationPermission.whileInUse) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<(String address, String isoCode)> getFullStringAddress(
+      GeoPoint currentLocationPosition) async {
+    List<Placemark> placemarks = await GeocodingPlatform.instance!
+        .placemarkFromCoordinates(currentLocationPosition.latitude,
+            currentLocationPosition.longitude);
+    Placemark placemark = placemarks.first;
+    String address =
+        "${placemark.street ?? ""}${placemark.subLocality ?? ""} ${placemark.locality ?? ""} ${placemark.administrativeArea ?? ""} ${placemark.country ?? ""}";
+    String countryISOCode = placemark.isoCountryCode ?? "PK";
+    return (address, countryISOCode);
   }
 }
