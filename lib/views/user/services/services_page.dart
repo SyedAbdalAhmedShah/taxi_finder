@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/logout_button.dart';
@@ -9,7 +8,6 @@ import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/main.dart';
 import 'package:taxi_finder/utils/extensions.dart';
-import 'package:taxi_finder/utils/local_notificatioin_service.dart';
 import 'package:taxi_finder/utils/notification_service.dart';
 import 'package:taxi_finder/views/user/shuttle_service/shuttle_service.dart';
 

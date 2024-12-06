@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,12 +14,14 @@ class _ShuttleServiceState extends State<ShuttleService> {
   late GoogleMapController _controller;
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition:
-          const CameraPosition(target: LatLng(40.7128, -74.0060), zoom: 10),
-      onMapCreated: (GoogleMapController controller) {
-        _controller = controller;
-      },
+    return Scaffold(
+      body: GoogleMap(
+        initialCameraPosition:
+            const CameraPosition(target: LatLng(40.7128, -74.0060), zoom: 10),
+        onMapCreated: (GoogleMapController controller) {
+          _controller = controller;
+        },
+      ),
     );
   }
 }
