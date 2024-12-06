@@ -27,7 +27,6 @@ class EmailNotVerified extends StatelessWidget {
               ),
               Gap(5.h),
               Lottie.asset(verificationLottie, onLoaded: (p0) {
-// context.read<SubjectBloc>()
                 Timer(
                   const Duration(seconds: 5),
                   () => Navigator.of(context).pushAndRemoveUntil(

@@ -24,6 +24,7 @@ class DriverInfo {
   LatLong? latLong;
   String? activeRide;
   List<String>? rideRequests;
+  String? driverType;
 
   DriverInfo(
       {this.driverUid,
@@ -40,6 +41,7 @@ class DriverInfo {
       this.numberOfSeats,
       this.licenseIssueDate,
       this.status = "Pending",
+      this.driverType,
       this.carDocUrl,
       this.carInsceptionReport,
       this.licenseImageUrl,
@@ -71,6 +73,7 @@ class DriverInfo {
         idCardNumber: json[FirebaseStrings.idCardNumber],
         email: json[FirebaseStrings.email],
         licenseNumber: json[FirebaseStrings.licenseNumber],
+        driverType: json[FirebaseStrings.driverType],
         licenseIssueDate: issueDateTime,
         licenseExpiryDate: expireDateTime,
         carRegNumber: json[FirebaseStrings.carRegNumber],
@@ -114,7 +117,8 @@ class DriverInfo {
       FirebaseStrings.status: status,
       FirebaseStrings.numOfSeats: numberOfSeats,
       FirebaseStrings.activeRide: activeRide,
-      FirebaseStrings.rideRequests: rideRequests
+      FirebaseStrings.rideRequests: rideRequests,
+      FirebaseStrings.driverType: driverType,
     };
   }
 }

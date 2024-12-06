@@ -24,6 +24,7 @@ class FirebaseStrings {
   static const String idCardNumber = "idCardNumber";
   static const String email = "email";
   static const String licenseNumber = "licenseNumber";
+  static const String driverType = "driverType";
   static const String licenseIssueDate = "licenseIssueDate";
   static const String licenseExpiryDate = "licenseExpiryDate";
   static const String carRegNumber = "carRegNumber";

@@ -11,6 +11,7 @@ import 'package:taxi_finder/main.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/local_notificatioin_service.dart';
 import 'package:taxi_finder/utils/notification_service.dart';
+import 'package:taxi_finder/views/user/shuttle_service/shuttle_service.dart';
 
 import 'package:taxi_finder/views/user/taxi_finder/taxi_finder_service.dart';
 
@@ -60,18 +61,7 @@ class _ServicesPageState extends State<ServicesPage> {
             ServiceCard(
               imagePath: shuttleFinderImage,
               title: shuttleFinderS,
-              onTap: () {
-                FlutterLocalNotificationsPlugin
-                    flutterLocalNotificationsPlugin =
-                    FlutterLocalNotificationsPlugin();
-                flutterLocalNotificationsPlugin
-                    .resolvePlatformSpecificImplementation<
-                        AndroidFlutterLocalNotificationsPlugin>()!
-                    .requestNotificationsPermission();
-                LocalNotificationService().showNotification(
-                    id: 4, title: "hiiii", body: "i am body ");
-                // context.push(const TaxiFinderscreen());
-              },
+              onTap: () => context.push(const ShuttleService()),
             )
           ],
         ),
