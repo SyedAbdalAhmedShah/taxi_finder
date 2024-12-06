@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/blocs/user_map_bloc/user_map_bloc.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
 class UserMapView extends StatefulWidget {
@@ -16,18 +16,18 @@ class UserMapView extends StatefulWidget {
 }
 
 class UserMapViewState extends State<UserMapView> {
-  late UserMapBloc userMapBloc;
+  late TaxiFinderUserBloc userMapBloc;
 
   @override
   void initState() {
-    userMapBloc = context.read<UserMapBloc>();
+    userMapBloc = context.read<TaxiFinderUserBloc>();
     userMapBloc.add(FetchCurrentLocation());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UserMapBloc, UserMapState>(
+    return BlocListener<TaxiFinderUserBloc, TaxiFinderUserState>(
       listener: (context, state) {
         if (state is UserMapFailureState) {
           Utils.showErrortoast(errorMessage: state.errorMessage);
@@ -42,7 +42,7 @@ class UserMapViewState extends State<UserMapView> {
           );
         }
       },
-      child: BlocBuilder<UserMapBloc, UserMapState>(
+      child: BlocBuilder<TaxiFinderUserBloc, TaxiFinderUserState>(
         builder: (context, state) {
           log("State $state");
           return ModalProgressHUD(
@@ -85,7 +85,7 @@ class UserMapViewState extends State<UserMapView> {
 }
 
 class UserMapLoadingWidget extends StatelessWidget {
-  final UserMapState states;
+  final TaxiFinderUserState states;
   const UserMapLoadingWidget({required this.states, super.key});
 
   @override

@@ -17,10 +17,11 @@ import 'package:taxi_finder/models/ride_request_model.dart';
 import 'package:taxi_finder/repositories/user_map_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
-part 'user_map_event.dart';
-part 'user_map_state.dart';
+part 'taxi_finder_user_event.dart';
+part 'taxi_finder_user_state.dart';
 
-class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
+class TaxiFinderUserBloc
+    extends Bloc<TaxiFinderUserEvent, TaxiFinderUserState> {
   UserMapRepo userMapRepo = UserMapRepo();
   late GoogleMapController gController;
   late Stream<List<DriverInfo>> nearByDriversStream;
@@ -47,7 +48,7 @@ class UserMapBloc extends Bloc<UserMapEvent, UserMapState> {
   Set<Polyline> polylineSet = {};
   Set<Marker> markers = {};
 
-  UserMapBloc() : super(UserMapInitial()) {
+  TaxiFinderUserBloc() : super(UserMapInitial()) {
     on<FetchCurrentLocation>((event, emit) async {
       emit(UserMapLoadingState());
       try {
