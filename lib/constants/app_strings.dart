@@ -55,3 +55,4 @@ const title = 'title';
 const body = 'body';
 const data = 'data';
 const message = 'message';
+const shuttleService = 'Shuttle Service';
