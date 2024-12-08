@@ -5,20 +5,35 @@ import 'package:sizer/sizer.dart';
 class CacheNetworkImageView extends StatelessWidget {
   final String imageUrl;
   final double? height;
-  const CacheNetworkImageView({required this.imageUrl, this.height, super.key});
+  final double? cachedNetworkImageHeight;
+  final double? width;
+
+  final BoxDecoration? boxDecoration;
+  const CacheNetworkImageView(
+      {required this.imageUrl,
+      this.height,
+      this.width,
+      this.boxDecoration,
+      this.cachedNetworkImageHeight,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      height: height ?? 20.h,
+      height: cachedNetworkImageHeight ?? 20.h,
       imageUrl: imageUrl,
+      width: width ?? 20.w,
       imageBuilder: (context, imageProvider) {
         return Container(
-          height: 20.h,
-          width: 20.w,
+          height: height ?? 20.h,
+          width: width ?? 20.w,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+            shape: boxDecoration?.shape ?? BoxShape.circle,
+            borderRadius: boxDecoration?.borderRadius,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.fill,
+            ),
           ),
         );
       },
