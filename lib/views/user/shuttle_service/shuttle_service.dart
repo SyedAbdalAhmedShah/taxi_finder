@@ -32,12 +32,16 @@ class _ShuttleServiceState extends State<ShuttleService> {
         builder: (context, state) {
           return ModalProgressHUD(
             inAsyncCall: state is ShuttleFinderLoadingState,
-            child: GoogleMap(
-              initialCameraPosition: _shuttleFinderBloc.cameraPosition,
-              myLocationEnabled: true,
-              onMapCreated: (GoogleMapController controller) {
-                _shuttleFinderBloc.googleMapController = controller;
-              },
+            child: Stack(
+              children: [
+                GoogleMap(
+                  initialCameraPosition: _shuttleFinderBloc.cameraPosition,
+                  myLocationEnabled: true,
+                  onMapCreated: (GoogleMapController controller) {
+                    _shuttleFinderBloc.googleMapController = controller;
+                  },
+                ),
+              ],
             ),
           );
         },
