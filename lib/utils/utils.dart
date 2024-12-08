@@ -98,7 +98,7 @@ class Utils {
     final driverData = await docsnap.get();
 
     if (driverData.exists) {
-      await docsnap.update({FirebaseStrings.activeRide: null});
+      await docsnap.update({FirebaseStrings.activeRide: ""});
       DriverInfo driverInfo = DriverInfo.fromJson(driverData.data() ?? {});
       return driverInfo;
     } else {

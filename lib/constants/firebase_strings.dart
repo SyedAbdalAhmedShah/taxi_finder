@@ -19,6 +19,7 @@ class FirebaseStrings {
   static const String userId = "userId";
 
   static const String address = "address";
+  static const String shuttleRide = "shuttleRide";
   static const String destination = "destination";
   static const String contactNumber = "contactNumber";
   static const String idCardNumber = "idCardNumber";

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,13 +21,8 @@ mixin ShuttleFinderRepo {
       radiusInKm: radiusInKm,
       field: FirebaseStrings.latLong,
       queryBuilder: (query) {
-        query.get().then((data) {
-          List<DriverInfo> drivers =
-              data.docs.map((doc) => DriverInfo.fromJson(doc.data())).toList();
-        });
-        return query
-            .where(FirebaseStrings.activeRide, isNull: true)
-            .where(FirebaseStrings.driverType, isEqualTo: shuttleService);
+        return query.where(FirebaseStrings.driverType,
+            isEqualTo: shuttleService);
       },
       strictMode: true,
       geopointFrom: (obj) {

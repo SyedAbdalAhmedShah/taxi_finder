@@ -4,10 +4,7 @@ import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
@@ -99,7 +96,7 @@ class UserMapRepo {
       radiusInKm: radiusInKm,
       field: FirebaseStrings.latLong,
       queryBuilder: (query) {
-        return query.where(FirebaseStrings.activeRide, isNull: true);
+        return query.where(FirebaseStrings.activeRide, isEqualTo: "");
       },
       strictMode: true,
       geopointFrom: (obj) {
