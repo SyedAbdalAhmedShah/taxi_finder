@@ -42,7 +42,7 @@ class _ShuttleServiceState extends State<ShuttleService> {
                     _shuttleFinderBloc.googleMapController = controller;
                   },
                 ),
-                _ShuttleAvailableCities(),
+                const _ShuttleAvailableCities(),
               ],
             ),
           );
@@ -63,7 +63,7 @@ class _ShuttleAvailableCities extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: List.generate(10, (i) => AvailableCities()),
+          children: List.generate(10, (i) => const AvailableCities()),
         ),
       ),
     );

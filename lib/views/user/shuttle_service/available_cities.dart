@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/cache_network_image_view.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
-import 'package:taxi_finder/utils/utils.dart';
 
 class AvailableCities extends StatelessWidget {
   const AvailableCities({super.key});
@@ -13,7 +11,7 @@ class AvailableCities extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white.withOpacity(0.7),
+      color: Colors.white.withOpacity(0.8),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 1.w),
         child: Row(
