@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,6 +33,7 @@ class _ShuttleServiceState extends State<ShuttleService> {
       appBar: AppBar(),
       body: BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
         builder: (context, state) {
+          log('Shuttle bloc builder state is $state');
           return ModalProgressHUD(
             inAsyncCall: state is ShuttleFinderLoadingState,
             child: Stack(

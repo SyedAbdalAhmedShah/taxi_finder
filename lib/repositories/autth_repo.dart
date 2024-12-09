@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,7 +55,12 @@ mixin AuthRepo {
   }
 
   updateUserFcmTokenAndDeviceId(String userId) async {
-    String? fcmToken = await fcm.getToken();
+    String? fcmToken;
+    if (Platform.isAndroid) {
+      fcmToken = await fcm.getToken();
+    } else {
+      fcmToken = await fcm.getAPNSToken();
+    }
     log('fcm token is $fcmToken');
     String deviceId = await Utils.getPlatformDeviceID();
     _firestore.collection(FirebaseStrings.usersColl).doc(userId).update({

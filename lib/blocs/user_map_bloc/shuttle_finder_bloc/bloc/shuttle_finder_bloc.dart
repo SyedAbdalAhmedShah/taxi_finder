@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,8 +23,13 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
       try {
         emit(ShuttleFinderLoadingState());
         bool isPermissionGranted = await Utils.isPermissionGranted();
+        log("========isPermissionGranted======= $isPermissionGranted");
         if (isPermissionGranted) {
+          bool isLocationServiceEnable =
+              await Geolocator.isLocationServiceEnabled();
+          log('isLocationServiceEnable $isLocationServiceEnable');
           currentUserLocation = await Geolocator.getCurrentPosition();
+          log('current user location $currentUserLocation');
           LatLng currentLatLong = LatLng(
               currentUserLocation.latitude, currentUserLocation.longitude);
           GeoPoint currentGeoPoint =
@@ -41,6 +48,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           add(GetUserCurrentLocation());
         }
       } catch (e) {
+        log('error $e');
         emit(ShuttleFinderFailureState());
       }
     });
