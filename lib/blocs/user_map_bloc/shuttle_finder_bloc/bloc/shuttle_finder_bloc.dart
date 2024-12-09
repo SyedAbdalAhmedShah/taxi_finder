@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/repositories/shuttle_finder_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
@@ -47,5 +48,9 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         emit(ShuttleFinderFailureState());
       }
     });
+
+    on<OnShuttleSelectLocation>((event, emit) => emit(
+          OnShuttleLocationSelectedState(selectedCity: event.selectedCity),
+        ));
   }
 }

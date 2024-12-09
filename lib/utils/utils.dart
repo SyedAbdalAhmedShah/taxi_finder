@@ -2,15 +2,21 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/components/app_text_field.dart';
+import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
@@ -168,5 +174,70 @@ class Utils {
         "${placemark.street ?? ""}${placemark.subLocality ?? ""} ${placemark.locality ?? ""} ${placemark.administrativeArea ?? ""} ${placemark.country ?? ""}";
     String countryISOCode = placemark.isoCountryCode ?? "PK";
     return (address, countryISOCode);
+  }
+
+  static showShuttleSelectedDialog(
+      {required BuildContext context, required CityToCityModel cityModel}) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'From: ',
+                        style: TextStyle(color: Colors.grey.shade500),
+                      ),
+                      Text(
+                        '${cityModel.from} ',
+                        style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  Gap(1.h),
+                  Row(
+                    children: [
+                      Text(
+                        'To: ',
+                        style: TextStyle(color: Colors.grey.shade500),
+                      ),
+                      Text(
+                        '${cityModel.to} ',
+                        style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Gap(1.h),
+                  Row(
+                    children: [
+                      Text(
+                        'Cost: ',
+                        style: TextStyle(color: Colors.grey.shade500),
+                      ),
+                      Text(
+                        '${cityModel.fare} ',
+                        style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Gap(1.h),
+                  AppTextField(
+                      keyboardType: TextInputType.number,
+                      fillColor: Colors.grey.shade700,
+                      hintText: seatWantToRes,
+                      controller: TextEditingController()),
+                  Gap(1.h),
+                  PrimaryButton(text: bookRide, onPressed: () {})
+                ],
+              ),
+            ));
   }
 }
