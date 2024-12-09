@@ -3,6 +3,7 @@ class FirebaseStrings {
   static const String ridesColl = "rides";
   static const String usersColl = "Users";
   static const String rideRequestColl = "RideRequests";
+  static const String shuttleCityToCityColl = "ShuttleCityToCity";
 
   static const String driverUid = "driverUid";
   static const String token = "token";
@@ -19,6 +20,10 @@ class FirebaseStrings {
   static const String userId = "userId";
 
   static const String address = "address";
+  static const String cityUrl = "cityUrl";
+  static const String fare = "fare";
+  static const String from = "from";
+  static const String to = "to";
   static const String shuttleRide = "shuttleRide";
   static const String destination = "destination";
   static const String contactNumber = "contactNumber";

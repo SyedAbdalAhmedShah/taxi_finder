@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:taxi_finder/blocs/bloc/shuttle_city_to_city_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
+import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/views/user/shuttle_service/available_cities.dart';
-
+import 'package:skeletonizer/skeletonizer.dart';
 // Custom Place class for clustering
 
 class ShuttleService extends StatefulWidget {
@@ -19,11 +21,13 @@ class ShuttleService extends StatefulWidget {
 
 class _ShuttleServiceState extends State<ShuttleService> {
   late ShuttleFinderBloc _shuttleFinderBloc;
-
+  late ShuttleCityToCityBloc shuttleCityToCityBloc;
   @override
   void initState() {
     _shuttleFinderBloc = context.read<ShuttleFinderBloc>();
+    shuttleCityToCityBloc = context.read<ShuttleCityToCityBloc>();
     _shuttleFinderBloc.add(GetUserCurrentLocation());
+    shuttleCityToCityBloc.add(GetAvailableShuttleCities());
     super.initState();
   }
 
@@ -65,9 +69,44 @@ class _ShuttleAvailableCities extends StatelessWidget {
       width: MediaQuery.sizeOf(context).width,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(10, (i) => const AvailableCities()),
+        child: BlocBuilder<ShuttleCityToCityBloc, ShuttleCityToCityState>(
+          builder: (context, state) {
+            if (state is ShuttleCityToCityLoadingState) {
+              return const CitiesLoadingView();
+            } else if (state is ShuttleAvailableCitiesFetchedState) {
+              return Row(
+                children: List.generate(
+                    state.availableCities.length,
+                    (i) => AvailableCities(
+                          cityModel: state.availableCities[i],
+                        )),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
+      ),
+    );
+  }
+}
+
+class CitiesLoadingView extends StatelessWidget {
+  const CitiesLoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      child: Row(
+        children: List.generate(
+            3,
+            (i) => AvailableCities(
+                  cityModel: CityToCityModel(
+                      fare: ".......",
+                      from: ".......",
+                      to: '.......',
+                      cityUrl: ""),
+                )),
       ),
     );
   }

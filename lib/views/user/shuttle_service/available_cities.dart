@@ -4,9 +4,11 @@ import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/cache_network_image_view.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/models/city_to_city_model.dart';
 
 class AvailableCities extends StatelessWidget {
-  const AvailableCities({super.key});
+  final CityToCityModel cityModel;
+  const AvailableCities({super.key, required this.cityModel});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,7 @@ class AvailableCities extends StatelessWidget {
             CacheNetworkImageView(
               width: 30.w,
               cachedNetworkImageHeight: 15.h,
-              imageUrl:
-                  'https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/cityPictures%2FMandela_Bridge%2C_Johannesburg%2C_Gauteng%2C_South_Africa.jpg?alt=media&token=f5b17548-4f42-46e1-8bc5-e1793598cbcd',
+              imageUrl: cityModel.cityUrl ?? "",
               boxDecoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(2.w)),
@@ -40,7 +41,7 @@ class AvailableCities extends StatelessWidget {
                       size: 4.w,
                     ),
                     Gap(1.w),
-                    Text("Peshawar")
+                    Text(cityModel.from ?? "")
                   ],
                 ),
                 Padding(
@@ -63,7 +64,7 @@ class AvailableCities extends StatelessWidget {
                       size: 4.w,
                     ),
                     Gap(1.w),
-                    Text("Peshawar")
+                    Text(cityModel.to ?? "")
                   ],
                 ),
                 Gap(1.h),
@@ -75,7 +76,7 @@ class AvailableCities extends StatelessWidget {
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                     Gap(1.w),
-                    Text("R320")
+                    Text("R${cityModel.fare}")
                   ],
                 )
               ],

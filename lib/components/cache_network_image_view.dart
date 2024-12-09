@@ -42,9 +42,10 @@ class CacheNetworkImageView extends StatelessWidget {
       ),
       progressIndicatorBuilder: (context, url, progress) {
         return Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.grey,
-            shape: BoxShape.circle,
+            shape: boxDecoration?.shape ?? BoxShape.circle,
+            borderRadius: boxDecoration?.borderRadius,
           ),
           child: const Center(
             child: CircularProgressIndicator.adaptive(),
