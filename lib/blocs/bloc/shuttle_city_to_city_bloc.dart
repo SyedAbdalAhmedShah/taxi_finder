@@ -16,7 +16,7 @@ class ShuttleCityToCityBloc
         emit(ShuttleCityToCityLoadingState());
         List<CityToCityModel> availableCites = await getAvailableCities();
         log('city to city length ${availableCites.length}');
-        await Future.delayed(const Duration(seconds: 2));
+
         emit(ShuttleAvailableCitiesFetchedState(
             availableCities: availableCites));
       } catch (erroor) {

@@ -6,6 +6,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:taxi_finder/blocs/bloc/shuttle_city_to_city_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/utils/utils.dart';
 import 'package:taxi_finder/views/user/shuttle_service/available_cities.dart';
@@ -23,6 +26,7 @@ class ShuttleService extends StatefulWidget {
 class _ShuttleServiceState extends State<ShuttleService> {
   late ShuttleFinderBloc _shuttleFinderBloc;
   late ShuttleCityToCityBloc shuttleCityToCityBloc;
+  CurrentUserDependency loggedUser = locator.get<CurrentUserDependency>();
   @override
   void initState() {
     _shuttleFinderBloc = context.read<ShuttleFinderBloc>();
@@ -35,7 +39,9 @@ class _ShuttleServiceState extends State<ShuttleService> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('$welcomeBack ${loggedUser.userModel.fullName}'),
+      ),
       body: BlocListener<ShuttleFinderBloc, ShuttleFinderState>(
         listener: (context, state) {
           if (state is OnShuttleLocationSelectedState) {
