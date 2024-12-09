@@ -23,19 +23,14 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
       try {
         emit(ShuttleFinderLoadingState());
         bool isPermissionGranted = await Utils.isPermissionGranted();
-        log("========isPermissionGranted======= $isPermissionGranted");
         if (isPermissionGranted) {
           bool isLocationServiceEnable =
               await Geolocator.isLocationServiceEnabled();
           log('isLocationServiceEnable $isLocationServiceEnable');
           currentUserLocation = await Geolocator.getCurrentPosition();
-          log('current user location $currentUserLocation');
           LatLng currentLatLong = LatLng(
               currentUserLocation.latitude, currentUserLocation.longitude);
-          GeoPoint currentGeoPoint =
-              GeoPoint(currentLatLong.latitude, currentLatLong.longitude);
-          final placeMarkers =
-              await Utils.getFullStringAddress(currentGeoPoint);
+
           cameraPosition = CameraPosition(
             target: currentLatLong,
             zoom: 16.4746,
