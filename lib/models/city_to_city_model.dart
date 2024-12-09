@@ -1,3 +1,5 @@
+import 'package:taxi_finder/constants/firebase_strings.dart';
+
 class CityToCityModel {
   final String? cityUrl;
   final String? docId;
@@ -16,22 +18,22 @@ class CityToCityModel {
   // Factory constructor to create a Trip from a JSON map
   factory CityToCityModel.fromJson(Map<String, dynamic> json) {
     return CityToCityModel(
-      cityUrl: json['cityUrl'] as String?,
-      docId: json['docId'] as String?,
-      fare: json['fare'] as String?,
-      from: json['from'] as String?,
-      to: json['to'] as String?,
+      cityUrl: json[FirebaseStrings.cityUrl] as String?,
+      docId: json[FirebaseStrings.docId] as String?,
+      fare: json[FirebaseStrings.fare] as String?,
+      from: json[FirebaseStrings.from] as String?,
+      to: json[FirebaseStrings.to] as String?,
     );
   }
 
   // Method to convert Trip to a JSON map
   Map<String, dynamic> toJson() {
     return {
-      'cityUrl': cityUrl,
-      'docId': docId,
-      'fare': fare,
-      'from': from,
-      'to': to,
+      FirebaseStrings.cityUrl: cityUrl,
+      FirebaseStrings.docId: docId,
+      FirebaseStrings.fare: fare,
+      FirebaseStrings.from: from,
+      FirebaseStrings.to: to,
     };
   }
 
