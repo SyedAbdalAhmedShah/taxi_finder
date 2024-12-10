@@ -9,3 +9,5 @@ final class OnShuttleSelectLocation extends ShuttleFinderEvent {
 
   OnShuttleSelectLocation({required this.selectedCity});
 }
+
+final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {}

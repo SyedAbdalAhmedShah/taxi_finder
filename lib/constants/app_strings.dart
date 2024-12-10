@@ -49,6 +49,7 @@ const urRider = 'Your driver is comming';
 const request = 'Request';
 const requestid = 'requestId';
 const totalSeatToBook = 'Total seat you want to book';
+const pickMeUp = 'Pick me from my location ';
 const cost = 'Cost';
 const totlDis = 'Total distance';
 const token = 'token';

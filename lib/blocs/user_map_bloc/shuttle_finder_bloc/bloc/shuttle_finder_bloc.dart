@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +11,7 @@ part 'shuttle_finder_state.dart';
 
 class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
     with ShuttleFinderRepo {
+  bool pickMeUpFromMyLocation = false;
   late GoogleMapController googleMapController;
   late Position currentUserLocation;
   CameraPosition cameraPosition = const CameraPosition(
@@ -52,5 +51,10 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
     on<OnShuttleSelectLocation>((event, emit) => emit(
           OnShuttleLocationSelectedState(selectedCity: event.selectedCity),
         ));
+
+    on<PickMeUpFromMyLocationByUser>((event, emit) {
+      pickMeUpFromMyLocation = !pickMeUpFromMyLocation;
+      emit(TooglePickMeUpFromMyLocationState());
+    });
   }
 }

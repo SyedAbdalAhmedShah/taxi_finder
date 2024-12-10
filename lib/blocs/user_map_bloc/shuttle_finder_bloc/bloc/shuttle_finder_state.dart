@@ -15,3 +15,5 @@ final class OnShuttleLocationSelectedState extends ShuttleFinderState {
 
   OnShuttleLocationSelectedState({required this.selectedCity});
 }
+
+final class TooglePickMeUpFromMyLocationState extends ShuttleFinderState {}

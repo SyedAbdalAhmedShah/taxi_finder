@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
@@ -11,6 +12,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
 import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
@@ -178,6 +180,7 @@ class Utils {
 
   static showShuttleSelectedDialog(
       {required BuildContext context, required CityToCityModel cityModel}) {
+    final shuttleFinderBloc = context.read<ShuttleFinderBloc>();
     showCupertinoModalPopup(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -235,6 +238,19 @@ class Utils {
                       hintText: seatWantToRes,
                       controller: TextEditingController()),
                   Gap(1.h),
+                  Row(
+                    children: [
+                      BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+                        builder: (context, state) {
+                          return Checkbox(
+                              value: shuttleFinderBloc.pickMeUpFromMyLocation,
+                              onChanged: (v) => shuttleFinderBloc
+                                  .add(PickMeUpFromMyLocationByUser()));
+                        },
+                      ),
+                      const Text(pickMeUp),
+                    ],
+                  ),
                   PrimaryButton(text: bookRide, onPressed: () {})
                 ],
               ),
