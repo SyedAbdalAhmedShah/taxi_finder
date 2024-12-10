@@ -16,6 +16,8 @@ part 'shuttle_finder_state.dart';
 class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
     with ShuttleFinderRepo {
   bool pickMeUpFromMyLocation = false;
+  TextEditingController numberOfSeatUserBookingController =
+      TextEditingController();
   List<DriverInfo> nearByDrivers = [];
   Set<Marker> nearByDriverMarker = {};
   late Stream<List<DriverInfo>> nearByDriversStream;
@@ -78,7 +80,12 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         );
         nearByDrivers = event.availableDrivers;
         for (final driver in event.availableDrivers) {
+          log('driver shuttle ride ${driver.shuttleRide}');
+          int seatLeft =
+              (driver.numberOfSeats ?? 0) - (driver.shuttleRide?.length ?? 0);
           Marker driverMarker = Marker(
+              infoWindow:
+                  InfoWindow(title: "$seatLeft seats left", snippet: "Hey "),
               markerId: MarkerId(driver.driverUid ?? ""),
               position: LatLng(driver.latLong?.geoPoint?.latitude ?? 0.0,
                   driver.latLong?.geoPoint?.longitude ?? 0.0),

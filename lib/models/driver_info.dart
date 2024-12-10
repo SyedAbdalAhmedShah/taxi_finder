@@ -23,7 +23,7 @@ class DriverInfo {
   String? carInsceptionReport;
   LatLong? latLong;
   String? activeRide;
-  List<String>? rideRequests;
+  List<String>? shuttleRide;
   String? driverType;
 
   DriverInfo(
@@ -48,7 +48,7 @@ class DriverInfo {
       this.profileUrl,
       this.activeRide,
       this.latLong,
-      this.rideRequests,
+      this.shuttleRide,
       this.licenseNumber});
 
   // Convert from JSON
@@ -86,8 +86,8 @@ class DriverInfo {
         licenseImageUrl: json[FirebaseStrings.licenseImageUrl],
         profileUrl: json[FirebaseStrings.profileUrl],
         status: json[FirebaseStrings.status],
-        rideRequests: json[FirebaseStrings.rideRequests] != null
-            ? List<String>.from(json[FirebaseStrings.rideRequests])
+        shuttleRide: json[FirebaseStrings.shuttleRide] != null
+            ? List<String>.from(json[FirebaseStrings.shuttleRide])
             : null,
         latLong: json[FirebaseStrings.latLong] != null
             ? LatLong.fromJson(json[FirebaseStrings.latLong])
@@ -117,7 +117,7 @@ class DriverInfo {
       FirebaseStrings.status: status,
       FirebaseStrings.numOfSeats: numberOfSeats,
       FirebaseStrings.activeRide: activeRide,
-      FirebaseStrings.rideRequests: rideRequests,
+      FirebaseStrings.shuttleRide: shuttleRide,
       FirebaseStrings.driverType: driverType,
     };
   }

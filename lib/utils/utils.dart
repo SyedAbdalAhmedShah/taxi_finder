@@ -180,6 +180,7 @@ class Utils {
 
   static showShuttleSelectedDialog(
       {required BuildContext context, required CityToCityModel cityModel}) {
+    TextEditingController numberOfSeats = TextEditingController();
     final shuttleFinderBloc = context.read<ShuttleFinderBloc>();
     showCupertinoModalPopup(
         context: context,
@@ -236,7 +237,7 @@ class Utils {
                       keyboardType: TextInputType.number,
                       fillColor: Colors.grey.shade700,
                       hintText: seatWantToRes,
-                      controller: TextEditingController()),
+                      controller: numberOfSeats),
                   Gap(1.h),
                   Row(
                     children: [
