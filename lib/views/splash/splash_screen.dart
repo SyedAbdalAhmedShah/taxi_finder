@@ -1,15 +1,21 @@
+import 'dart:developer';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/splash_bloc/splash_bloc.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/utils.dart';
-import 'package:taxi_finder/views/driver/pending_screen.dart';
+import 'package:taxi_finder/views/driver/auth/pending_screen.dart';
 import 'package:taxi_finder/views/bridge/bridge.dart';
-import 'package:taxi_finder/views/driver/driver_home.dart';
-import 'package:taxi_finder/views/driver/rejected_screen.dart';
+import 'package:taxi_finder/views/driver/shuttle_finder/shuttle_finder_driver_home.dart';
+import 'package:taxi_finder/views/driver/taxi_finder_service/driver_home.dart';
+import 'package:taxi_finder/views/driver/auth/rejected_screen.dart';
 import 'package:taxi_finder/views/user/services/services_page.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -28,7 +34,14 @@ class SplashScreen extends StatelessWidget {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
         if (state is DriverAuthenticatedState) {
-          context.pushReplacment(const DriverHome());
+          CurrentUserDependency loggedUser = locator.get();
+          String currentDriverType = loggedUser.driverInfo.driverType ??
+              FirebaseStrings.taxiFinderType;
+          if (currentDriverType == FirebaseStrings.shuttleServiceType) {
+            context.pushReplacment(const ShuttleFinderDriverHome());
+          } else {
+            context.pushReplacment(const TaxiFinderDriverHome());
+          }
         } else if (state is UserAuthenticatedState) {
           context.pushReplacment(const ServicesPage());
         } else if (state is RoleNotAuthenticatedState) {

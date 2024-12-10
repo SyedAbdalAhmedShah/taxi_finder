@@ -52,7 +52,6 @@ class _DriverMapViewState extends State<DriverMapView> {
                 buildingsEnabled: true,
                 fortyFiveDegreeImageryEnabled: true,
                 // polylines: userMapBloc.polylineSet,
-                onCameraMoveStarted: () => log("message"),
                 // markers: userMapBloc.markers,
                 myLocationButtonEnabled: true,
                 trafficEnabled: true,

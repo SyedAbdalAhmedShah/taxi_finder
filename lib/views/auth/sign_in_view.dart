@@ -10,14 +10,18 @@ import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/components/signup_prompt.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/utils.dart';
 import 'package:taxi_finder/utils/validator.dart';
 import 'package:taxi_finder/views/auth/email_not_verified.dart';
-import 'package:taxi_finder/views/driver/driver_home.dart';
-import 'package:taxi_finder/views/driver/pending_screen.dart';
+import 'package:taxi_finder/views/driver/shuttle_finder/shuttle_finder_driver_home.dart';
+import 'package:taxi_finder/views/driver/taxi_finder_service/driver_home.dart';
+import 'package:taxi_finder/views/driver/auth/pending_screen.dart';
 import 'package:taxi_finder/views/auth/sign_up_view.dart';
-import 'package:taxi_finder/views/driver/rejected_screen.dart';
+import 'package:taxi_finder/views/driver/auth/rejected_screen.dart';
 import 'package:taxi_finder/views/user/services/services_page.dart';
 
 import '../../components/forgot_password.dart';
@@ -126,7 +130,14 @@ class _SignInButtonStates extends StatelessWidget {
         } else if (state is DriverRejectedState) {
           context.push(const RejectedScreen());
         } else if (state is DriverAuthorizedState) {
-          context.pushReplacment(const DriverHome());
+          CurrentUserDependency loggedUser = locator.get();
+          String currentDriverType = loggedUser.driverInfo.driverType ??
+              FirebaseStrings.taxiFinderType;
+          if (currentDriverType == FirebaseStrings.shuttleServiceType) {
+            context.pushReplacment(const ShuttleFinderDriverHome());
+          } else {
+            context.pushReplacment(const TaxiFinderDriverHome());
+          }
         } else if (state is UserAuthSuccessState) {
           context.pushAndRemoveUntil(const ServicesPage());
         }

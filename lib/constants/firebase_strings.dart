@@ -14,6 +14,8 @@ class FirebaseStrings {
   static const String userDropOffLocation = "userDropOffLocation";
 
   static const String fullName = "fullName";
+  static const String shuttleServiceType = "Shuttle Service";
+  static const String taxiFinderType = "Taxi Finder";
   static const String docId = "docId";
   static const String requestId = "requestId";
   static const String uid = "uid";
