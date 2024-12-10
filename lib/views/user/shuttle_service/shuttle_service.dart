@@ -47,6 +47,12 @@ class _ShuttleServiceState extends State<ShuttleService> {
           if (state is OnShuttleLocationSelectedState) {
             Utils.showShuttleSelectedDialog(
                 context: context, cityModel: state.selectedCity);
+          } else if (state is ShuttleFinderCurrentUserLocationState) {
+            _shuttleFinderBloc.nearByDriversStream.listen((drivers) {
+              log('List of drivers ${drivers.length}');
+              _shuttleFinderBloc.add(
+                  OnNearByShuttleDriversAddedEvent(availableDrivers: drivers));
+            });
           }
         },
         child: BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
@@ -62,6 +68,11 @@ class _ShuttleServiceState extends State<ShuttleService> {
                     onMapCreated: (GoogleMapController controller) {
                       _shuttleFinderBloc.googleMapController = controller;
                     },
+                    onTap: (latlong) {
+                      log('lat ${latlong.latitude}');
+                      log('long ${latlong.longitude}');
+                    },
+                    markers: {..._shuttleFinderBloc.nearByDriverMarker},
                   ),
                   const _ShuttleAvailableCities(),
                 ],

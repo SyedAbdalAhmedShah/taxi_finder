@@ -17,3 +17,5 @@ final class OnShuttleLocationSelectedState extends ShuttleFinderState {
 }
 
 final class TooglePickMeUpFromMyLocationState extends ShuttleFinderState {}
+
+final class OnShuttleNearByDriversAddedState extends ShuttleFinderState {}

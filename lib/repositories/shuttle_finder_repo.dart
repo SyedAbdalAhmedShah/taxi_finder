@@ -10,6 +10,7 @@ import 'package:taxi_finder/models/driver_info.dart';
 mixin ShuttleFinderRepo {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final loggedRole = locator.get<CurrentUserDependency>();
+
   Stream<List<DriverInfo>> getNearByShuttleFinderDrivers(LatLng positionns) {
     GeoPoint location = GeoPoint(positionns.latitude, positionns.longitude);
     final GeoFirePoint center = GeoFirePoint(location);
@@ -21,8 +22,9 @@ mixin ShuttleFinderRepo {
       radiusInKm: radiusInKm,
       field: FirebaseStrings.latLong,
       queryBuilder: (query) {
-        return query.where(FirebaseStrings.driverType,
-            isEqualTo: shuttleService);
+        return query
+            .where(FirebaseStrings.driverType, isEqualTo: shuttleService)
+            .where(FirebaseStrings.isSeatsFull, isEqualTo: false);
       },
       strictMode: true,
       geopointFrom: (obj) {

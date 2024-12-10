@@ -6,6 +6,7 @@ class FirebaseStrings {
   static const String shuttleCityToCityColl = "ShuttleCityToCity";
 
   static const String driverUid = "driverUid";
+  static const String isSeatsFull = "isSeatsFull";
   static const String token = "token";
   static const String deviceId = "deviceId";
   static const String userLatlong = "userLatLong";
