@@ -185,9 +185,10 @@ class UserMapRepo {
     });
   }
 
-  Future<String> addRideRequest(GeoPoint pickUpLocation, String destination,
+  Future<String> addRideRequest(LatLng pickUpLocation, String destination,
       GeoPoint dropOffLocation) async {
-    final GeoFirePoint userPickUpLocation = GeoFirePoint(pickUpLocation);
+    final GeoFirePoint userPickUpLocation =
+        await Utils.getGeoFirePoint(pickUpLocation);
     final GeoFirePoint userDropOffLocation = GeoFirePoint(dropOffLocation);
     DocumentReference<Map<String, dynamic>> doc =
         firebaseFirestore.collection(FirebaseStrings.rideRequestColl).doc();

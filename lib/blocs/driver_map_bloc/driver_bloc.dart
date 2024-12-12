@@ -56,6 +56,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
         } else {
           log('======= No Permission ====');
           await Geolocator.requestPermission();
+          add(DriverCurrentLocationEvent());
         }
       } catch (error) {
         log('ERROR IS $error HAPPENED IN DRIVER BLOC ',

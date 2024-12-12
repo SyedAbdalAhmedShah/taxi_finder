@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
+import 'package:taxi_finder/utils/utils.dart';
 
 mixin ShuttleFinderRepo {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -42,5 +44,28 @@ mixin ShuttleFinderRepo {
 
     // final driverSteamSubscriptions = driverInfo.listen((driverInfo) {});
     return driverInfo;
+  }
+
+  Future sendBookingRequestToNearByDrivers(
+      {required String driverUid,
+      required String numOfSeats,
+      required String to,
+      required String fare,
+      required String pickUpType}) async {
+    Position userCurrentLocation = await Geolocator.getCurrentPosition();
+    LatLng latLng =
+        LatLng(userCurrentLocation.latitude, userCurrentLocation.longitude);
+    final GeoFirePoint userPickUpLocation = await Utils.getGeoFirePoint(latLng);
+    Map<String, dynamic> data = {
+      FirebaseStrings.userId: loggedRole.userModel.uid,
+      FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
+      FirebaseStrings.numOfSeats: numOfSeats,
+      FirebaseStrings.to: to,
+      FirebaseStrings.fare: fare,
+      FirebaseStrings.pickUpType: pickUpType,
+    };
+    final doc =
+        firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverUid);
+    doc.set(data);
   }
 }

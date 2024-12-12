@@ -84,8 +84,9 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           int seatLeft =
               (driver.numberOfSeats ?? 0) - (driver.shuttleRide?.length ?? 0);
           Marker driverMarker = Marker(
-              infoWindow:
-                  InfoWindow(title: "$seatLeft seats left", snippet: "Hey "),
+              infoWindow: InfoWindow(
+                title: "$seatLeft seats left",
+              ),
               markerId: MarkerId(driver.driverUid ?? ""),
               position: LatLng(driver.latLong?.geoPoint?.latitude ?? 0.0,
                   driver.latLong?.geoPoint?.longitude ?? 0.0),
@@ -99,6 +100,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         emit(OnShuttleNearByDriversAddedState());
       } catch (e) {
         log('error is $e');
+        emit(ShuttleFinderFailureState());
       }
     });
   }

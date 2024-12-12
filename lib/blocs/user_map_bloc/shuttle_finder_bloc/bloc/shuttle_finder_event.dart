@@ -12,6 +12,8 @@ final class OnShuttleSelectLocation extends ShuttleFinderEvent {
 
 final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {}
 
+final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {}
+
 final class OnNearByShuttleDriversAddedEvent extends ShuttleFinderEvent {
   final List<DriverInfo> availableDrivers;
 

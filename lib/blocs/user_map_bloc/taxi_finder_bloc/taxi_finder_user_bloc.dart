@@ -169,13 +169,14 @@ class TaxiFinderUserBloc
     on<OnRequestForRiding>((event, emit) async {
       try {
         emit(OnRidingRequestLoadingState());
-
+        LatLng currentLatLong = LatLng(currentLocationPosition.latitude,
+            currentLocationPosition.longitude);
         GeoPoint userGeoPoint = GeoPoint(currentLocationPosition.latitude,
             currentLocationPosition.longitude);
 
         if (nearByDriverMarker.isNotEmpty) {
           String requestId = await userMapRepo.addRideRequest(
-              userGeoPoint, destinationController.text, destinationLocation);
+              currentLatLong, destinationController.text, destinationLocation);
           rideRequestTimer = Timer(const Duration(minutes: 2), () {
             emit(UserMapFailureState(errorMessage: noRiderAvail));
           });
