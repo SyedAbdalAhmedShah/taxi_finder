@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/repositories/shuttle_finder_repo.dart';
@@ -54,7 +56,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         }
       } catch (e) {
         log('error $e');
-        emit(ShuttleFinderFailureState());
+        emit(ShuttleFinderFailureState(errorMessage: e.toString()));
       }
     });
 
@@ -100,8 +102,37 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         emit(OnShuttleNearByDriversAddedState());
       } catch (e) {
         log('error is $e');
-        emit(ShuttleFinderFailureState());
+        emit(ShuttleFinderFailureState(errorMessage: e.toString()));
       }
     });
+
+    on<OnBookShuttleRide>((event, emit) async {
+      try {
+        emit(OnRideBookingLoadingState());
+        String requestId = await saveRequestForUser(
+            numOfSeats: event.numOfSeats,
+            to: event.selectedCity.to ?? "",
+            fare: event.selectedCity.fare ?? "",
+            pickUpFromMyLocation: pickMeUpFromMyLocation);
+        Timer(const Duration(seconds: 20), () {
+          log("timer called");
+          add(NotAcceptedBooking());
+        });
+        for (final driver in nearByDrivers) {
+          await sendBookingRequestToNearByDrivers(
+              driverUid: driver.driverUid ?? "",
+              reqquestId: requestId,
+              numOfSeats: event.numOfSeats,
+              to: event.selectedCity.to ?? "",
+              fare: event.selectedCity.fare ?? "",
+              pickUpFromMyLocation: pickMeUpFromMyLocation);
+        }
+      } catch (e) {
+        log('error is $e');
+        emit(ShuttleFinderFailureState(errorMessage: e.toString()));
+      }
+    });
+    on<NotAcceptedBooking>((event, emit) =>
+        emit(RequestNotAcceptedState(errorMessage: requestNotAccepted)));
   }
 }

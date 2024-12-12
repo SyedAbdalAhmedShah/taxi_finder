@@ -12,6 +12,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
@@ -185,77 +186,93 @@ class Utils {
     final shuttleFinderBloc = context.read<ShuttleFinderBloc>();
     showCupertinoModalPopup(
         context: context,
-        builder: (ctx) => AlertDialog(
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'From: ',
-                        style: TextStyle(color: Colors.grey.shade500),
-                      ),
-                      Text(
-                        '${cityModel.from} ',
-                        style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
+        builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+              builder: (context, state) {
+                return ModalProgressHUD(
+                  inAsyncCall: state is OnRideBookingLoadingState,
+                  blur: 2,
+                  progressIndicator: const CircularProgressIndicator.adaptive(),
+                  child: AlertDialog.adaptive(
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'From: ',
+                              style: TextStyle(color: Colors.grey.shade500),
+                            ),
+                            Text(
+                              '${cityModel.from} ',
+                              style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        Gap(1.h),
+                        Row(
+                          children: [
+                            Text(
+                              'To: ',
+                              style: TextStyle(color: Colors.grey.shade500),
+                            ),
+                            Text(
+                              '${cityModel.to} ',
+                              style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Gap(1.h),
+                        Row(
+                          children: [
+                            Text(
+                              'Cost: ',
+                              style: TextStyle(color: Colors.grey.shade500),
+                            ),
+                            Text(
+                              '${cityModel.fare} ',
+                              style: TextStyle(
+                                  color: Colors.grey.shade500,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Gap(1.h),
+                        AppTextField(
+                            keyboardType: TextInputType.number,
+                            fillColor: Colors.grey.shade700,
+                            hintText: seatWantToRes,
+                            controller: numberOfSeats),
+                        Gap(1.h),
+                        Row(
+                          children: [
+                            BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+                              builder: (context, state) {
+                                return Checkbox(
+                                    value: shuttleFinderBloc
+                                        .pickMeUpFromMyLocation,
+                                    onChanged: (v) => shuttleFinderBloc
+                                        .add(PickMeUpFromMyLocationByUser()));
+                              },
+                            ),
+                            const Text(pickMeUp),
+                          ],
+                        ),
+                        PrimaryButton(
+                            text: bookRide,
+                            onPressed: () {
+                              shuttleFinderBloc.add(OnBookShuttleRide(
+                                  selectedCity: cityModel,
+                                  numOfSeats: numberOfSeats.text));
+                            })
+                      ],
+                    ),
                   ),
-                  Gap(1.h),
-                  Row(
-                    children: [
-                      Text(
-                        'To: ',
-                        style: TextStyle(color: Colors.grey.shade500),
-                      ),
-                      Text(
-                        '${cityModel.to} ',
-                        style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  Gap(1.h),
-                  Row(
-                    children: [
-                      Text(
-                        'Cost: ',
-                        style: TextStyle(color: Colors.grey.shade500),
-                      ),
-                      Text(
-                        '${cityModel.fare} ',
-                        style: TextStyle(
-                            color: Colors.grey.shade500,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  Gap(1.h),
-                  AppTextField(
-                      keyboardType: TextInputType.number,
-                      fillColor: Colors.grey.shade700,
-                      hintText: seatWantToRes,
-                      controller: numberOfSeats),
-                  Gap(1.h),
-                  Row(
-                    children: [
-                      BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
-                        builder: (context, state) {
-                          return Checkbox(
-                              value: shuttleFinderBloc.pickMeUpFromMyLocation,
-                              onChanged: (v) => shuttleFinderBloc
-                                  .add(PickMeUpFromMyLocationByUser()));
-                        },
-                      ),
-                      const Text(pickMeUp),
-                    ],
-                  ),
-                  PrimaryButton(text: bookRide, onPressed: () {})
-                ],
-              ),
+                );
+              },
             ));
   }
 

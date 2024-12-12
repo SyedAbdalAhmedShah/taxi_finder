@@ -35,6 +35,7 @@ const somethingwrong = 'OPPS! Something went wrong';
 const signIn = 'Sign In';
 const signUp = 'Sign Up';
 const dontHaveAccount = "Don't have an account?";
+const requestNotAccepted = "OPPS!! Request not accepted by any driver ";
 const signUpNow = 'Sign Up';
 const seatWantToRes = 'Seat Want To Reserve';
 const bookRide = 'Book Ride ';

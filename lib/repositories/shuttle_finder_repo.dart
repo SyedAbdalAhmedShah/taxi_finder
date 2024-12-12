@@ -46,26 +46,58 @@ mixin ShuttleFinderRepo {
     return driverInfo;
   }
 
-  Future sendBookingRequestToNearByDrivers(
-      {required String driverUid,
-      required String numOfSeats,
+  Future saveRequestForUser(
+      {required String numOfSeats,
       required String to,
       required String fare,
-      required String pickUpType}) async {
+      required bool pickUpFromMyLocation}) async {
     Position userCurrentLocation = await Geolocator.getCurrentPosition();
     LatLng latLng =
         LatLng(userCurrentLocation.latitude, userCurrentLocation.longitude);
     final GeoFirePoint userPickUpLocation = await Utils.getGeoFirePoint(latLng);
+    final doc =
+        firebaseFirestore.collection(FirebaseStrings.shuttleRideReq).doc();
+    String requestId = doc.id;
     Map<String, dynamic> data = {
       FirebaseStrings.userId: loggedRole.userModel.uid,
       FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
       FirebaseStrings.numOfSeats: numOfSeats,
       FirebaseStrings.to: to,
       FirebaseStrings.fare: fare,
-      FirebaseStrings.pickUpType: pickUpType,
+      FirebaseStrings.pickUpFromMyLocation: pickUpFromMyLocation,
+      FirebaseStrings.status: FirebaseStrings.pending,
+      FirebaseStrings.docId: doc.id,
     };
-    final doc =
-        firebaseFirestore.collection(FirebaseStrings.driverColl).doc(driverUid);
-    doc.set(data);
+    await doc.set(data);
+    return requestId;
+  }
+
+  Future sendBookingRequestToNearByDrivers(
+      {required String driverUid,
+      required String numOfSeats,
+      required String to,
+      required String fare,
+      required bool pickUpFromMyLocation,
+      required String reqquestId}) async {
+    Position userCurrentLocation = await Geolocator.getCurrentPosition();
+    LatLng latLng =
+        LatLng(userCurrentLocation.latitude, userCurrentLocation.longitude);
+    final GeoFirePoint userPickUpLocation = await Utils.getGeoFirePoint(latLng);
+    final doc = firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(driverUid)
+        .collection(FirebaseStrings.rideRequests)
+        .doc(reqquestId);
+    Map<String, dynamic> data = {
+      FirebaseStrings.userId: loggedRole.userModel.uid,
+      FirebaseStrings.userPickUpLocation: userPickUpLocation.data,
+      FirebaseStrings.numOfSeats: numOfSeats,
+      FirebaseStrings.to: to,
+      FirebaseStrings.fare: fare,
+      FirebaseStrings.pickUpFromMyLocation: pickUpFromMyLocation,
+      FirebaseStrings.requestId: reqquestId,
+    };
+
+    await doc.set(data);
   }
 }

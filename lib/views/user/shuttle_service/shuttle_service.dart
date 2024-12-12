@@ -53,6 +53,11 @@ class _ShuttleServiceState extends State<ShuttleService> {
               _shuttleFinderBloc.add(
                   OnNearByShuttleDriversAddedEvent(availableDrivers: drivers));
             });
+          } else if (state is RequestNotAcceptedState) {
+            Navigator.pop(context);
+            Utils.showErrortoast(errorMessage: state.errorMessage);
+          } else if (state is ShuttleFinderFailureState) {
+            Utils.showErrortoast(errorMessage: state.errorMessage);
           }
         },
         child: BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(

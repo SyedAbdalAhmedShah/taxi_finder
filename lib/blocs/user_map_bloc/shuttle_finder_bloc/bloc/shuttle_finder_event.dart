@@ -12,7 +12,13 @@ final class OnShuttleSelectLocation extends ShuttleFinderEvent {
 
 final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {}
 
-final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {}
+final class NotAcceptedBooking extends ShuttleFinderEvent {}
+
+final class OnBookShuttleRide extends ShuttleFinderEvent {
+  final CityToCityModel selectedCity;
+  final String numOfSeats;
+  OnBookShuttleRide({required this.selectedCity, required this.numOfSeats});
+}
 
 final class OnNearByShuttleDriversAddedEvent extends ShuttleFinderEvent {
   final List<DriverInfo> availableDrivers;
