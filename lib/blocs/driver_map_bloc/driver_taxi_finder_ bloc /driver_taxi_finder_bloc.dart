@@ -38,7 +38,7 @@ class DriverTaxiFinderBLoc
         if (isPermisssionGranted) {
           bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
           if (serviceEnabled) {
-            positionStream = getPositionListner();
+            positionStream = Utils.getPositionListner();
 
             driverCurrentPosition = await Geolocator.getCurrentPosition();
             await updateDriverLocation(driverCurrentPosition);

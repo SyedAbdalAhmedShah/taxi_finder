@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -280,5 +281,11 @@ class Utils {
     GeoPoint userGeoPoint = GeoPoint(latLong.latitude, latLong.longitude);
     final GeoFirePoint userPickUpLocation = GeoFirePoint(userGeoPoint);
     return userPickUpLocation;
+  }
+
+  static StreamSubscription<Position> getPositionListner() {
+    return Geolocator.getPositionStream().listen(
+      (event) {},
+    );
   }
 }
