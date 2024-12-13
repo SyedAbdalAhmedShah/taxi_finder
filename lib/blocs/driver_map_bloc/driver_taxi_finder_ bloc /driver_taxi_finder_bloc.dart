@@ -12,10 +12,13 @@ import 'package:taxi_finder/utils/api_helper.dart';
 import 'package:taxi_finder/utils/notification_service.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
-part 'driver_event.dart';
-part 'driver_state.dart';
+part 'driver_taxi_finder_state.dart';
 
-class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
+part 'driver_taxi_finder_event.dart';
+
+class DriverTaxiFinderBLoc
+    extends Bloc<DriverTaxiFinderEvent, DriverTaxiFinderState>
+    with DriverMapRepo {
   late GoogleMapController mapController;
   late List<UserRequestModel> userRequest;
   StreamSubscription<Position>? positionStream;
@@ -27,7 +30,7 @@ class DriverBloc extends Bloc<DriverEvent, DriverState> with DriverMapRepo {
   Set<Polyline> polylineSet = {};
   Set<Marker> markers = {};
   late UserRequestModel currentRideRequest;
-  DriverBloc() : super(DriverInitial()) {
+  DriverTaxiFinderBLoc() : super(DriverInitial()) {
     on<DriverCurrentLocationEvent>((event, emit) async {
       emit(DriverMapLoadingState());
       try {
