@@ -34,10 +34,8 @@ class DriverTaxiFinderBLoc
     on<DriverCurrentLocationEvent>((event, emit) async {
       emit(DriverMapLoadingState());
       try {
-        LocationPermission isPermissionEnable =
-            await Geolocator.checkPermission();
-        if (isPermissionEnable == LocationPermission.always ||
-            isPermissionEnable == LocationPermission.whileInUse) {
+        bool isPermisssionGranted = await Utils.isPermissionGranted();
+        if (isPermisssionGranted) {
           bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
           if (serviceEnabled) {
             positionStream = getPositionListner();
@@ -57,8 +55,6 @@ class DriverTaxiFinderBLoc
             Geolocator.requestPermission();
           }
         } else {
-          log('======= No Permission ====');
-          await Geolocator.requestPermission();
           add(DriverCurrentLocationEvent());
         }
       } catch (error) {
