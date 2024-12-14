@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_taxi_finder_%20bloc%20/driver_taxi_finder_bloc.dart';
 import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/views/driver/components/driver_drawer.dart';
@@ -25,7 +25,7 @@ class TaxiFinderDriverHome extends StatelessWidget {
       body: const Stack(
         children: [DriverMapView(), UsersRequestsSection()],
       ),
-      bottomSheet: BlocBuilder<DriverBloc, DriverState>(
+      bottomSheet: BlocBuilder<DriverTaxiFinderBLoc, DriverTaxiFinderState>(
         builder: (context, state) {
           if (state is RideAcceptedState) {
             return Padding(
@@ -34,7 +34,7 @@ class TaxiFinderDriverHome extends StatelessWidget {
                     text: reachedUserLoc,
                     onPressed: () {
                       context
-                          .read<DriverBloc>()
+                          .read<DriverTaxiFinderBLoc>()
                           .add(ReachedOnUserPickupLocation());
                     }));
           } else if (state is ReachedOnUserPickupLocationState) {
@@ -43,7 +43,9 @@ class TaxiFinderDriverHome extends StatelessWidget {
                 child: PrimaryButton(
                     text: rideCompleted,
                     onPressed: () {
-                      context.read<DriverBloc>().add(OnRideCompletedEvent());
+                      context
+                          .read<DriverTaxiFinderBLoc>()
+                          .add(OnRideCompletedEvent());
                     }));
           } else {
             return const SizedBox.shrink();

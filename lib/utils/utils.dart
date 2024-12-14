@@ -195,6 +195,7 @@ class Utils {
                   progressIndicator: const CircularProgressIndicator.adaptive(),
                   child: AlertDialog.adaptive(
                     content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
@@ -262,6 +263,15 @@ class Utils {
                             const Text(pickMeUp),
                           ],
                         ),
+                        BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+                          builder: (context, state) {
+                            return NoteWhenPickFromLocation(
+                              isPickMeUp:
+                                  shuttleFinderBloc.pickMeUpFromMyLocation,
+                            );
+                          },
+                        ),
+                        Gap(1.h),
                         PrimaryButton(
                             text: bookRide,
                             onPressed: () {
@@ -286,6 +296,48 @@ class Utils {
   static StreamSubscription<Position> getPositionListner() {
     return Geolocator.getPositionStream().listen(
       (event) {},
+    );
+  }
+}
+
+class NoteWhenPickFromLocation extends StatelessWidget {
+  final bool isPickMeUp;
+  const NoteWhenPickFromLocation({required this.isPickMeUp, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      padding: EdgeInsets.all(1.w),
+      height: isPickMeUp ? 16.h : 0,
+      decoration: BoxDecoration(
+          color: Colors.yellow.shade100,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(1.w)),
+      duration: Durations.medium1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            additionalCharges,
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+          Gap(0.5.h),
+          Text(
+            "• 1-4.9 KM = R15",
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+          ),
+          Gap(0.5.h),
+          Text(
+            "• 5-9.9 KM = R30",
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+          ),
+          Gap(0.5.h),
+          Text(
+            "• 10-15 KM = R50",
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
     );
   }
 }

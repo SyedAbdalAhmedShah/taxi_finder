@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:linear_timer/linear_timer.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_taxi_finder_%20bloc%20/driver_taxi_finder_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 
@@ -17,10 +17,10 @@ class UsersRequestsSection extends StatefulWidget {
 }
 
 class _UsersRequestsSectionState extends State<UsersRequestsSection> {
-  late DriverBloc driverBloc;
+  late DriverTaxiFinderBLoc driverBloc;
   @override
   void initState() {
-    driverBloc = context.read<DriverBloc>();
+    driverBloc = context.read<DriverTaxiFinderBLoc>();
     super.initState();
   }
 
@@ -71,7 +71,7 @@ class UserRequestCard extends StatelessWidget {
               duration: const Duration(seconds: 10),
               backgroundColor: primaryColor,
               onTimerEnd: () {
-                context.read<DriverBloc>().add(OnRequestExpireEvent(
+                context.read<DriverTaxiFinderBLoc>().add(OnRequestExpireEvent(
                     docId: userRequestModel.requestId ?? ""));
               },
             ),
@@ -111,7 +111,7 @@ class UserRequestCard extends StatelessWidget {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      context.read<DriverBloc>().add(
+                      context.read<DriverTaxiFinderBLoc>().add(
                           OnAcceptRide(userRequestModel: userRequestModel));
                     },
                     child: const Text("Accept"))

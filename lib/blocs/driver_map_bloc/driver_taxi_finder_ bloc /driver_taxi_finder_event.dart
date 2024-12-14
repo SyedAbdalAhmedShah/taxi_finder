@@ -1,22 +1,22 @@
-part of 'driver_bloc.dart';
+part of 'driver_taxi_finder_bloc.dart';
 
-abstract class DriverEvent {}
+abstract class DriverTaxiFinderEvent {}
 
-class DriverCurrentLocationEvent extends DriverEvent {}
+class DriverCurrentLocationEvent extends DriverTaxiFinderEvent {}
 
-class OnRideRequestRecieveEvent extends DriverEvent {}
+class OnRideRequestRecieveEvent extends DriverTaxiFinderEvent {}
 
-class ReachedOnUserPickupLocation extends DriverEvent {}
+class ReachedOnUserPickupLocation extends DriverTaxiFinderEvent {}
 
-class OnRideCompletedEvent extends DriverEvent {}
+class OnRideCompletedEvent extends DriverTaxiFinderEvent {}
 
-class OnRequestExpireEvent extends DriverEvent {
+class OnRequestExpireEvent extends DriverTaxiFinderEvent {
   final String docId;
 
   OnRequestExpireEvent({required this.docId});
 }
 
-class OnAcceptRide extends DriverEvent {
+class OnAcceptRide extends DriverTaxiFinderEvent {
   final UserRequestModel userRequestModel;
 
   OnAcceptRide({required this.userRequestModel});

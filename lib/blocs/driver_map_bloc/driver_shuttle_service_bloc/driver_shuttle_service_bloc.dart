@@ -14,17 +14,17 @@ part 'driver_shuttle_service_state.dart';
 class DriverShuttleServiceBloc
     extends Bloc<DriverShuttleServiceEvent, DriverShuttleServiceState>
     with DriverMapRepo {
+  late GoogleMapController mapController;
+  late List<UserRequestModel> userRequest;
+  StreamSubscription<Position>? positionStream;
+  CameraPosition cameraPosition = const CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+  late Position driverCurrentPosition;
+  Set<Polyline> polylineSet = {};
+  Set<Marker> markers = {};
   DriverShuttleServiceBloc() : super(DriverShuttleServiceInitial()) {
-    late GoogleMapController mapController;
-    late List<UserRequestModel> userRequest;
-    StreamSubscription<Position>? positionStream;
-    CameraPosition cameraPosition = const CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962),
-      zoom: 14.4746,
-    );
-    late Position driverCurrentPosition;
-    Set<Polyline> polylineSet = {};
-    Set<Marker> markers = {};
     on<DriverCurrentLocationEvent>((event, emit) async {
       emit(DriverShuttleServiceLoadingState());
       try {
@@ -32,7 +32,6 @@ class DriverShuttleServiceBloc
         if (isPermisssionGranted) {
           bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
           if (serviceEnabled) {
-            positionStream = Utils.getPositionListner();
             driverCurrentPosition = await Geolocator.getCurrentPosition();
             await updateDriverLocation(driverCurrentPosition);
             cameraPosition = CameraPosition(
@@ -40,10 +39,16 @@ class DriverShuttleServiceBloc
                   driverCurrentPosition.longitude),
               zoom: 16.4746,
             );
-            mapController = mapController
+            mapController
                 .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+            positionStream = Utils.getPositionListner();
+            emit(ShuttleDriverCurrentLocationState());
+          } else {
+            add(DriverCurrentLocationEvent());
           }
-        } else {}
+        } else {
+          add(DriverCurrentLocationEvent());
+        }
       } catch (e) {
         log('error happened $e');
         emit(DriverShuttleServiceFailureState());

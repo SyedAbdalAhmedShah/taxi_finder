@@ -9,3 +9,6 @@ final class DriverShuttleServiceLoadingState
 
 final class DriverShuttleServiceFailureState
     extends DriverShuttleServiceState {}
+
+final class ShuttleDriverCurrentLocationState
+    extends DriverShuttleServiceState {}

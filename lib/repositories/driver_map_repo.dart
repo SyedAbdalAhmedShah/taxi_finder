@@ -13,11 +13,6 @@ import 'package:taxi_finder/models/user_request_model.dart';
 mixin DriverMapRepo {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final loggedRole = locator.get<CurrentUserDependency>();
-  StreamSubscription<Position> getPositionListner() {
-    return Geolocator.getPositionStream().listen(
-      (event) {},
-    );
-  }
 
   Future updateDriverLocation(Position position) async {
     DriverInfo driverInfo = loggedRole.driverInfo;

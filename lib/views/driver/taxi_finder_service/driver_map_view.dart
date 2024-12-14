@@ -24,8 +24,8 @@ class _DriverMapViewState extends State<DriverMapView> {
     driverBloc.add(DriverCurrentLocationEvent());
 
     driverBloc.positionStream?.onData(
-      (position) {
-        driverBloc.updateDriverLocation(position);
+      (position) async {
+        await driverBloc.updateDriverLocation(position);
       },
     );
     super.initState();

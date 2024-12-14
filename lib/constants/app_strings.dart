@@ -39,6 +39,8 @@ const requestNotAccepted = "OPPS!! Request not accepted by any driver ";
 const signUpNow = 'Sign Up';
 const seatWantToRes = 'Seat Want To Reserve';
 const bookRide = 'Book Ride ';
+const additionalCharges =
+    'Note: Additional charges can be assessed based on the accepted driver\'s time away.';
 const alreadyHaveAccount = 'Already have an account?';
 const enterEmail = "Enter your email";
 const enterPassword = "Enter password";

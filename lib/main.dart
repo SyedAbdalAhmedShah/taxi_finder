@@ -10,7 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/auth_bloc/auth_bloc.dart';
 import 'package:taxi_finder/blocs/bloc/shuttle_city_to_city_bloc.dart';
-import 'package:taxi_finder/blocs/driver_map_bloc/driver_bloc.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_shuttle_service_bloc/driver_shuttle_service_bloc.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_taxi_finder_%20bloc%20/driver_taxi_finder_bloc.dart';
 import 'package:taxi_finder/blocs/splash_bloc/splash_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
@@ -71,13 +72,16 @@ class MyApp extends StatelessWidget {
             create: (context) => TaxiFinderUserBloc(),
           ),
           BlocProvider(
-            create: (context) => DriverBloc(),
+            create: (context) => DriverTaxiFinderBLoc(),
           ),
           BlocProvider(
             create: (context) => ShuttleFinderBloc(),
           ),
           BlocProvider(
             create: (context) => ShuttleCityToCityBloc(),
+          ),
+          BlocProvider(
+            create: (context) => DriverShuttleServiceBloc(),
           ),
         ],
         child: MaterialApp(

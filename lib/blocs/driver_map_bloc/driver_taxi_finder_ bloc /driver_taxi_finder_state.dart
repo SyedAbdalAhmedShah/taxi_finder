@@ -1,19 +1,19 @@
-part of 'driver_bloc.dart';
+part of 'driver_taxi_finder_bloc.dart';
 
-abstract class DriverState {}
+abstract class DriverTaxiFinderState {}
 
-final class DriverInitial extends DriverState {}
+final class DriverInitial extends DriverTaxiFinderState {}
 
-final class DriverMapLoadingState extends DriverState {}
+final class DriverMapLoadingState extends DriverTaxiFinderState {}
 
-final class ExpiredRequestState extends DriverState {}
+final class ExpiredRequestState extends DriverTaxiFinderState {}
 
-final class RideAcceptedState extends DriverState {}
+final class RideAcceptedState extends DriverTaxiFinderState {}
 
-final class ReachedOnUserPickupLocationState extends DriverState {}
+final class ReachedOnUserPickupLocationState extends DriverTaxiFinderState {}
 
-final class CompletedRideState extends DriverState {}
+final class CompletedRideState extends DriverTaxiFinderState {}
 
-final class DriverMapFailureState extends DriverState {}
+final class DriverMapFailureState extends DriverTaxiFinderState {}
 
-final class DriverCurrentLocationUpdatedState extends DriverState {}
+final class DriverCurrentLocationUpdatedState extends DriverTaxiFinderState {}
