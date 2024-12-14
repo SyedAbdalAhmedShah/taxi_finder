@@ -12,6 +12,7 @@ class ShuttleRideRequest {
   final String? userId;
   Timestamp? createdAt;
   LatLong? userPickUpLocation;
+  String? totalDistanceToUser;
 
   ShuttleRideRequest({
     this.fare,
@@ -23,6 +24,7 @@ class ShuttleRideRequest {
     this.userId,
     this.createdAt,
     this.userPickUpLocation,
+    this.totalDistanceToUser,
   });
 
   // Factory constructor to create a TripRequest from a JSON map
@@ -67,17 +69,20 @@ class ShuttleRideRequest {
       String? to,
       String? userId,
       Timestamp? createdAt,
+      String? totalDistanceToUser,
       LatLong? userPickUpLocation}) {
     return ShuttleRideRequest(
-        fare: fare ?? this.fare,
-        numberOfSeats: numberOfSeats ?? this.numberOfSeats,
-        pickUpFromMyLocation: pickUpFromMyLocation ?? this.pickUpFromMyLocation,
-        requestId: requestId ?? this.requestId,
-        status: status ?? this.status,
-        to: to ?? this.to,
-        userId: userId ?? this.userId,
-        createdAt: createdAt ?? this.createdAt,
-        userPickUpLocation: userPickUpLocation ?? this.userPickUpLocation);
+      fare: fare ?? this.fare,
+      numberOfSeats: numberOfSeats ?? this.numberOfSeats,
+      pickUpFromMyLocation: pickUpFromMyLocation ?? this.pickUpFromMyLocation,
+      requestId: requestId ?? this.requestId,
+      status: status ?? this.status,
+      to: to ?? this.to,
+      userId: userId ?? this.userId,
+      createdAt: createdAt ?? this.createdAt,
+      userPickUpLocation: userPickUpLocation ?? this.userPickUpLocation,
+      totalDistanceToUser: totalDistanceToUser ?? this.totalDistanceToUser,
+    );
   }
 
   @override

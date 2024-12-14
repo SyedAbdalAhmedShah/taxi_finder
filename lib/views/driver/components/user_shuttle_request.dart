@@ -74,6 +74,15 @@ class UserShuttleRequestCard extends StatelessWidget {
                     Text("R${shuttleRideRequest.fare}"),
                   ],
                 ),
+                Row(
+                  children: [
+                    Text(
+                      "Away ",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                    Text("R${shuttleRideRequest.totalDistanceToUser}"),
+                  ],
+                ),
               ],
             ),
             Gap(1.h),
