@@ -67,6 +67,7 @@ mixin ShuttleFinderRepo {
       FirebaseStrings.pickUpFromMyLocation: pickUpFromMyLocation,
       FirebaseStrings.status: FirebaseStrings.pending,
       FirebaseStrings.docId: doc.id,
+      FirebaseStrings.createdAt: Timestamp.now(),
     };
     await doc.set(data);
     return requestId;
@@ -96,6 +97,8 @@ mixin ShuttleFinderRepo {
       FirebaseStrings.fare: fare,
       FirebaseStrings.pickUpFromMyLocation: pickUpFromMyLocation,
       FirebaseStrings.requestId: reqquestId,
+      FirebaseStrings.status: FirebaseStrings.pending,
+      FirebaseStrings.createdAt: Timestamp.now(),
     };
 
     await doc.set(data);

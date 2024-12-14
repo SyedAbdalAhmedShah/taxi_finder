@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/blocs/driver_map_bloc/driver_shuttle_service_bloc/driver_shuttle_service_bloc.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/models/shuttle_ride_request.dart';
 import 'package:taxi_finder/views/driver/components/user_shuttle_request.dart';
 
 class ShuttleFinderDriverHome extends StatelessWidget {
@@ -88,7 +89,20 @@ class UserShuttleRequestSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemBuilder: (ctx, index) => UserShuttleRequestCard());
+    final shuttleServiceBloc = context.read<DriverShuttleServiceBloc>();
+    return StreamBuilder<List<ShuttleRideRequest>>(
+        stream: shuttleServiceBloc.requestByUserShuttleServiceToDriver(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            List<ShuttleRideRequest>? shuttleRideRequest = snapshot.data;
+            return ListView.builder(
+                itemCount: shuttleRideRequest?.length ?? 0,
+                itemBuilder: (ctx, index) => UserShuttleRequestCard(
+                      shuttleRideRequest: shuttleRideRequest![index],
+                    ));
+          } else {
+            return SizedBox.shrink();
+          }
+        });
   }
 }

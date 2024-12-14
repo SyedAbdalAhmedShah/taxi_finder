@@ -8,6 +8,7 @@ import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
+import 'package:taxi_finder/models/shuttle_ride_request.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 
 mixin DriverMapRepo {
@@ -26,12 +27,19 @@ mixin DriverMapRepo {
     );
   }
 
-  requestByUserShuttleServiceToDriver() {
+  Stream<List<ShuttleRideRequest>> requestByUserShuttleServiceToDriver() {
     final ref = _firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(loggedRole.driverInfo.driverUid)
-        .collection(FirebaseStrings.rideRequestColl)
+        .collection(FirebaseStrings.shuttleRideReq)
         .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.pending);
+    final snapShot = ref.snapshots();
+    Stream<List<ShuttleRideRequest>> streamShuttle = snapShot.map((e) =>
+        e.docs.map((da) => ShuttleRideRequest.fromJson(da.data())).toList());
+    streamShuttle.listen((data) {
+      log("================length ${data.length}=======");
+    });
+    return streamShuttle;
   }
 
   Stream<List<UserRequestModel>> requestbyUserToDriver() {
@@ -72,6 +80,16 @@ mixin DriverMapRepo {
         .collection(FirebaseStrings.driverColl)
         .doc(loggedRole.driverInfo.driverUid)
         .collection(FirebaseStrings.rideRequestColl)
+        .doc(docId)
+        .update({FirebaseStrings.status: status});
+  }
+
+  Future updateDriverShuttleRideRequest(
+      {required String docId, required String status}) async {
+    await _firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedRole.driverInfo.driverUid)
+        .collection(FirebaseStrings.shuttleRideReq)
         .doc(docId)
         .update({FirebaseStrings.status: status});
   }

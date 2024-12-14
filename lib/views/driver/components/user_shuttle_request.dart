@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:linear_timer/linear_timer.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taxi_finder/blocs/driver_map_bloc/driver_shuttle_service_bloc/driver_shuttle_service_bloc.dart';
+
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/models/shuttle_ride_request.dart';
 
 class UserShuttleRequestCard extends StatelessWidget {
-  const UserShuttleRequestCard({super.key});
+  final ShuttleRideRequest shuttleRideRequest;
+  const UserShuttleRequestCard({required this.shuttleRideRequest, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +25,9 @@ class UserShuttleRequestCard extends StatelessWidget {
               duration: const Duration(seconds: 10),
               backgroundColor: primaryColor,
               onTimerEnd: () {
-                // context.read<DriverTaxiFinderBLoc>().add(OnRequestExpireEvent(
-                //     docId: userRequestModel.requestId ?? ""));
+                context.read<DriverShuttleServiceBloc>().add(
+                    OnExpireShuttleRideRequest(
+                        requestId: shuttleRideRequest.requestId ?? ""));
               },
             ),
             Gap(1.h),
@@ -53,7 +59,7 @@ class UserShuttleRequestCard extends StatelessWidget {
                       text: "To  ",
                       children: [
                         TextSpan(
-                            text: "Islamabad",
+                            text: "${shuttleRideRequest.to}",
                             style:
                                 TextStyle(color: Colors.black, fontSize: 16.sp))
                       ],
@@ -65,13 +71,15 @@ class UserShuttleRequestCard extends StatelessWidget {
                       "Fare: ",
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
-                    Text("R150 "),
+                    Text("R${shuttleRideRequest.fare}"),
                   ],
                 ),
               ],
             ),
             Gap(1.h),
-            Text('Pick from user location'),
+            Visibility(
+                visible: shuttleRideRequest.pickUpFromMyLocation ?? false,
+                child: Text('Pick from user location')),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

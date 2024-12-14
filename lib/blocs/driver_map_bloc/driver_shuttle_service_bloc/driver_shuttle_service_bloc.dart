@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
@@ -51,6 +52,15 @@ class DriverShuttleServiceBloc
         }
       } catch (e) {
         log('error happened $e');
+        emit(DriverShuttleServiceFailureState());
+      }
+    });
+
+    on<OnExpireShuttleRideRequest>((event, emit) async {
+      try {
+        await updateDriverShuttleRideRequest(
+            docId: event.requestId, status: FirebaseStrings.expired);
+      } catch (e) {
         emit(DriverShuttleServiceFailureState());
       }
     });
