@@ -26,6 +26,14 @@ mixin DriverMapRepo {
     );
   }
 
+  requestByUserShuttleServiceToDriver() {
+    final ref = _firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedRole.driverInfo.driverUid)
+        .collection(FirebaseStrings.rideRequestColl)
+        .where(FirebaseStrings.status, isEqualTo: FirebaseStrings.pending);
+  }
+
   Stream<List<UserRequestModel>> requestbyUserToDriver() {
     final ref = _firebaseFirestore
         .collection(FirebaseStrings.driverColl)

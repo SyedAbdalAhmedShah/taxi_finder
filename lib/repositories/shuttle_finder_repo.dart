@@ -86,7 +86,7 @@ mixin ShuttleFinderRepo {
     final doc = firebaseFirestore
         .collection(FirebaseStrings.driverColl)
         .doc(driverUid)
-        .collection(FirebaseStrings.rideRequests)
+        .collection(FirebaseStrings.shuttleRideReq)
         .doc(reqquestId);
     Map<String, dynamic> data = {
       FirebaseStrings.userId: loggedRole.userModel.uid,

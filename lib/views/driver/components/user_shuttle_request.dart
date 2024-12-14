@@ -45,24 +45,29 @@ class UserShuttleRequestCard extends StatelessWidget {
                 ),
               ),
             ),
-            RichText(
-              text: TextSpan(
-                  text: "To  ",
-                  children: [
-                    TextSpan(
-                        text: "Islamabad",
-                        style: TextStyle(color: Colors.black, fontSize: 16.sp))
-                  ],
-                  style: TextStyle(color: Colors.grey, fontSize: 16.sp)),
-            ),
-            Gap(1.h),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Fare: ",
-                  style: TextStyle(color: Colors.grey.shade600),
+                RichText(
+                  text: TextSpan(
+                      text: "To  ",
+                      children: [
+                        TextSpan(
+                            text: "Islamabad",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16.sp))
+                      ],
+                      style: TextStyle(color: Colors.grey, fontSize: 16.sp)),
                 ),
-                Text("R150 "),
+                Row(
+                  children: [
+                    Text(
+                      "Fare: ",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                    Text("R150 "),
+                  ],
+                ),
               ],
             ),
             Gap(1.h),
