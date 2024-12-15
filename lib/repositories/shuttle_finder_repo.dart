@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +9,7 @@ import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/models/driver_info.dart';
+import 'package:taxi_finder/models/shuttle_ride_request.dart';
 import 'package:taxi_finder/utils/utils.dart';
 
 mixin ShuttleFinderRepo {
@@ -102,5 +105,34 @@ mixin ShuttleFinderRepo {
     };
 
     await doc.set(data);
+  }
+
+  Future<int> fetchRequestDocsForSeatsLeft(
+      {required DriverInfo driverIfon}) async {
+    List<ShuttleRideRequest> driverAllActiveRequest = [];
+    int allConsumedSeats = 0;
+    final driverShuttleReqColl = firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(driverIfon.driverUid)
+        .collection(FirebaseStrings.shuttleRideReq);
+    List<String> driverActiveRequests = driverIfon.shuttleRide ?? [];
+    if (driverActiveRequests.isNotEmpty) {
+      for (final request in driverActiveRequests) {
+        DocumentSnapshot<Map<String, dynamic>> requestData =
+            await driverShuttleReqColl.doc(request).get();
+        ShuttleRideRequest shuttleRideRequest =
+            ShuttleRideRequest.fromJson(requestData.data()!);
+        driverAllActiveRequest.add(shuttleRideRequest);
+      }
+    }
+
+    for (final shuttleReq in driverAllActiveRequest) {
+      int? seatsBook = int.tryParse(shuttleReq.numberOfSeats ?? "0");
+      if (seatsBook != null) {
+        allConsumedSeats += seatsBook;
+      }
+    }
+
+    return allConsumedSeats;
   }
 }

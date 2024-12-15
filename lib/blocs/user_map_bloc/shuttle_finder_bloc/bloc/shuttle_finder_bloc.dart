@@ -48,6 +48,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           );
           await googleMapController
               .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
           nearByDriversStream = getNearByShuttleFinderDrivers(currentLatLong);
           emit(ShuttleFinderCurrentUserLocationState());
         } else {
@@ -82,12 +83,21 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         );
         nearByDrivers = event.availableDrivers;
         for (final driver in event.availableDrivers) {
+          int totalBookedSeats = 0;
           log('driver shuttle ride ${driver.shuttleRide}');
+          int allConsumedSeats =
+              await fetchRequestDocsForSeatsLeft(driverIfon: driver);
+          if (allConsumedSeats == driver.numberOfSeats) {
+            log('is full');
+          } else {
+            totalBookedSeats = (driver.numberOfSeats ?? 0) - allConsumedSeats;
+          }
           int seatLeft =
               (driver.numberOfSeats ?? 0) - (driver.shuttleRide?.length ?? 0);
           Marker driverMarker = Marker(
+              flat: true,
               infoWindow: InfoWindow(
-                title: "$seatLeft seats left",
+                title: "$totalBookedSeats seats left",
               ),
               markerId: MarkerId(driver.driverUid ?? ""),
               position: LatLng(driver.latLong?.geoPoint?.latitude ?? 0.0,
