@@ -26,6 +26,7 @@ import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:taxi_finder/utils/extensions.dart';
 
 class Utils {
   static PolylinePoints polylinePoints = PolylinePoints();
@@ -190,105 +191,116 @@ class Utils {
         context: context,
         builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
               builder: (context, state) {
-                return ModalProgressHUD(
-                  inAsyncCall: state is OnRideBookingLoadingState,
-                  blur: 2,
-                  progressIndicator: const CircularProgressIndicator.adaptive(),
-                  child: AlertDialog.adaptive(
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'From: ',
-                              style: TextStyle(color: Colors.grey.shade500),
-                            ),
-                            Text(
-                              '${cityModel.from} ',
-                              style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                        Gap(1.h),
-                        Row(
-                          children: [
-                            Text(
-                              'To: ',
-                              style: TextStyle(color: Colors.grey.shade500),
-                            ),
-                            Text(
-                              '${cityModel.to} ',
-                              style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Gap(1.h),
-                        Row(
-                          children: [
-                            Text(
-                              'Cost: ',
-                              style: TextStyle(color: Colors.grey.shade500),
-                            ),
-                            Text(
-                              '${cityModel.fare} ',
-                              style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Gap(1.h),
-                        Form(
-                          key: formKey,
-                          child: AppTextField(
-                              keyboardType: TextInputType.number,
-                              fillColor: Colors.grey.shade700,
-                              hintText: seatWantToRes,
-                              validator: (p0) => p0 == null || p0.isEmpty
-                                  ? "Please enter seats you want to book"
-                                  : null,
-                              controller: numberOfSeats),
-                        ),
-                        Gap(1.h),
-                        Row(
-                          children: [
-                            BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
-                              builder: (context, state) {
-                                return Checkbox(
-                                    value: shuttleFinderBloc
-                                        .pickMeUpFromMyLocation,
-                                    onChanged: (v) => shuttleFinderBloc
-                                        .add(PickMeUpFromMyLocationByUser()));
-                              },
-                            ),
-                            const Text(pickMeUp),
-                          ],
-                        ),
-                        BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
-                          builder: (context, state) {
-                            return NoteWhenPickFromLocation(
-                              isPickMeUp:
-                                  shuttleFinderBloc.pickMeUpFromMyLocation,
-                            );
-                          },
-                        ),
-                        Gap(1.h),
-                        PrimaryButton(
-                            text: bookRide,
-                            onPressed: () {
-                              if (formKey.currentState?.validate() ?? false) {
-                                shuttleFinderBloc.add(OnBookShuttleRide(
-                                    selectedCity: cityModel,
-                                    numOfSeats: numberOfSeats.text));
-                              }
-                            })
+                return Material(
+                  color: Colors.transparent,
+                  child: ModalProgressHUD(
+                    inAsyncCall: state is OnRideBookingLoadingState,
+                    blur: 2,
+                    progressIndicator:
+                        const CircularProgressIndicator.adaptive(),
+                    child: AlertDialog.adaptive(
+                      actions: [
+                        TextButton.icon(
+                            icon: Icon(Icons.adaptive.arrow_back),
+                            onPressed: () => context.pop(),
+                            label: Text("cancel"))
                       ],
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'From: ',
+                                style: TextStyle(color: Colors.grey.shade500),
+                              ),
+                              Text(
+                                '${cityModel.from} ',
+                                style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                          Gap(1.h),
+                          Row(
+                            children: [
+                              Text(
+                                'To: ',
+                                style: TextStyle(color: Colors.grey.shade500),
+                              ),
+                              Text(
+                                '${cityModel.to} ',
+                                style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Gap(1.h),
+                          Row(
+                            children: [
+                              Text(
+                                'Cost: ',
+                                style: TextStyle(color: Colors.grey.shade500),
+                              ),
+                              Text(
+                                '${cityModel.fare} ',
+                                style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Gap(1.h),
+                          Form(
+                            key: formKey,
+                            child: AppTextField(
+                                keyboardType: TextInputType.number,
+                                fillColor: Colors.grey.shade700,
+                                hintText: seatWantToRes,
+                                validator: (p0) => p0 == null || p0.isEmpty
+                                    ? "Please enter seats you want to book"
+                                    : null,
+                                controller: numberOfSeats),
+                          ),
+                          Gap(1.h),
+                          Row(
+                            children: [
+                              BlocBuilder<ShuttleFinderBloc,
+                                  ShuttleFinderState>(
+                                builder: (context, state) {
+                                  return Checkbox(
+                                      value: shuttleFinderBloc
+                                          .pickMeUpFromMyLocation,
+                                      onChanged: (v) => shuttleFinderBloc
+                                          .add(PickMeUpFromMyLocationByUser()));
+                                },
+                              ),
+                              const Text(pickMeUp),
+                            ],
+                          ),
+                          BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+                            builder: (context, state) {
+                              return NoteWhenPickFromLocation(
+                                isPickMeUp:
+                                    shuttleFinderBloc.pickMeUpFromMyLocation,
+                              );
+                            },
+                          ),
+                          Gap(1.h),
+                          PrimaryButton(
+                              text: bookRide,
+                              onPressed: () {
+                                if (formKey.currentState?.validate() ?? false) {
+                                  shuttleFinderBloc.add(OnBookShuttleRide(
+                                      selectedCity: cityModel,
+                                      numOfSeats: numberOfSeats.text));
+                                }
+                              })
+                        ],
+                      ),
                     ),
                   ),
                 );

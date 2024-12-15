@@ -31,6 +31,8 @@ const emailNotVerified =
 const forgotPassword = 'Forgot Password?';
 const usrNotFnd = 'OPPS! User Not Found';
 const drvrNotFnd = 'OPPS! Driver Not Found';
+const drvrNotAvail =
+    'OPPS! Driver not available at this time, Please try after sometime';
 const somethingwrong = 'OPPS! Something went wrong';
 const signIn = 'Sign In';
 const signUp = 'Sign Up';

@@ -82,34 +82,41 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           vanImage,
         );
         nearByDrivers = event.availableDrivers;
-        for (final driver in event.availableDrivers) {
-          int totalBookedSeats = 0;
-          log('driver shuttle ride ${driver.shuttleRide}');
-          int allConsumedSeats =
-              await fetchRequestDocsForSeatsLeft(driverIfon: driver);
-          if (allConsumedSeats == driver.numberOfSeats) {
-            log('is full');
-          } else {
-            totalBookedSeats = (driver.numberOfSeats ?? 0) - allConsumedSeats;
+        if (event.availableDrivers.isNotEmpty) {
+          for (final driver in event.availableDrivers) {
+            int totalBookedSeats = 0;
+
+            int allConsumedSeats =
+                await fetchRequestDocsForSeatsLeft(driverIfon: driver);
+            if (allConsumedSeats == driver.numberOfSeats) {
+              await updateDriverVehcialIsFull(
+                  driverUid: driver.driverUid ?? "");
+            } else {
+              totalBookedSeats = (driver.numberOfSeats ?? 0) - allConsumedSeats;
+            }
+
+            Marker driverMarker = Marker(
+                flat: true,
+                infoWindow: InfoWindow(
+                  title: "$totalBookedSeats seats left",
+                ),
+                markerId: MarkerId(driver.driverUid ?? ""),
+                position: LatLng(driver.latLong?.geoPoint?.latitude ?? 0.0,
+                    driver.latLong?.geoPoint?.longitude ?? 0.0),
+                icon: icon);
+            updatedMarkers.add(driverMarker);
+            nearByDriverMarker.removeWhere(
+                (marker) => !currentDriverIds.contains(marker.markerId.value));
           }
-          int seatLeft =
-              (driver.numberOfSeats ?? 0) - (driver.shuttleRide?.length ?? 0);
-          Marker driverMarker = Marker(
-              flat: true,
-              infoWindow: InfoWindow(
-                title: "$totalBookedSeats seats left",
-              ),
-              markerId: MarkerId(driver.driverUid ?? ""),
-              position: LatLng(driver.latLong?.geoPoint?.latitude ?? 0.0,
-                  driver.latLong?.geoPoint?.longitude ?? 0.0),
-              icon: icon);
-          updatedMarkers.add(driverMarker);
-          nearByDriverMarker.removeWhere(
-              (marker) => !currentDriverIds.contains(marker.markerId.value));
+          nearByDriverMarker = updatedMarkers;
+          log('marker length ${updatedMarkers.length}');
+          emit(OnShuttleNearByDriversAddedState());
+        } else {
+          if (nearByDriverMarker.isNotEmpty) {
+            nearByDriverMarker.clear();
+          }
+          emit(ShuttleFinderFailureState(errorMessage: drvrNotAvail));
         }
-        nearByDriverMarker = updatedMarkers;
-        log('marker length ${updatedMarkers.length}');
-        emit(OnShuttleNearByDriversAddedState());
       } catch (e) {
         log('error is $e');
         emit(ShuttleFinderFailureState(errorMessage: e.toString()));

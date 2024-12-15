@@ -49,7 +49,6 @@ class _ShuttleServiceState extends State<ShuttleService> {
                 context: context, cityModel: state.selectedCity);
           } else if (state is ShuttleFinderCurrentUserLocationState) {
             _shuttleFinderBloc.nearByDriversStream.listen((drivers) {
-              log('List of drivers ${drivers.length}');
               _shuttleFinderBloc.add(
                   OnNearByShuttleDriversAddedEvent(availableDrivers: drivers));
             });

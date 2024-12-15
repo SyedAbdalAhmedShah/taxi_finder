@@ -135,4 +135,11 @@ mixin ShuttleFinderRepo {
 
     return allConsumedSeats;
   }
+
+  Future updateDriverVehcialIsFull({required String driverUid}) async {
+    await firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(driverUid)
+        .update({FirebaseStrings.isSeatsFull: true});
+  }
 }

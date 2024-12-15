@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/shuttle_ride_request.dart';
 
 import 'package:taxi_finder/models/user_request_model.dart';
@@ -75,6 +79,22 @@ class DriverShuttleServiceBloc
         await updateActiveRideOfUserForShuttleRide(
             userId: shuttleRideRequest.userId ?? "",
             requestId: shuttleRideRequest.requestId ?? "");
+        var icon = await BitmapDescriptor.asset(
+          const ImageConfiguration(devicePixelRatio: 1.2, size: Size(50, 50)),
+          userMarkerForDriver,
+        );
+        LatLng userLocation = LatLng(
+          shuttleRideRequest.userPickUpLocation?.geoPoint?.latitude ?? 0.0,
+          shuttleRideRequest.userPickUpLocation?.geoPoint?.longitude ?? 0.0,
+        );
+        Marker acceptedUserLocationMarker = Marker(
+            markerId: MarkerId("${shuttleRideRequest.requestId}"),
+            position: userLocation,
+            icon: icon);
+        DriverInfo? driverInfo = await Utils.driver(
+            driverUid: loggedRole.driverInfo.driverUid ?? "");
+
+        markers.add(acceptedUserLocationMarker);
         emit(OnShuttleRideAcceptedState());
       } catch (e) {
         log("error $e");

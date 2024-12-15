@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/blocs/driver_map_bloc/driver_shuttle_service_bloc/driver_shuttle_service_bloc.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/models/shuttle_ride_request.dart';
+import 'package:taxi_finder/views/driver/components/driver_drawer.dart';
 import 'package:taxi_finder/views/driver/components/user_shuttle_request.dart';
 
 class ShuttleFinderDriverHome extends StatelessWidget {
@@ -12,6 +13,7 @@ class ShuttleFinderDriverHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const DriverDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -63,20 +65,27 @@ class _DriverShuttleMapViewState extends State<_DriverShuttleMapView> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          return GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _driverShuttleServiceBloc.cameraPosition,
-            onMapCreated: (GoogleMapController controller) async {
-              _driverShuttleServiceBloc.mapController = controller;
-            },
-            polylines: _driverShuttleServiceBloc.polylineSet,
-            markers: _driverShuttleServiceBloc.markers,
-            buildingsEnabled: true,
-            fortyFiveDegreeImageryEnabled: true,
-            myLocationButtonEnabled: true,
-            trafficEnabled: true,
-            myLocationEnabled: true,
-            onTap: (LatLng latLng) {},
+          return Stack(
+            children: [
+              GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _driverShuttleServiceBloc.cameraPosition,
+                onMapCreated: (GoogleMapController controller) async {
+                  _driverShuttleServiceBloc.mapController = controller;
+                },
+                mapToolbarEnabled: true,
+                zoomControlsEnabled: true,
+                zoomGesturesEnabled: true,
+                polylines: _driverShuttleServiceBloc.polylineSet,
+                markers: _driverShuttleServiceBloc.markers,
+                buildingsEnabled: true,
+                fortyFiveDegreeImageryEnabled: true,
+                myLocationButtonEnabled: true,
+                trafficEnabled: true,
+                myLocationEnabled: true,
+                onTap: (LatLng latLng) {},
+              ),
+            ],
           );
         },
       ),
@@ -95,11 +104,15 @@ class UserShuttleRequestSection extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             List<ShuttleRideRequest>? shuttleRideRequest = snapshot.data;
-            return ListView.builder(
-                itemCount: shuttleRideRequest?.length ?? 0,
-                itemBuilder: (ctx, index) => UserShuttleRequestCard(
-                      shuttleRideRequest: shuttleRideRequest![index],
-                    ));
+            if (shuttleRideRequest!.isNotEmpty) {
+              return ListView.builder(
+                  itemCount: shuttleRideRequest.length ?? 0,
+                  itemBuilder: (ctx, index) => UserShuttleRequestCard(
+                        shuttleRideRequest: shuttleRideRequest[index],
+                      ));
+            } else {
+              return SizedBox.shrink();
+            }
           } else {
             return SizedBox.shrink();
           }
