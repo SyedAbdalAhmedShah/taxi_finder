@@ -69,7 +69,7 @@ class NotificationService {
       );
       log('response notification ${response.body} === status code ${response.statusCode}');
     } catch (e) {
-      print('Error sending notification: $e');
+      log('Error sending notification: $e');
     }
   }
 }

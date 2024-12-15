@@ -91,7 +91,7 @@ class _ShuttleServiceState extends State<ShuttleService> {
 }
 
 class _ShuttleAvailableCities extends StatelessWidget {
-  const _ShuttleAvailableCities({super.key});
+  const _ShuttleAvailableCities();
 
   @override
   Widget build(BuildContext context) {

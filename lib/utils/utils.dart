@@ -185,6 +185,7 @@ class Utils {
       {required BuildContext context, required CityToCityModel cityModel}) {
     TextEditingController numberOfSeats = TextEditingController();
     final shuttleFinderBloc = context.read<ShuttleFinderBloc>();
+    final formKey = GlobalKey<FormState>();
     showCupertinoModalPopup(
         context: context,
         builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
@@ -243,11 +244,17 @@ class Utils {
                           ],
                         ),
                         Gap(1.h),
-                        AppTextField(
-                            keyboardType: TextInputType.number,
-                            fillColor: Colors.grey.shade700,
-                            hintText: seatWantToRes,
-                            controller: numberOfSeats),
+                        Form(
+                          key: formKey,
+                          child: AppTextField(
+                              keyboardType: TextInputType.number,
+                              fillColor: Colors.grey.shade700,
+                              hintText: seatWantToRes,
+                              validator: (p0) => p0 == null || p0.isEmpty
+                                  ? "Please enter seats you want to book"
+                                  : null,
+                              controller: numberOfSeats),
+                        ),
                         Gap(1.h),
                         Row(
                           children: [
@@ -275,9 +282,11 @@ class Utils {
                         PrimaryButton(
                             text: bookRide,
                             onPressed: () {
-                              shuttleFinderBloc.add(OnBookShuttleRide(
-                                  selectedCity: cityModel,
-                                  numOfSeats: numberOfSeats.text));
+                              if (formKey.currentState?.validate() ?? false) {
+                                shuttleFinderBloc.add(OnBookShuttleRide(
+                                    selectedCity: cityModel,
+                                    numOfSeats: numberOfSeats.text));
+                              }
                             })
                       ],
                     ),

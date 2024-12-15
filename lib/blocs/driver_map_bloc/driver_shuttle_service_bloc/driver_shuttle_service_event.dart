@@ -11,7 +11,7 @@ class OnExpireShuttleRideRequest extends DriverShuttleServiceEvent {
 }
 
 class OnShuttleRideAcceptEvent extends DriverShuttleServiceEvent {
-  final String requestId;
+  final ShuttleRideRequest shuttleRideRequest;
 
-  OnShuttleRideAcceptEvent({required this.requestId});
+  OnShuttleRideAcceptEvent({required this.shuttleRideRequest});
 }

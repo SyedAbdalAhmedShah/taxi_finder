@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/models/shuttle_ride_request.dart';
+
 import 'package:taxi_finder/models/user_request_model.dart';
 import 'package:taxi_finder/repositories/driver_map_repo.dart';
 import 'package:taxi_finder/utils/utils.dart';
@@ -67,7 +69,12 @@ class DriverShuttleServiceBloc
     on<OnShuttleRideAcceptEvent>((event, emit) async {
       try {
         emit(DriverShuttleRideAcceptLoadingState());
-        await acceptShuttleRequestAndUpdateDriverColl(event.requestId);
+        ShuttleRideRequest shuttleRideRequest = event.shuttleRideRequest;
+        await acceptShuttleRequestAndUpdateDriverColl(
+            shuttleRideRequest.requestId ?? "");
+        await updateActiveRideOfUserForShuttleRide(
+            userId: shuttleRideRequest.userId ?? "",
+            requestId: shuttleRideRequest.requestId ?? "");
         emit(OnShuttleRideAcceptedState());
       } catch (e) {
         log("error $e");

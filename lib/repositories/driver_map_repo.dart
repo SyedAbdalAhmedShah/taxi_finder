@@ -213,6 +213,14 @@ mixin DriverMapRepo {
     }, SetOptions(merge: true));
   }
 
+  Future updateActiveRideOfUserForShuttleRide(
+      {required String userId, required String requestId}) async {
+    await _firebaseFirestore
+        .collection(FirebaseStrings.usersColl)
+        .doc(userId)
+        .update({FirebaseStrings.activeRide: requestId});
+  }
+
   markCompletedOfDriverRideRequestCollection(
       {required String driverId, required String requestId}) async {
     final driverDoc =
