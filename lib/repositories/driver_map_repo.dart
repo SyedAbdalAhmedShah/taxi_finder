@@ -181,8 +181,31 @@ mixin DriverMapRepo {
     driverDoc
         .doc(loggedRole.driverInfo.driverUid)
         .set({FirebaseStrings.activeRide: requestId}, SetOptions(merge: true));
-    _firebaseFirestore
+    await _firebaseFirestore
         .collection(FirebaseStrings.rideRequestColl)
+        .doc(requestId)
+        .set({
+      FirebaseStrings.status: FirebaseStrings.accepted,
+      FirebaseStrings.driverUid: loggedRole.driverInfo.driverUid
+    }, SetOptions(merge: true));
+  }
+
+  acceptShuttleRequestAndUpdateDriverColl(String requestId) async {
+    final driverColl =
+        _firebaseFirestore.collection(FirebaseStrings.driverColl);
+
+    final driverDoc = driverColl.doc(loggedRole.driverInfo.driverUid);
+    driverDoc.set({
+      FirebaseStrings.shuttleRide: FieldValue.arrayUnion([requestId])
+    }, SetOptions(merge: true));
+    await driverDoc
+        .collection(FirebaseStrings.shuttleRideReq)
+        .doc(requestId)
+        .update({
+      FirebaseStrings.status: FirebaseStrings.accepted,
+    });
+    await _firebaseFirestore
+        .collection(FirebaseStrings.shuttleRideReq)
         .doc(requestId)
         .set({
       FirebaseStrings.status: FirebaseStrings.accepted,

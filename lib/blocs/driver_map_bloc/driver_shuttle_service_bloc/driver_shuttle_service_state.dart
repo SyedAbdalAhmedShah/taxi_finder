@@ -4,6 +4,11 @@ sealed class DriverShuttleServiceState {}
 
 final class DriverShuttleServiceInitial extends DriverShuttleServiceState {}
 
+final class DriverShuttleRideAcceptLoadingState
+    extends DriverShuttleServiceState {}
+
+final class OnShuttleRideAcceptedState extends DriverShuttleServiceState {}
+
 final class DriverShuttleServiceLoadingState
     extends DriverShuttleServiceState {}
 

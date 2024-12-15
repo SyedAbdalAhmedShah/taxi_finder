@@ -64,5 +64,14 @@ class DriverShuttleServiceBloc
         emit(DriverShuttleServiceFailureState());
       }
     });
+    on<OnShuttleRideAcceptEvent>((event, emit) async {
+      try {
+        emit(DriverShuttleRideAcceptLoadingState());
+        await acceptShuttleRequestAndUpdateDriverColl(event.requestId);
+      } catch (e) {
+        log("error $e");
+        emit(DriverShuttleServiceFailureState());
+      }
+    });
   }
 }

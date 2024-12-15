@@ -3,7 +3,7 @@ class FirebaseStrings {
   static const String ridesColl = "rides";
   static const String usersColl = "Users";
   static const String rideRequestColl = "RideRequests";
-  static const String shuttleRideReq = "ShuttleRideReq";
+  static const String shuttleRideReq = "ShuttleRideRequest";
   static const String shuttleCityToCityColl = "ShuttleCityToCity";
 
   static const String driverUid = "driverUid";
