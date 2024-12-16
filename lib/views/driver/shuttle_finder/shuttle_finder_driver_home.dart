@@ -65,27 +65,20 @@ class _DriverShuttleMapViewState extends State<_DriverShuttleMapView> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-          return Stack(
-            children: [
-              GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: _driverShuttleServiceBloc.cameraPosition,
-                onMapCreated: (GoogleMapController controller) async {
-                  _driverShuttleServiceBloc.mapController = controller;
-                },
-                mapToolbarEnabled: true,
-                zoomControlsEnabled: true,
-                zoomGesturesEnabled: true,
-                polylines: _driverShuttleServiceBloc.polylineSet,
-                markers: _driverShuttleServiceBloc.markers,
-                buildingsEnabled: true,
-                fortyFiveDegreeImageryEnabled: true,
-                myLocationButtonEnabled: true,
-                trafficEnabled: true,
-                myLocationEnabled: true,
-                onTap: (LatLng latLng) {},
-              ),
-            ],
+          return GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _driverShuttleServiceBloc.cameraPosition,
+            onMapCreated: (GoogleMapController controller) async {
+              _driverShuttleServiceBloc.mapController = controller;
+            },
+            polylines: _driverShuttleServiceBloc.polylineSet,
+            markers: _driverShuttleServiceBloc.markers,
+            buildingsEnabled: true,
+            fortyFiveDegreeImageryEnabled: true,
+            myLocationButtonEnabled: true,
+            trafficEnabled: true,
+            myLocationEnabled: true,
+            onTap: (LatLng latLng) {},
           );
         },
       ),

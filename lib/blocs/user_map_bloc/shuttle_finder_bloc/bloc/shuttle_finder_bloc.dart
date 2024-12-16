@@ -96,7 +96,6 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
             }
 
             Marker driverMarker = Marker(
-                flat: true,
                 infoWindow: InfoWindow(
                   title: "$totalBookedSeats seats left",
                 ),
@@ -112,10 +111,10 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           log('marker length ${updatedMarkers.length}');
           emit(OnShuttleNearByDriversAddedState());
         } else {
-          if (nearByDriverMarker.isNotEmpty) {
-            nearByDriverMarker.clear();
-          }
-          emit(ShuttleFinderFailureState(errorMessage: drvrNotAvail));
+          // if (nearByDriverMarker.isNotEmpty) {
+          //   nearByDriverMarker.clear();
+          // }
+          // emit(ShuttleFinderFailureState(errorMessage: drvrNotAvail));
         }
       } catch (e) {
         log('error is $e');

@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> with AuthRepo {
       emit(AuthLoadingState());
       try {
         UserCredential? userCredential = await signInWithEmailAndPassword(
-            email: email.text, password: password.text);
+            email: email.text.trim(), password: password.text.trim());
         if (userCredential != null) {
           bool isVerified = userCredential.user?.emailVerified ?? false;
           if (isVerified) {
