@@ -1,17 +1,36 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/views/user/components/auto_complete_map_field.dart';
 
-class LocationSearchSection extends StatelessWidget {
+class LocationSearchSection extends StatefulWidget {
   const LocationSearchSection({super.key});
 
   @override
+  State<LocationSearchSection> createState() => _LocationSearchSectionState();
+}
+
+class _LocationSearchSectionState extends State<LocationSearchSection> {
+  GlobalKey one = GlobalKey();
+  GlobalKey two = GlobalKey();
+  late TaxiFinderUserBloc userMapBloc;
+  @override
+  void initState() {
+    userMapBloc = context.read<TaxiFinderUserBloc>();
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ShowCaseWidget.of(context).startShowCase([one, two]));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TaxiFinderUserBloc userMapBloc = context.read<TaxiFinderUserBloc>();
     return Container(
       height: 25.h,
       width: double.infinity,
@@ -34,63 +53,73 @@ class LocationSearchSection extends StatelessWidget {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      AutoCompleteMapField(
-                        countryISO: userMapBloc.countryISO!,
-                        controller: userMapBloc.myLocationController,
-                        hint: "Your Location",
-                        // onLocationSelected: (prediction) {},
+                      Showcase(
+                        key: one,
+                        description: 'Your current location',
+                        targetBorderRadius: BorderRadius.circular(8),
+                        child: AutoCompleteMapField(
+                          countryISO: userMapBloc.countryISO!,
+                          controller: userMapBloc.myLocationController,
+                          hint: "Your Location",
+                          // onLocationSelected: (prediction) {},
+                        ),
                       ),
                       Gap(1.h),
-                      Autocomplete(
-                        optionsViewBuilder: (context, onSelected, options) {
-                          return Card(
-                            child: ListView(
-                              children: options.map(
-                                (prediction) {
-                                  return ListTile(
-                                    onTap: () {
-                                      onSelected(prediction);
-                                    },
-                                    title: Text(prediction.description ?? ""),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                          );
-                        },
-                        onSelected: (option) {
-                          FocusScope.of(context).unfocus();
-                          userMapBloc
-                              .add(OnLocationSelectedEvent(prediction: option));
-                        },
-                        displayStringForOption: (option) =>
-                            option.description ?? "",
-                        fieldViewBuilder: (context, textEditingController,
-                            focusNode, onFieldSubmitted) {
-                          return TextField(
-                            focusNode: focusNode,
-                            onEditingComplete: onFieldSubmitted,
-                            onSubmitted: (value) {
-                              focusNode.unfocus();
-                            },
-                            controller: textEditingController,
-                            decoration: InputDecoration(
-                                hintText: "Destination",
-                                hintStyle:
-                                    const TextStyle(color: textColorSecondary),
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide.none,
-                                )),
-                          );
-                        },
-                        optionsBuilder: (textEditingValue) {
-                          userMapBloc.add(OnLocationSearchEvent(
-                              query: textEditingValue.text));
-                          return userMapBloc.searchLocations;
-                        },
+                      Showcase(
+                        key: two,
+                        description: 'The destination location you want to go',
+                        targetBorderRadius: BorderRadius.circular(8),
+                        child: Autocomplete(
+                          optionsViewBuilder: (context, onSelected, options) {
+                            return Card(
+                              child: ListView(
+                                children: options.map(
+                                  (prediction) {
+                                    return ListTile(
+                                      onTap: () {
+                                        onSelected(prediction);
+                                      },
+                                      title: Text(prediction.description ?? ""),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            );
+                          },
+                          onSelected: (option) {
+                            FocusScope.of(context).unfocus();
+                            userMapBloc.add(
+                                OnLocationSelectedEvent(prediction: option));
+                          },
+                          displayStringForOption: (option) =>
+                              option.description ?? "",
+                          fieldViewBuilder: (context, textEditingController,
+                              focusNode, onFieldSubmitted) {
+                            return TextField(
+                              focusNode: focusNode,
+                              onEditingComplete: onFieldSubmitted,
+                              onSubmitted: (value) {
+                                focusNode.unfocus();
+                              },
+                              controller: textEditingController,
+                              decoration: InputDecoration(
+                                  hintText: "Destination",
+                                  hintStyle: const TextStyle(
+                                      color: textColorSecondary),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide.none,
+                                  )),
+                            );
+                          },
+                          optionsBuilder: (textEditingValue) {
+                            userMapBloc.add(OnLocationSearchEvent(
+                                query: textEditingValue.text));
+                            return userMapBloc.searchLocations;
+                          },
+                        ),
                       )
                     ],
                   );

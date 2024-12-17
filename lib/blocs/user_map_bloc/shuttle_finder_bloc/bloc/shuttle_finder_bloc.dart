@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/repositories/shuttle_finder_repo.dart';
@@ -111,10 +112,10 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           log('marker length ${updatedMarkers.length}');
           emit(OnShuttleNearByDriversAddedState());
         } else {
-          // if (nearByDriverMarker.isNotEmpty) {
-          //   nearByDriverMarker.clear();
-          // }
-          // emit(ShuttleFinderFailureState(errorMessage: drvrNotAvail));
+          if (nearByDriverMarker.isNotEmpty) {
+            nearByDriverMarker.clear();
+          }
+          emit(ShuttleFinderFailureState(errorMessage: drvrNotAvail));
         }
       } catch (e) {
         log('error is $e');
@@ -130,7 +131,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
             to: event.selectedCity.to ?? "",
             fare: event.selectedCity.fare ?? "",
             pickUpFromMyLocation: pickMeUpFromMyLocation);
-        Timer(const Duration(seconds: 20), () {
+        final timer = Timer(const Duration(minutes: 2), () {
           log("timer called");
           add(NotAcceptedBooking());
         });
@@ -143,6 +144,14 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
               fare: event.selectedCity.fare ?? "",
               pickUpFromMyLocation: pickMeUpFromMyLocation);
         }
+        listenShuttleRideRequest(requestId: requestId)
+            .listen((shuttleRequesedRide) {
+          if (shuttleRequesedRide.status != null &&
+              shuttleRequesedRide.status == FirebaseStrings.accepted) {
+            timer.cancel();
+            log('request accepted by driver id ${shuttleRequesedRide.driverUid}');
+          }
+        });
       } catch (e) {
         log('error is $e');
         emit(ShuttleFinderFailureState(errorMessage: e.toString()));

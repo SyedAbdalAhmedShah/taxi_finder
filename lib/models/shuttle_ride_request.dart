@@ -7,9 +7,11 @@ class ShuttleRideRequest {
   final String? numberOfSeats;
   final bool? pickUpFromMyLocation;
   final String? requestId;
+  final String? docId;
   final String? status;
   final String? to;
   final String? userId;
+  final String? driverUid;
   Timestamp? createdAt;
   LatLong? userPickUpLocation;
   String? totalDistanceToUser;
@@ -25,6 +27,8 @@ class ShuttleRideRequest {
     this.createdAt,
     this.userPickUpLocation,
     this.totalDistanceToUser,
+    this.docId,
+    this.driverUid,
   });
 
   // Factory constructor to create a TripRequest from a JSON map
@@ -35,8 +39,10 @@ class ShuttleRideRequest {
       pickUpFromMyLocation: json['pickUpFromMyLocation'] as bool?,
       requestId: json['requestId'] as String?,
       status: json['status'] as String?,
+      docId: json['docId'] as String?,
       to: json['to'] as String?,
       userId: json['userId'] as String?,
+      driverUid: json['driverUid'] as String?,
       createdAt: json[FirebaseStrings.createdAt] as Timestamp?,
       userPickUpLocation: json[FirebaseStrings.userPickUpLocation] != null
           ? LatLong.fromJson(json[FirebaseStrings.userPickUpLocation])
@@ -54,6 +60,8 @@ class ShuttleRideRequest {
       'status': status,
       'to': to,
       'userId': userId,
+      'docId': docId,
+      'driverUid': driverUid,
       FirebaseStrings.createdAt: createdAt,
       FirebaseStrings.userPickUpLocation: userPickUpLocation
     };

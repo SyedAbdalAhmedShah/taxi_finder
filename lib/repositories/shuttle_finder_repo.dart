@@ -142,4 +142,14 @@ mixin ShuttleFinderRepo {
         .doc(driverUid)
         .update({FirebaseStrings.isSeatsFull: true});
   }
+
+  Stream<ShuttleRideRequest> listenShuttleRideRequest(
+      {required String requestId}) {
+    final snapShot = firebaseFirestore
+        .collection(FirebaseStrings.shuttleRideReq)
+        .doc(requestId)
+        .snapshots();
+    return snapShot
+        .map((event) => ShuttleRideRequest.fromJson(event.data() ?? {}));
+  }
 }

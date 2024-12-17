@@ -319,6 +319,19 @@ class Utils {
       (event) {},
     );
   }
+
+  static showDriverDepratureTimePicker(BuildContext context) async {
+    TimeOfDay? timeOfDay = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        helpText: "Please Select Departure Time",
+        confirmText: "Set Departure Time",
+        
+        cancelText: "Until its full");
+    if (timeOfDay != null) {
+      log("Time picked ${timeOfDay.format(context)}");
+    } else {}
+  }
 }
 
 class NoteWhenPickFromLocation extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/views/user/components/driver_rider_sheet.dart';
@@ -24,16 +25,19 @@ class _TaxiFinderscreenState extends State<TaxiFinderscreen> {
     // checkLocationPermission();
     userMapBloc = context.read<TaxiFinderUserBloc>();
     userMapBloc.add(FetchCurrentLocation());
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: const Stack(
+        body: Stack(
           children: [
             UserMapView(),
-            LocationSearchSection(),
+            ShowCaseWidget(builder: (context) {
+              return LocationSearchSection();
+            }),
           ],
         ),
         bottomSheet: BlocBuilder<TaxiFinderUserBloc, TaxiFinderUserState>(

@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/blocs/driver_map_bloc/driver_shuttle_service_bloc/driver_shuttle_service_bloc.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/models/shuttle_ride_request.dart';
+import 'package:taxi_finder/utils/utils.dart';
 import 'package:taxi_finder/views/driver/components/driver_drawer.dart';
 import 'package:taxi_finder/views/driver/components/user_shuttle_request.dart';
 
-class ShuttleFinderDriverHome extends StatelessWidget {
+class ShuttleFinderDriverHome extends StatefulWidget {
   const ShuttleFinderDriverHome({super.key});
+
+  @override
+  State<ShuttleFinderDriverHome> createState() =>
+      _ShuttleFinderDriverHomeState();
+}
+
+class _ShuttleFinderDriverHomeState extends State<ShuttleFinderDriverHome> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    SchedulerBinding.instance.addPostFrameCallback(
+        (_) => Utils.showDriverDepratureTimePicker(context));
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
