@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/taxi_finder_bloc/taxi_finder_user_bloc.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
+import 'package:taxi_finder/dependency_injection/shared_prefrences.dart';
 import 'package:taxi_finder/views/user/components/auto_complete_map_field.dart';
 
 class LocationSearchSection extends StatefulWidget {
@@ -21,11 +25,13 @@ class _LocationSearchSectionState extends State<LocationSearchSection> {
   GlobalKey one = GlobalKey();
   GlobalKey two = GlobalKey();
   late TaxiFinderUserBloc userMapBloc;
+  SharedPrefrencesDependency sharedPrefrencesDependency = locator.get();
   @override
   void initState() {
     userMapBloc = context.read<TaxiFinderUserBloc>();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context).startShowCase([one, two]));
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) async => await showShowCaseWidget());
     super.initState();
   }
 
@@ -67,6 +73,13 @@ class _LocationSearchSectionState extends State<LocationSearchSection> {
                       Gap(1.h),
                       Showcase(
                         key: two,
+                        onBarrierClick: () async =>
+                            await storeIntroKey(taxiFinderMyLocKey),
+                        onTargetClick: () async =>
+                            await storeIntroKey(taxiFinderMyLocKey),
+                        onToolTipClick: () async =>
+                            await storeIntroKey(taxiFinderMyLocKey),
+                        disposeOnTap: true,
                         description: 'The destination location you want to go',
                         targetBorderRadius: BorderRadius.circular(8),
                         child: Autocomplete(
@@ -127,5 +140,21 @@ class _LocationSearchSectionState extends State<LocationSearchSection> {
         ),
       ),
     );
+  }
+
+  storeIntroKey(String key) async {
+    await sharedPrefrencesDependency.preferences.setBool(key, true);
+
+    ShowCaseWidget.of(context).next();
+  }
+
+  showShowCaseWidget() async {
+    SharedPreferences prefrences = sharedPrefrencesDependency.preferences;
+
+    bool? taxiFinderIntro = prefrences.getBool(taxiFinderMyLocKey);
+
+    if (taxiFinderIntro == null) {
+      ShowCaseWidget.of(context).startShowCase([one, two]);
+    }
   }
 }

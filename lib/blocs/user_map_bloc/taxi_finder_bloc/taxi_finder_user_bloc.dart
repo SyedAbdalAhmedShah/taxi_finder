@@ -5,11 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
+import 'package:taxi_finder/dependency_injection/shared_prefrences.dart';
 import 'package:taxi_finder/models/auto_complete_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/place_detail_model.dart';
@@ -23,6 +25,7 @@ part 'taxi_finder_user_state.dart';
 class TaxiFinderUserBloc
     extends Bloc<TaxiFinderUserEvent, TaxiFinderUserState> {
   UserMapRepo userMapRepo = UserMapRepo();
+  SharedPrefrencesDependency sharedPrefrencesDependency = locator.get();
   late GoogleMapController gController;
   late Stream<List<DriverInfo>> nearByDriversStream;
   late StreamSubscription<List<DriverInfo>> nearByDriversStreamSubscription;
@@ -52,6 +55,9 @@ class TaxiFinderUserBloc
     on<FetchCurrentLocation>((event, emit) async {
       emit(UserMapLoadingState());
       try {
+        SharedPreferences prefrences = sharedPrefrencesDependency.preferences;
+        await prefrences.remove(taxiFinderMyLocKey);
+
         bool isPermissionGranted = await Utils.isPermissionGranted();
 
         if (isPermissionGranted) {

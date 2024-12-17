@@ -64,3 +64,6 @@ const body = 'body';
 const data = 'data';
 const message = 'message';
 const shuttleService = 'Shuttle Service';
+
+// Prefrences key
+const taxiFinderMyLocKey = 'taxiFinderMyLocKey';
