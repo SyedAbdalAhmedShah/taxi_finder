@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 import 'package:taxi_finder/components/cache_network_image_view.dart';
@@ -12,7 +13,56 @@ import 'package:taxi_finder/models/city_to_city_model.dart';
 
 class AvailableCities extends StatelessWidget {
   final CityToCityModel cityModel;
-  const AvailableCities({super.key, required this.cityModel});
+
+  const AvailableCities({
+    super.key,
+    required this.cityModel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return City(cityModel: cityModel);
+  }
+}
+
+class CityIntroTile extends StatefulWidget {
+  final CityToCityModel cityModel;
+  final GlobalKey<State<StatefulWidget>> showCaseKey;
+
+  const CityIntroTile(
+      {required this.cityModel, required this.showCaseKey, super.key});
+
+  @override
+  State<CityIntroTile> createState() => _CityIntroTileState();
+}
+
+class _CityIntroTileState extends State<CityIntroTile> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ShowCaseWidget.of(context).startShowCase([widget.showCaseKey]));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Showcase(
+        key: widget.showCaseKey,
+        targetBorderRadius: BorderRadius.circular(2.w),
+        onTargetClick: () => log,
+        disposeOnTap: true,
+        description: 'You can choose city from this tile where you want to go',
+        child: City(cityModel: widget.cityModel));
+  }
+}
+
+class City extends StatelessWidget {
+  const City({
+    super.key,
+    required this.cityModel,
+  });
+
+  final CityToCityModel cityModel;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +73,7 @@ class AvailableCities extends StatelessWidget {
             .add(OnShuttleSelectLocation(selectedCity: cityModel));
       },
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.w)),
         color: Colors.white.withOpacity(0.8),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 1.w),

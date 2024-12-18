@@ -26,6 +26,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
   late Stream<List<DriverInfo>> nearByDriversStream;
   late GoogleMapController googleMapController;
   late Position currentUserLocation;
+  String? pickUpFromMyLocation;
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -68,6 +69,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
 
     on<PickMeUpFromMyLocationByUser>((event, emit) {
       pickMeUpFromMyLocation = !pickMeUpFromMyLocation;
+      pickUpFromMyLocation = event.pickUpType;
       emit(TooglePickMeUpFromMyLocationState());
     });
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:taxi_finder/blocs/bloc/shuttle_city_to_city_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
@@ -94,6 +95,7 @@ class _ShuttleAvailableCities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final key = GlobalKey();
     return Positioned(
       bottom: 0,
       width: MediaQuery.sizeOf(context).width,
@@ -105,11 +107,22 @@ class _ShuttleAvailableCities extends StatelessWidget {
               return const CitiesLoadingView();
             } else if (state is ShuttleAvailableCitiesFetchedState) {
               return Row(
-                children: List.generate(
-                    state.availableCities.length,
-                    (i) => AvailableCities(
-                          cityModel: state.availableCities[i],
-                        )),
+                children: List.generate(state.availableCities.length, (i) {
+                  if (i == 0) {
+                    return ShowCaseWidget(builder: (context) {
+                      return CityIntroTile(
+                        cityModel: state.availableCities[i],
+                        showCaseKey: key,
+                      );
+                    });
+                  } else {
+                    return ShowCaseWidget(
+                      builder: (c) => AvailableCities(
+                        cityModel: state.availableCities[i],
+                      ),
+                    );
+                  }
+                }),
               );
             } else {
               return const SizedBox.shrink();
