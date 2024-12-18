@@ -7,6 +7,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:taxi_finder/blocs/bloc/shuttle_city_to_city_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
+import 'package:taxi_finder/components/near_by_driver_shuttler.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
@@ -97,31 +98,32 @@ class _ShuttleAvailableCities extends StatelessWidget {
   Widget build(BuildContext context) {
     final key = GlobalKey();
     return Positioned(
-      bottom: 0,
+      top: 0,
       width: MediaQuery.sizeOf(context).width,
       child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+        scrollDirection: Axis.vertical,
         child: BlocBuilder<ShuttleCityToCityBloc, ShuttleCityToCityState>(
           builder: (context, state) {
             if (state is ShuttleCityToCityLoadingState) {
               return const CitiesLoadingView();
             } else if (state is ShuttleAvailableCitiesFetchedState) {
-              return Row(
+              return Column(
                 children: List.generate(state.availableCities.length, (i) {
-                  if (i == 0) {
-                    return ShowCaseWidget(builder: (context) {
-                      return CityIntroTile(
-                        cityModel: state.availableCities[i],
-                        showCaseKey: key,
-                      );
-                    });
-                  } else {
-                    return ShowCaseWidget(
-                      builder: (c) => AvailableCities(
-                        cityModel: state.availableCities[i],
-                      ),
-                    );
-                  }
+                  return NearByDriverShuttler();
+                  // if (i == 0) {
+                  //   return ShowCaseWidget(builder: (context) {
+                  //     return CityIntroTile(
+                  //       cityModel: state.availableCities[i],
+                  //       showCaseKey: key,
+                  //     );
+                  //   });
+                  // } else {
+                  //   return ShowCaseWidget(
+                  //     builder: (c) => AvailableCities(
+                  //       cityModel: state.availableCities[i],
+                  //     ),
+                  //   );
+                  // }
                 }),
               );
             } else {

@@ -186,12 +186,6 @@ class Utils {
 
   static showShuttleSelectedDialog(
       {required BuildContext context, required CityToCityModel cityModel}) {
-    TextEditingController numberOfSeats = TextEditingController();
-    final shuttleFinder = context.read<ShuttleFinderBloc>();
-    final formKey = GlobalKey<FormState>();
-    // final formIntroKey = GlobalKey();
-    // final typeKey = GlobalKey<FormState>();
-    // ShowCaseWidget.of(context).startShowCase([formIntroKey,typeKey]);
     showCupertinoModalPopup(
         context: context,
         builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
@@ -268,6 +262,7 @@ class _ShuttleBookingDiloagContentState
   final formKey = GlobalKey<FormState>();
   final dropIntroKey = GlobalKey();
   final fieldIntroKey = GlobalKey();
+  final buttonIntroKey = GlobalKey();
   TextEditingController numberOfSeats = TextEditingController();
   late ShuttleFinderBloc shuttleFinderBloc;
   @override
@@ -275,7 +270,7 @@ class _ShuttleBookingDiloagContentState
     shuttleFinderBloc = context.read<ShuttleFinderBloc>();
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         ShowCaseWidget.of(context)
-            .startShowCase([dropIntroKey, fieldIntroKey]));
+            .startShowCase([dropIntroKey, fieldIntroKey, buttonIntroKey]));
     super.initState();
   }
 
@@ -330,6 +325,7 @@ class _ShuttleBookingDiloagContentState
         Gap(1.h),
         Showcase(
             key: dropIntroKey,
+            targetBorderRadius: BorderRadius.circular(8),
             description:
                 "You can select option, You can go to town for taking your ride Or you can choose pick from your location ",
             child: CustomDropdown()),
@@ -348,15 +344,20 @@ class _ShuttleBookingDiloagContentState
               controller: numberOfSeats),
         ),
         Gap(1.h),
-        PrimaryButton(
-            text: bookRide,
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                shuttleFinderBloc.add(OnBookShuttleRide(
-                    selectedCity: widget.cityModel,
-                    numOfSeats: numberOfSeats.text));
-              }
-            })
+        Showcase(
+          key: buttonIntroKey,
+          description: "You can send request and book your ride",
+          targetBorderRadius: BorderRadius.circular(3.w),
+          child: PrimaryButton(
+              text: bookRide,
+              onPressed: () {
+                if (formKey.currentState?.validate() ?? false) {
+                  shuttleFinderBloc.add(OnBookShuttleRide(
+                      selectedCity: widget.cityModel,
+                      numOfSeats: numberOfSeats.text));
+                }
+              }),
+        )
       ],
     );
   }
