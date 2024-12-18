@@ -64,6 +64,9 @@ const body = 'body';
 const data = 'data';
 const message = 'message';
 const shuttleService = 'Shuttle Service';
+const numberOfSeatsAvail = "Number of seats Available";
+const carNum = "Car Number";
+const depTime = "Departure time";
 
 // Prefrences key
 const taxiFinderMyLocKey = 'taxiFinderMyLocKey';

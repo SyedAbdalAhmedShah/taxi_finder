@@ -18,6 +18,7 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 import 'package:taxi_finder/components/app_text_field.dart';
+import 'package:taxi_finder/components/near_by_driver_shuttler.dart';
 import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/components/select_pickup_type_dropdown.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
@@ -187,37 +188,73 @@ class Utils {
   static showShuttleSelectedDialog(
       {required BuildContext context, required CityToCityModel cityModel}) {
     showCupertinoModalPopup(
-        context: context,
-        builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
-              builder: (context, state) {
-                return SizedBox(
-                  width: 80.w,
-                  height: 80.h,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: ModalProgressHUD(
-                      inAsyncCall: state is OnRideBookingLoadingState,
-                      blur: 2,
-                      progressIndicator:
-                          const CircularProgressIndicator.adaptive(),
-                      child: AlertDialog(
-                        actions: [
-                          TextButton.icon(
-                              icon: Icon(Icons.adaptive.arrow_back),
-                              onPressed: () => context.pop(),
-                              label: Text("cancel"))
-                        ],
-                        content: ShowCaseWidget(
-                          builder: (ctx) => ShuttleBookingDiloagContent(
-                            cityModel: cityModel,
-                          ),
-                        ),
-                      ),
+      context: context,
+      builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+        builder: (context, state) {
+          return SizedBox(
+            width: 80.w,
+            height: 80.h,
+            child: Material(
+              color: Colors.transparent,
+              child: ModalProgressHUD(
+                inAsyncCall: state is OnRideBookingLoadingState,
+                blur: 2,
+                progressIndicator: const CircularProgressIndicator.adaptive(),
+                child: AlertDialog(
+                  actions: [
+                    TextButton.icon(
+                        icon: Icon(Icons.adaptive.arrow_back),
+                        onPressed: () => context.pop(),
+                        label: Text("cancel"))
+                  ],
+                  content: ShowCaseWidget(
+                    builder: (ctx) => ShuttleBookingDiloagContent(
+                      cityModel: cityModel,
                     ),
                   ),
-                );
-              },
-            ));
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  static showNearByDriversDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+        builder: (context, state) {
+          return SizedBox(
+            height: 60.h,
+            child: Material(
+              color: Colors.transparent,
+              child: ModalProgressHUD(
+                inAsyncCall: state is OnRideBookingLoadingState,
+                blur: 2,
+                progressIndicator: const CircularProgressIndicator.adaptive(),
+                child: Dialog(
+                  insetPadding: EdgeInsets.zero,
+                  // actions: [
+                  //   TextButton.icon(
+                  //       icon: Icon(Icons.adaptive.arrow_back),
+                  //       onPressed: () => context.pop(),
+                  //       label: Text("cancel"))
+                  // ],
+                  child: ShowCaseWidget(
+                    onFinish: () {
+                      context.pop();
+                    },
+                    builder: (ctx) => ShuttleDriverIntroContent(),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   static Future<GeoFirePoint> getGeoFirePoint(LatLng latLong) async {
@@ -348,6 +385,10 @@ class _ShuttleBookingDiloagContentState
           key: buttonIntroKey,
           description: "You can send request and book your ride",
           targetBorderRadius: BorderRadius.circular(3.w),
+          onBarrierClick: onIntroTap,
+          onTargetClick: onIntroTap,
+          onToolTipClick: onIntroTap,
+          disposeOnTap: true,
           child: PrimaryButton(
               text: bookRide,
               onPressed: () {
@@ -359,6 +400,90 @@ class _ShuttleBookingDiloagContentState
               }),
         )
       ],
+    );
+  }
+
+  Future onIntroTap() async {
+    Navigator.of(context).pop();
+    Utils.showNearByDriversDialog(context);
+  }
+}
+
+class ShuttleDriverIntroContent extends StatefulWidget {
+  const ShuttleDriverIntroContent({super.key});
+
+  @override
+  State<ShuttleDriverIntroContent> createState() =>
+      _ShuttleDriverIntroContentState();
+}
+
+class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
+  final driverInfoIntro = GlobalKey();
+  final requestAllItro = GlobalKey();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        ShowCaseWidget.of(context)
+            .startShowCase([driverInfoIntro, requestAllItro]));
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 2.0.w),
+      child: Column(
+        children: [
+          Gap(2.h),
+          Showcase(
+            key: driverInfoIntro,
+            description:
+                "You can see available drivers information and send a request to a particular driver ",
+            targetBorderRadius: BorderRadius.circular(2.w),
+            child: NearByDriverShuttler(
+                carNumber: "912",
+                departureTime: "08:00 PM",
+                driverName: "Micheal",
+                driverPicUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/uploads%2Fman-pointing-his-left.jpg?alt=media&token=d6d9cb69-fd38-4e6f-8f6d-3c09848e9c5c",
+                numberOfSeatAvailable: "2"),
+          ),
+          Gap(2.h),
+          NearByDriverShuttler(
+              carNumber: "1002",
+              departureTime: "12:00 PM",
+              driverName: "Mike",
+              driverPicUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/uploads%2Fman-pointing-his-left.jpg?alt=media&token=d6d9cb69-fd38-4e6f-8f6d-3c09848e9c5c",
+              numberOfSeatAvailable: "2"),
+          Gap(2.h),
+          NearByDriverShuttler(
+              carNumber: "612",
+              departureTime: "10:00 PM",
+              driverName: "John wick",
+              driverPicUrl:
+                  "https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/uploads%2Fman-pointing-his-left.jpg?alt=media&token=d6d9cb69-fd38-4e6f-8f6d-3c09848e9c5c",
+              numberOfSeatAvailable: "2"),
+          Spacer(),
+          Showcase(
+              key: requestAllItro,
+              description:
+                  "You can also send request at once to all available drivers",
+              targetBorderRadius: BorderRadius.circular(3.w),
+              child: PrimaryButton(text: "Request To All", onPressed: () {})),
+          Gap(2.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              OutlinedButton(
+                  onPressed: () => context.pop(), child: Text("Cancel"))
+            ],
+          ),
+          Gap(2.h),
+        ],
+      ),
     );
   }
 }
