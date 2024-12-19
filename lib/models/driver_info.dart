@@ -25,6 +25,7 @@ class DriverInfo {
   String? activeRide;
   List<String>? shuttleRide;
   String? driverType;
+  String? deperatureTime;
 
   DriverInfo(
       {this.driverUid,
@@ -48,6 +49,7 @@ class DriverInfo {
       this.profileUrl,
       this.activeRide,
       this.latLong,
+      this.deperatureTime,
       this.shuttleRide,
       this.licenseNumber});
 
@@ -71,6 +73,7 @@ class DriverInfo {
         contactNumber: json[FirebaseStrings.contactNumber],
         activeRide: json[FirebaseStrings.activeRide],
         idCardNumber: json[FirebaseStrings.idCardNumber],
+        deperatureTime: json[FirebaseStrings.deperatureTime],
         email: json[FirebaseStrings.email],
         licenseNumber: json[FirebaseStrings.licenseNumber],
         driverType: json[FirebaseStrings.driverType],
