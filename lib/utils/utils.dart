@@ -14,6 +14,7 @@ import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
@@ -24,12 +25,16 @@ import 'package:taxi_finder/components/select_pickup_type_dropdown.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
+import 'package:taxi_finder/dependency_injection/shared_prefrences.dart';
 import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:taxi_finder/utils/extensions.dart';
+import 'package:taxi_finder/views/user/components/shuttle_booking_dialog_content.dart';
+import 'package:taxi_finder/views/user/components/shuttle_driver_intro_content.dart';
 
 class Utils {
   static PolylinePoints polylinePoints = PolylinePoints();
@@ -208,6 +213,13 @@ class Utils {
                         label: Text("cancel"))
                   ],
                   content: ShowCaseWidget(
+                    onFinish: () async {
+                      SharedPrefrencesDependency sharedPrefrencesDependency =
+                          locator.get();
+                      SharedPreferences preferences =
+                          sharedPrefrencesDependency.preferences;
+                      await preferences.setBool(bookingShuttleRideIntro, true);
+                    },
                     builder: (ctx) => ShuttleBookingDiloagContent(
                       cityModel: cityModel,
                     ),
@@ -236,14 +248,14 @@ class Utils {
                 progressIndicator: const CircularProgressIndicator.adaptive(),
                 child: Dialog(
                   insetPadding: EdgeInsets.zero,
-                  // actions: [
-                  //   TextButton.icon(
-                  //       icon: Icon(Icons.adaptive.arrow_back),
-                  //       onPressed: () => context.pop(),
-                  //       label: Text("cancel"))
-                  // ],
                   child: ShowCaseWidget(
-                    onFinish: () {
+                    onFinish: () async {
+                      SharedPrefrencesDependency sharedPrefrencesDependency =
+                          locator.get();
+                      SharedPreferences preferences =
+                          sharedPrefrencesDependency.preferences;
+                      await preferences.setBool(
+                          shuttleRequestDriverIntro, true);
                       context.pop();
                     },
                     builder: (ctx) => ShuttleDriverIntroContent(),
@@ -279,211 +291,5 @@ class Utils {
     if (timeOfDay != null) {
       log("Time picked ${timeOfDay.format(context)}");
     } else {}
-  }
-}
-
-class ShuttleBookingDiloagContent extends StatefulWidget {
-  final CityToCityModel cityModel;
-  const ShuttleBookingDiloagContent({
-    required this.cityModel,
-    super.key,
-  });
-
-  @override
-  State<ShuttleBookingDiloagContent> createState() =>
-      _ShuttleBookingDiloagContentState();
-}
-
-class _ShuttleBookingDiloagContentState
-    extends State<ShuttleBookingDiloagContent> {
-  final formKey = GlobalKey<FormState>();
-  final dropIntroKey = GlobalKey();
-  final fieldIntroKey = GlobalKey();
-  final buttonIntroKey = GlobalKey();
-  TextEditingController numberOfSeats = TextEditingController();
-  late ShuttleFinderBloc shuttleFinderBloc;
-  @override
-  void initState() {
-    shuttleFinderBloc = context.read<ShuttleFinderBloc>();
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        ShowCaseWidget.of(context)
-            .startShowCase([dropIntroKey, fieldIntroKey, buttonIntroKey]));
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            Text(
-              'From: ',
-              style: TextStyle(color: Colors.grey.shade500),
-            ),
-            Text(
-              '${widget.cityModel.from} ',
-              style: TextStyle(
-                  color: Colors.grey.shade500, fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-        Gap(1.h),
-        Row(
-          children: [
-            Text(
-              'To: ',
-              style: TextStyle(color: Colors.grey.shade500),
-            ),
-            Text(
-              '${widget.cityModel.to} ',
-              style: TextStyle(
-                  color: Colors.grey.shade500, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        Gap(1.h),
-        Row(
-          children: [
-            Text(
-              'Cost: ',
-              style: TextStyle(color: Colors.grey.shade500),
-            ),
-            Text(
-              '${widget.cityModel.fare} ',
-              style: TextStyle(
-                  color: Colors.grey.shade500, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        Gap(1.h),
-        Gap(1.h),
-        Showcase(
-            key: dropIntroKey,
-            targetBorderRadius: BorderRadius.circular(8),
-            description:
-                "You can select option, You can go to town for taking your ride Or you can choose pick from your location ",
-            child: CustomDropdown()),
-        Gap(1.h),
-        Showcase(
-          key: fieldIntroKey,
-          description: "You can enter number of seats you want to book",
-          targetBorderRadius: BorderRadius.circular(8),
-          child: AppTextField(
-              keyboardType: TextInputType.number,
-              fillColor: Colors.grey.shade700,
-              hintText: seatWantToRes,
-              validator: (p0) => p0 == null || p0.isEmpty
-                  ? "Please enter seats you want to book"
-                  : null,
-              controller: numberOfSeats),
-        ),
-        Gap(1.h),
-        Showcase(
-          key: buttonIntroKey,
-          description: "You can send request and book your ride",
-          targetBorderRadius: BorderRadius.circular(3.w),
-          onBarrierClick: onIntroTap,
-          onTargetClick: onIntroTap,
-          onToolTipClick: onIntroTap,
-          disposeOnTap: true,
-          child: PrimaryButton(
-              text: bookRide,
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
-                  shuttleFinderBloc.add(OnBookShuttleRide(
-                      selectedCity: widget.cityModel,
-                      numOfSeats: numberOfSeats.text));
-                }
-              }),
-        )
-      ],
-    );
-  }
-
-  Future onIntroTap() async {
-    Navigator.of(context).pop();
-    Utils.showNearByDriversDialog(context);
-  }
-}
-
-class ShuttleDriverIntroContent extends StatefulWidget {
-  const ShuttleDriverIntroContent({super.key});
-
-  @override
-  State<ShuttleDriverIntroContent> createState() =>
-      _ShuttleDriverIntroContentState();
-}
-
-class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
-  final driverInfoIntro = GlobalKey();
-  final requestAllItro = GlobalKey();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        ShowCaseWidget.of(context)
-            .startShowCase([driverInfoIntro, requestAllItro]));
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 2.0.w),
-      child: Column(
-        children: [
-          Gap(2.h),
-          Showcase(
-            key: driverInfoIntro,
-            description:
-                "You can see available drivers information and send a request to a particular driver ",
-            targetBorderRadius: BorderRadius.circular(2.w),
-            child: NearByDriverShuttler(
-                carNumber: "912",
-                departureTime: "08:00 PM",
-                driverName: "Micheal",
-                driverPicUrl:
-                    "https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/uploads%2Fman-pointing-his-left.jpg?alt=media&token=d6d9cb69-fd38-4e6f-8f6d-3c09848e9c5c",
-                numberOfSeatAvailable: "2"),
-          ),
-          Gap(2.h),
-          NearByDriverShuttler(
-              carNumber: "1002",
-              departureTime: "12:00 PM",
-              driverName: "Mike",
-              driverPicUrl:
-                  "https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/uploads%2Fman-pointing-his-left.jpg?alt=media&token=d6d9cb69-fd38-4e6f-8f6d-3c09848e9c5c",
-              numberOfSeatAvailable: "2"),
-          Gap(2.h),
-          NearByDriverShuttler(
-              carNumber: "612",
-              departureTime: "10:00 PM",
-              driverName: "John wick",
-              driverPicUrl:
-                  "https://firebasestorage.googleapis.com/v0/b/taxi-finder-93d36.appspot.com/o/uploads%2Fman-pointing-his-left.jpg?alt=media&token=d6d9cb69-fd38-4e6f-8f6d-3c09848e9c5c",
-              numberOfSeatAvailable: "2"),
-          Spacer(),
-          Showcase(
-              key: requestAllItro,
-              description:
-                  "You can also send request at once to all available drivers",
-              targetBorderRadius: BorderRadius.circular(3.w),
-              child: PrimaryButton(text: "Request To All", onPressed: () {})),
-          Gap(2.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              OutlinedButton(
-                  onPressed: () => context.pop(), child: Text("Cancel"))
-            ],
-          ),
-          Gap(2.h),
-        ],
-      ),
-    );
   }
 }

@@ -70,3 +70,6 @@ const depTime = "Departure time";
 
 // Prefrences key
 const taxiFinderMyLocKey = 'taxiFinderMyLocKey';
+const availableCityIntro = 'availableCityIntroKey';
+const bookingShuttleRideIntro = 'bookingShuttleRideIntro';
+const shuttleRequestDriverIntro = 'shuttleRequestDriverIntro';
