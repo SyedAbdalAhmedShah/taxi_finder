@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,13 +17,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
-import 'package:taxi_finder/components/app_text_field.dart';
-import 'package:taxi_finder/components/near_by_driver_shuttler.dart';
-import 'package:taxi_finder/components/primary_button.dart';
-import 'package:taxi_finder/components/select_pickup_type_dropdown.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
+import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/dependency_injection/shared_prefrences.dart';
 import 'package:taxi_finder/models/city_to_city_model.dart';
@@ -283,13 +279,25 @@ class Utils {
 
   static showDriverDepratureTimePicker(BuildContext context) async {
     TimeOfDay? timeOfDay = await showTimePicker(
+        barrierDismissible: false,
         context: context,
         initialTime: TimeOfDay.now(),
         helpText: "Please Select Departure Time",
         confirmText: "Set Departure Time",
         cancelText: "Until its full");
     if (timeOfDay != null) {
-      log("Time picked ${timeOfDay.format(context)}");
-    } else {}
+      final selectedTime = timeOfDay.format(context);
+      await updateDriverDepratureTime(depTime: selectedTime);
+    } else {
+      await updateDriverDepratureTime(depTime: untilItsFull);
+    }
+  }
+
+  static updateDriverDepratureTime({required String depTime}) async {
+    CurrentUserDependency loggedUser = locator.get();
+    final driverDoc = firebaseFirestore
+        .collection(FirebaseStrings.driverColl)
+        .doc(loggedUser.driverInfo.driverUid);
+    await driverDoc.update({FirebaseStrings.deperatureTime: depTime});
   }
 }

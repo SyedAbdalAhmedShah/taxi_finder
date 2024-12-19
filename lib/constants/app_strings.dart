@@ -19,6 +19,7 @@ const String technicalIssue =
     'Opps! Something went wrong because of some technical issue';
 
 const enterFullName = 'Enter your full name';
+const untilItsFull = 'until its full';
 const whoUR = 'Who You Are';
 const String passwordValid = 'Password must be more than 8 characters';
 

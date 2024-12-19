@@ -21,6 +21,7 @@ class FirebaseStrings {
   static const String requestId = "requestId";
   static const String uid = "uid";
   static const String timStamp = "timestamp";
+  static const String deperatureTime = "deperatureTime";
   static const String userId = "userId";
 
   static const String address = "address";
