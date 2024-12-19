@@ -29,6 +29,7 @@ import 'package:taxi_finder/models/user_model.dart';
 import 'package:taxi_finder/utils/api_helper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:taxi_finder/utils/extensions.dart';
+import 'package:taxi_finder/views/user/components/shuttle_available_drivers.dart';
 import 'package:taxi_finder/views/user/components/shuttle_booking_dialog_content.dart';
 import 'package:taxi_finder/views/user/components/shuttle_driver_intro_content.dart';
 
@@ -229,7 +230,7 @@ class Utils {
     );
   }
 
-  static showNearByDriversDialog(BuildContext context) async {
+  static showNearByDriversDialogIntro(BuildContext context) async {
     showDialog(
       context: context,
       builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
@@ -256,6 +257,31 @@ class Utils {
                     },
                     builder: (ctx) => ShuttleDriverIntroContent(),
                   ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  static showshowNearByDriversDialog(
+      BuildContext context, List<DriverInfo> availableDrivers) {
+    showDialog(
+      context: context,
+      builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+        builder: (context, state) {
+          return SizedBox(
+            height: 60.h,
+            child: ModalProgressHUD(
+              inAsyncCall: state is OnRideBookingLoadingState,
+              blur: 2,
+              progressIndicator: const CircularProgressIndicator.adaptive(),
+              child: Dialog(
+                insetPadding: EdgeInsets.zero,
+                child: ShuttleAvailableDrivers(
+                  availableDrivers: availableDrivers,
                 ),
               ),
             ),

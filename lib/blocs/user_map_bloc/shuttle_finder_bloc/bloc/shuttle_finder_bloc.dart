@@ -133,27 +133,30 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
             to: event.selectedCity.to ?? "",
             fare: event.selectedCity.fare ?? "",
             pickUpFromMyLocation: pickMeUpFromMyLocation);
-        final timer = Timer(const Duration(minutes: 2), () {
-          log("timer called");
-          add(NotAcceptedBooking());
-        });
-        for (final driver in nearByDrivers) {
-          await sendBookingRequestToNearByDrivers(
-              driverUid: driver.driverUid ?? "",
-              reqquestId: requestId,
-              numOfSeats: event.numOfSeats,
-              to: event.selectedCity.to ?? "",
-              fare: event.selectedCity.fare ?? "",
-              pickUpFromMyLocation: pickMeUpFromMyLocation);
-        }
-        listenShuttleRideRequest(requestId: requestId)
-            .listen((shuttleRequesedRide) {
-          if (shuttleRequesedRide.status != null &&
-              shuttleRequesedRide.status == FirebaseStrings.accepted) {
-            timer.cancel();
-            log('request accepted by driver id ${shuttleRequesedRide.driverUid}');
-          }
-        });
+
+        emit(CheckAllAvailableDrivers(
+            availableDriver: nearByDrivers, requestId: requestId));
+        // final timer = Timer(const Duration(minutes: 2), () {
+        //   log("timer called");
+        //   add(NotAcceptedBooking());
+        // });
+        // for (final driver in nearByDrivers) {
+        //   await sendBookingRequestToNearByDrivers(
+        //       driverUid: driver.driverUid ?? "",
+        //       reqquestId: requestId,
+        //       numOfSeats: event.numOfSeats,
+        //       to: event.selectedCity.to ?? "",
+        //       fare: event.selectedCity.fare ?? "",
+        //       pickUpFromMyLocation: pickMeUpFromMyLocation);
+        // }
+        // listenShuttleRideRequest(requestId: requestId)
+        //     .listen((shuttleRequesedRide) {
+        //   if (shuttleRequesedRide.status != null &&
+        //       shuttleRequesedRide.status == FirebaseStrings.accepted) {
+        //     timer.cancel();
+        //     log('request accepted by driver id ${shuttleRequesedRide.driverUid}');
+        //   }
+        // });
       } catch (e) {
         log('error is $e');
         emit(ShuttleFinderFailureState(errorMessage: e.toString()));

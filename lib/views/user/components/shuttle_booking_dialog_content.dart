@@ -138,7 +138,7 @@ class _ShuttleBookingDiloagContentState
 
   Future onIntroTap() async {
     Navigator.of(context).pop();
-    Utils.showNearByDriversDialog(context);
+    Utils.showNearByDriversDialogIntro(context);
   }
 
   checkBookingIntroCheckout() {

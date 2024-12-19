@@ -33,3 +33,11 @@ final class TooglePickMeUpFromMyLocationState extends ShuttleFinderState {}
 final class OnShuttleNearByDriversAddedState extends ShuttleFinderState {}
 
 final class OnShuttleNearByDriversRemovedState extends ShuttleFinderState {}
+
+final class CheckAllAvailableDrivers extends ShuttleFinderState {
+  final List<DriverInfo> availableDriver;
+  final String requestId;
+
+  CheckAllAvailableDrivers(
+      {required this.availableDriver, required this.requestId});
+}
