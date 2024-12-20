@@ -189,38 +189,26 @@ class Utils {
 
   static showShuttleSelectedDialog(
       {required BuildContext context, required CityToCityModel cityModel}) {
-    showCupertinoModalPopup(
+    showDialog(
       context: context,
       builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
         builder: (context, state) {
-          return SizedBox(
-            width: 80.w,
-            height: 80.h,
-            child: Material(
-              color: Colors.transparent,
-              child: ModalProgressHUD(
-                inAsyncCall: state is OnRideBookingLoadingState,
-                blur: 2,
-                progressIndicator: const CircularProgressIndicator.adaptive(),
-                child: AlertDialog(
-                  actions: [
-                    TextButton.icon(
-                        icon: Icon(Icons.adaptive.arrow_back),
-                        onPressed: () => context.pop(),
-                        label: Text("cancel"))
-                  ],
-                  content: ShowCaseWidget(
-                    onFinish: () async {
-                      SharedPrefrencesDependency sharedPrefrencesDependency =
-                          locator.get();
-                      SharedPreferences preferences =
-                          sharedPrefrencesDependency.preferences;
-                      await preferences.setBool(bookingShuttleRideIntro, true);
-                    },
-                    builder: (ctx) => ShuttleBookingDiloagContent(
-                      cityModel: cityModel,
-                    ),
-                  ),
+          return ModalProgressHUD(
+            inAsyncCall: state is OnRideBookingLoadingState,
+            blur: 2,
+            progressIndicator: const CircularProgressIndicator.adaptive(),
+            child: Dialog(
+              insetPadding: EdgeInsets.all(2.w),
+              child: ShowCaseWidget(
+                onFinish: () async {
+                  SharedPrefrencesDependency sharedPrefrencesDependency =
+                      locator.get();
+                  SharedPreferences preferences =
+                      sharedPrefrencesDependency.preferences;
+                  await preferences.setBool(bookingShuttleRideIntro, true);
+                },
+                builder: (ctx) => ShuttleBookingDiloagContent(
+                  cityModel: cityModel,
                 ),
               ),
             ),
@@ -266,8 +254,8 @@ class Utils {
     );
   }
 
-  static showshowNearByDriversDialog(
-      BuildContext context, List<DriverInfo> availableDrivers) {
+  static showshowNearByDriversDialog(BuildContext context,
+      List<DriverInfo> availableDrivers, String requestId) {
     showDialog(
       context: context,
       builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
