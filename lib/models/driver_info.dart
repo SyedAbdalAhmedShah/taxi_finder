@@ -26,6 +26,7 @@ class DriverInfo {
   List<String>? shuttleRide;
   String? driverType;
   String? deperatureTime;
+  int? availableSeats;
 
   DriverInfo(
       {this.driverUid,

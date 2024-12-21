@@ -8,7 +8,6 @@ import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/dependency_injection/current_user.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/utils/extensions.dart';
-import 'package:taxi_finder/utils/local_notificatioin_service.dart';
 import 'package:taxi_finder/views/bridge/bridge.dart';
 
 class DriverDrawer extends StatefulWidget {

@@ -18,6 +18,12 @@ final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {
 
 final class NotAcceptedBooking extends ShuttleFinderEvent {}
 
+final class OnRideCancelEvent extends ShuttleFinderEvent {
+  final String requestId;
+
+  OnRideCancelEvent({required this.requestId});
+}
+
 final class OnBookShuttleRide extends ShuttleFinderEvent {
   final CityToCityModel selectedCity;
   final String numOfSeats;

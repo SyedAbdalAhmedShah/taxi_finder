@@ -20,7 +20,7 @@ class ShuttleAvailableDrivers extends StatelessWidget {
               driverName: availableDrivers[index].fullName ?? "",
               driverPicUrl: availableDrivers[index].profileUrl ?? "",
               numberOfSeatAvailable:
-                  availableDrivers[index].numberOfSeats.toString());
+                  (availableDrivers[index].availableSeats ?? 0).toString());
         });
   }
 }

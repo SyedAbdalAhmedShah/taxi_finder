@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -264,7 +262,7 @@ class Utils {
           return SizedBox(
             height: 60.h,
             child: ModalProgressHUD(
-              inAsyncCall: state is OnRideBookingLoadingState,
+              inAsyncCall: true,
               blur: 2,
               progressIndicator: const CircularProgressIndicator.adaptive(),
               child: Dialog(

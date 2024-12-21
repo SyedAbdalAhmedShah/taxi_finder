@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:taxi_finder/constants/app_assets.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
-import 'package:taxi_finder/constants/firebase_strings.dart';
 import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 import 'package:taxi_finder/repositories/shuttle_finder_repo.dart';
@@ -134,6 +132,15 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
             fare: event.selectedCity.fare ?? "",
             pickUpFromMyLocation: pickMeUpFromMyLocation);
 
+        for (final driver in nearByDrivers) {
+          int allConsumedSeats =
+              await fetchRequestDocsForSeatsLeft(driverIfon: driver);
+          log('all consumed seats  $allConsumedSeats');
+          int totalBookedSeats = (driver.numberOfSeats ?? 0) - allConsumedSeats;
+          log('totalBookedSeats  $totalBookedSeats');
+          driver.availableSeats = totalBookedSeats;
+          log('driver available seats ${driver.availableSeats}');
+        }
         emit(CheckAllAvailableDrivers(
             availableDriver: nearByDrivers, requestId: requestId));
         // final timer = Timer(const Duration(minutes: 2), () {

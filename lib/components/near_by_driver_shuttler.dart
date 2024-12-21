@@ -88,7 +88,6 @@ class _DriverTitle extends StatelessWidget {
   final String title;
   const _DriverTitle({
     required this.title,
-    super.key,
   });
 
   @override

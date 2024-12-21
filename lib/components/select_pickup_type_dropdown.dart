@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
 
 class CustomDropdown extends StatefulWidget {
+  const CustomDropdown({super.key});
+
   @override
   _CustomDropdownState createState() => _CustomDropdownState();
 }
