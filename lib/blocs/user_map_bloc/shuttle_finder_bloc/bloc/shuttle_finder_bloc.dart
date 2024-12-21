@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -141,6 +142,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
           driver.availableSeats = totalBookedSeats;
           log('driver available seats ${driver.availableSeats}');
         }
+        log('Ride request id $requestId');
         emit(CheckAllAvailableDrivers(
             availableDriver: nearByDrivers, requestId: requestId));
         // final timer = Timer(const Duration(minutes: 2), () {
@@ -171,5 +173,19 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
     });
     on<NotAcceptedBooking>((event, emit) =>
         emit(RequestNotAcceptedState(errorMessage: requestNotAccepted)));
+
+    on<OnRideCancelEvent>((event, emit) async {
+      emit(OnRideBookingLoadingState());
+      try {
+        await cancelRideRequest(
+            requestId: event.requestId, driverInfo: nearByDrivers);
+        emit(RideCancledState());
+      } on SocketException catch (socketError) {
+        log('Socket exception ${socketError.message}');
+      } catch (e) {
+        log('error is $e');
+        emit(ShuttleFinderFailureState(errorMessage: e.toString()));
+      }
+    });
   }
 }

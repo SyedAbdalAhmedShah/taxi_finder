@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -257,35 +258,66 @@ class Utils {
       List<DriverInfo> availableDrivers, String requestId) {
     showDialog(
       context: context,
-      builder: (ctx) => BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
-        builder: (context, state) {
-          return SizedBox(
-            height: 60.h,
-            child: ModalProgressHUD(
-              inAsyncCall: true,
-              blur: 2,
-              progressIndicator: const CircularProgressIndicator.adaptive(),
-              child: Dialog(
-                insetPadding: EdgeInsets.zero,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      onPressed: context.pop,
-                      icon: Icon(Icons.close),
-                    ),
-                    Expanded(
-                      child: ShuttleAvailableDrivers(
-                        availableDrivers: availableDrivers,
+      builder: (ctx) => BlocListener<ShuttleFinderBloc, ShuttleFinderState>(
+        listener: (context, state) {
+          if (state is RideCancledState) {
+            context.pop();
+          }
+        },
+        child: BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
+          builder: (context, state) {
+            return SizedBox(
+              height: 60.h,
+              child: ModalProgressHUD(
+                inAsyncCall: state is OnRideBookingLoadingState,
+                blur: 2,
+                progressIndicator: const CircularProgressIndicator.adaptive(),
+                child: Dialog(
+                  insetPadding: EdgeInsets.zero,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showCupertinoModalPopup(
+                              context: context,
+                              builder: (ctx) => CupertinoActionSheet(
+                                    title: Text("Ride Actions"),
+                                    message:
+                                        Text("Do you want to cancel ride?"),
+                                    actions: [
+                                      CupertinoActionSheetAction(
+                                        onPressed: () {
+                                          context.pop();
+                                        },
+                                        child: Text("No"),
+                                      ),
+                                      CupertinoActionSheetAction(
+                                        onPressed: () {
+                                          context.read<ShuttleFinderBloc>().add(
+                                              OnRideCancelEvent(
+                                                  requestId: requestId));
+                                        },
+                                        child: Text("Yes"),
+                                      ),
+                                    ],
+                                  ));
+                        },
+                        icon: Icon(Icons.close),
                       ),
-                    ),
-                    PrimaryButton(text: "Send To All", onPressed: () {})
-                  ],
+                      Expanded(
+                        child: ShuttleAvailableDrivers(
+                          availableDrivers: availableDrivers,
+                        ),
+                      ),
+                      PrimaryButton(text: "Send To All", onPressed: () {})
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

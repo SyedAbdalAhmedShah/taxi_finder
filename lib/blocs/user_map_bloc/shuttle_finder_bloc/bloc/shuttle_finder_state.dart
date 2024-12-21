@@ -8,6 +8,8 @@ final class ShuttleFinderLoadingState extends ShuttleFinderState {}
 
 final class OnRideBookingLoadingState extends ShuttleFinderState {}
 
+final class RideCancledState extends ShuttleFinderState {}
+
 final class ShuttleFinderCurrentUserLocationState extends ShuttleFinderState {}
 
 final class ShuttleFinderFailureState extends ShuttleFinderState {

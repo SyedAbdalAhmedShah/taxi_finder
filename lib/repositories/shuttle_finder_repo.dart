@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:geolocator/geolocator.dart';
@@ -150,5 +149,21 @@ mixin ShuttleFinderRepo {
         .snapshots();
     return snapShot
         .map((event) => ShuttleRideRequest.fromJson(event.data() ?? {}));
+  }
+
+  cancelRideRequest(
+      {required String requestId, required List<DriverInfo> driverInfo}) async {
+    await firebaseFirestore
+        .collection(FirebaseStrings.shuttleRideReq)
+        .doc(requestId)
+        .update({FirebaseStrings.status: FirebaseStrings.canceled});
+    for (final driver in driverInfo) {
+      await firebaseFirestore
+          .collection(FirebaseStrings.driverColl)
+          .doc(driver.driverUid)
+          .collection(FirebaseStrings.shuttleRideReq)
+          .doc(requestId)
+          .update({FirebaseStrings.status: FirebaseStrings.canceled});
+    }
   }
 }
