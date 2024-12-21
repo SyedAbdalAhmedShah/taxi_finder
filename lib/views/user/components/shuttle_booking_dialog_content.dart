@@ -54,7 +54,7 @@ class _ShuttleBookingDiloagContentState
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(onPressed: () => context.pop(), icon: Icon(Icons.close)),
-          Gap(5.h),
+          Gap(2.h),
           Row(
             children: [
               Text(
@@ -68,7 +68,7 @@ class _ShuttleBookingDiloagContentState
               )
             ],
           ),
-          Gap(1.h),
+          Gap(2.h),
           Row(
             children: [
               Text(
@@ -82,7 +82,7 @@ class _ShuttleBookingDiloagContentState
               ),
             ],
           ),
-          Gap(1.h),
+          Gap(2.h),
           Row(
             children: [
               Text(
@@ -96,29 +96,31 @@ class _ShuttleBookingDiloagContentState
               ),
             ],
           ),
-          Gap(1.h),
-          Gap(1.h),
+          Gap(2.h),
           Showcase(
               key: dropIntroKey,
               targetBorderRadius: BorderRadius.circular(8),
               description:
                   "You can select option, You can go to town for taking your ride Or you can choose pick from your location ",
               child: CustomDropdown()),
-          Gap(1.h),
+          Gap(2.h),
           Showcase(
             key: fieldIntroKey,
             description: "You can enter number of seats you want to book",
             targetBorderRadius: BorderRadius.circular(8),
-            child: AppTextField(
-                keyboardType: TextInputType.number,
-                fillColor: Colors.grey.shade700,
-                hintText: seatWantToRes,
-                validator: (p0) => p0 == null || p0.isEmpty
-                    ? "Please enter seats you want to book"
-                    : null,
-                controller: numberOfSeats),
+            child: Form(
+              key: formKey,
+              child: AppTextField(
+                  keyboardType: TextInputType.number,
+                  fillColor: Colors.grey.shade700,
+                  hintText: seatWantToRes,
+                  validator: (p0) => p0 == null || p0.isEmpty
+                      ? "Please enter seats you want to book"
+                      : null,
+                  controller: numberOfSeats),
+            ),
           ),
-          Gap(1.h),
+          Gap(2.h),
           Showcase(
             key: buttonIntroKey,
             description: "You can send request and book your ride",

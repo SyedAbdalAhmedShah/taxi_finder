@@ -24,7 +24,7 @@ class NearByDriverShuttler extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 1.w),
         child: Wrap(
-          spacing: 2.w,
+          spacing: 1.w,
           runSpacing: 1.h,
           crossAxisAlignment: WrapCrossAlignment.start,
           alignment: WrapAlignment.center,

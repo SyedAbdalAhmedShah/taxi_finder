@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
+import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_colors.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/constants/firebase_strings.dart';
@@ -268,8 +269,20 @@ class Utils {
               progressIndicator: const CircularProgressIndicator.adaptive(),
               child: Dialog(
                 insetPadding: EdgeInsets.zero,
-                child: ShuttleAvailableDrivers(
-                  availableDrivers: availableDrivers,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      onPressed: context.pop,
+                      icon: Icon(Icons.close),
+                    ),
+                    Expanded(
+                      child: ShuttleAvailableDrivers(
+                        availableDrivers: availableDrivers,
+                      ),
+                    ),
+                    PrimaryButton(text: "Send To All", onPressed: () {})
+                  ],
                 ),
               ),
             ),
