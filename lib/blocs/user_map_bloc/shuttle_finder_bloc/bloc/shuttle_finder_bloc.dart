@@ -187,6 +187,10 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
               fare: event.selectedCity.fare ?? "",
               pickUpFromMyLocation: isPickFromMyLoc);
         }
+        final timer = Timer(const Duration(minutes: 2), () {
+          log("timer called");
+          add(NotAcceptedBooking());
+        });
       } on SocketException catch (socketError) {
         log('socket exception $socketError');
         emit(ShuttleFinderFailureState(errorMessage: socketError.message));
