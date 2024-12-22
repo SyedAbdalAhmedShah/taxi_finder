@@ -254,8 +254,12 @@ class Utils {
     );
   }
 
-  static showshowNearByDriversDialog(BuildContext context,
-      List<DriverInfo> availableDrivers, String requestId) {
+  static showshowNearByDriversDialog(
+    BuildContext context,
+    List<DriverInfo> availableDrivers,
+    String requestId,
+    CityToCityModel city,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => BlocListener<ShuttleFinderBloc, ShuttleFinderState>(
@@ -308,6 +312,8 @@ class Utils {
                       Expanded(
                         child: ShuttleAvailableDrivers(
                           availableDrivers: availableDrivers,
+                          selectedCity: city,
+                          requestId: requestId,
                         ),
                       ),
                       PrimaryButton(text: "Send To All", onPressed: () {})

@@ -39,7 +39,10 @@ final class OnShuttleNearByDriversRemovedState extends ShuttleFinderState {}
 final class CheckAllAvailableDrivers extends ShuttleFinderState {
   final List<DriverInfo> availableDriver;
   final String requestId;
+  final CityToCityModel selectedCity;
 
   CheckAllAvailableDrivers(
-      {required this.availableDriver, required this.requestId});
+      {required this.selectedCity,
+      required this.availableDriver,
+      required this.requestId});
 }

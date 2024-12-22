@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taxi_finder/components/near_by_driver_shuttler.dart';
+import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/models/driver_info.dart';
 
 class ShuttleAvailableDrivers extends StatelessWidget {
   final List<DriverInfo> availableDrivers;
-  const ShuttleAvailableDrivers({required this.availableDrivers, super.key});
+  final CityToCityModel selectedCity;
+  final String requestId;
+  const ShuttleAvailableDrivers(
+      {required this.availableDrivers,
+      super.key,
+      required this.selectedCity,
+      required this.requestId});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +22,9 @@ class ShuttleAvailableDrivers extends StatelessWidget {
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
           return NearByDriverShuttler(
+              requestId: requestId,
+              selectedCity: selectedCity,
+              driverUid: availableDrivers[index].driverUid ?? "",
               carNumber: availableDrivers[index].carRegNumber ?? "",
               departureTime: availableDrivers[index].deperatureTime ?? "",
               driverName: availableDrivers[index].fullName ?? "",

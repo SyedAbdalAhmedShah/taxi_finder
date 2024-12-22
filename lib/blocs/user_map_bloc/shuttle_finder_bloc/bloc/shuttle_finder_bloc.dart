@@ -124,7 +124,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
       }
     });
 
-    on<OnBookShuttleRide>((event, emit) async {
+    on<OnRequestShuttleRide>((event, emit) async {
       try {
         emit(OnRideBookingLoadingState());
         String requestId = await saveRequestForUser(
@@ -136,15 +136,13 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         for (final driver in nearByDrivers) {
           int allConsumedSeats =
               await fetchRequestDocsForSeatsLeft(driverIfon: driver);
-          log('all consumed seats  $allConsumedSeats');
           int totalBookedSeats = (driver.numberOfSeats ?? 0) - allConsumedSeats;
-          log('totalBookedSeats  $totalBookedSeats');
           driver.availableSeats = totalBookedSeats;
-          log('driver available seats ${driver.availableSeats}');
         }
-        log('Ride request id $requestId');
         emit(CheckAllAvailableDrivers(
-            availableDriver: nearByDrivers, requestId: requestId));
+            availableDriver: nearByDrivers,
+            requestId: requestId,
+            selectedCity: event.selectedCity));
         // final timer = Timer(const Duration(minutes: 2), () {
         //   log("timer called");
         //   add(NotAcceptedBooking());
@@ -168,6 +166,29 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         // });
       } catch (e) {
         log('error is $e');
+        emit(ShuttleFinderFailureState(errorMessage: e.toString()));
+      }
+    });
+
+    on<OnSendShuttleRideRequestToSpecificDriver>((event, emit) async {
+      emit(OnRideBookingLoadingState());
+      bool isPickFromMyLoc = false;
+      if (pickUpFromMyLocation != null && pickUpFromMyLocation == pickMeUp) {
+        isPickFromMyLoc = true;
+      }
+      try {
+        await sendBookingRequestToNearByDrivers(
+            driverUid: event.driverId,
+            reqquestId: event.requestId,
+            numOfSeats: event.noOfSeats,
+            to: event.selectedCity.to ?? "",
+            fare: event.selectedCity.fare ?? "",
+            pickUpFromMyLocation: isPickFromMyLoc);
+      } on SocketException catch (socketError) {
+        log('socket exception $socketError');
+        emit(ShuttleFinderFailureState(errorMessage: socketError.message));
+      } catch (e) {
+        log('error in OnSendShuttleRideRequestToSpecificDriver  $e');
         emit(ShuttleFinderFailureState(errorMessage: e.toString()));
       }
     });

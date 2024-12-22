@@ -133,7 +133,7 @@ class _ShuttleBookingDiloagContentState
                 text: bookRide,
                 onPressed: () {
                   if (formKey.currentState?.validate() ?? false) {
-                    shuttleFinderBloc.add(OnBookShuttleRide(
+                    shuttleFinderBloc.add(OnRequestShuttleRide(
                         selectedCity: widget.cityModel,
                         numOfSeats: numberOfSeats.text));
                   }

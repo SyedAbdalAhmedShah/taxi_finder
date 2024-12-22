@@ -18,16 +18,30 @@ final class PickMeUpFromMyLocationByUser extends ShuttleFinderEvent {
 
 final class NotAcceptedBooking extends ShuttleFinderEvent {}
 
+final class OnSendShuttleRideRequestToSpecificDriver
+    extends ShuttleFinderEvent {
+  final CityToCityModel selectedCity;
+  final String requestId;
+  final String noOfSeats;
+  final String driverId;
+
+  OnSendShuttleRideRequestToSpecificDriver(
+      {required this.requestId,
+      required this.noOfSeats,
+      required this.selectedCity,
+      required this.driverId});
+}
+
 final class OnRideCancelEvent extends ShuttleFinderEvent {
   final String requestId;
 
   OnRideCancelEvent({required this.requestId});
 }
 
-final class OnBookShuttleRide extends ShuttleFinderEvent {
+final class OnRequestShuttleRide extends ShuttleFinderEvent {
   final CityToCityModel selectedCity;
   final String numOfSeats;
-  OnBookShuttleRide({required this.selectedCity, required this.numOfSeats});
+  OnRequestShuttleRide({required this.selectedCity, required this.numOfSeats});
 }
 
 final class OnNearByShuttleDriversAddedEvent extends ShuttleFinderEvent {

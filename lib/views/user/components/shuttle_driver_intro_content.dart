@@ -8,6 +8,7 @@ import 'package:taxi_finder/components/primary_button.dart';
 import 'package:taxi_finder/constants/app_strings.dart';
 import 'package:taxi_finder/dependency_injection/dependency_setup.dart';
 import 'package:taxi_finder/dependency_injection/shared_prefrences.dart';
+import 'package:taxi_finder/models/city_to_city_model.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 
 class ShuttleDriverIntroContent extends StatefulWidget {
@@ -41,6 +42,9 @@ class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
                 "You can see available drivers information and send a request to a particular driver ",
             targetBorderRadius: BorderRadius.circular(2.w),
             child: NearByDriverShuttler(
+                selectedCity: CityToCityModel(),
+                driverUid: "123",
+                requestId: "123",
                 carNumber: "912",
                 departureTime: "08:00 PM",
                 driverName: "Micheal",
@@ -51,6 +55,9 @@ class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
           Gap(2.h),
           NearByDriverShuttler(
               carNumber: "1002",
+              selectedCity: CityToCityModel(),
+              driverUid: "123",
+              requestId: "123",
               departureTime: "12:00 PM",
               driverName: "Mike",
               driverPicUrl:
@@ -59,6 +66,9 @@ class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
           Gap(2.h),
           NearByDriverShuttler(
               carNumber: "612",
+              selectedCity: CityToCityModel(),
+              driverUid: "123",
+              requestId: "123",
               departureTime: "10:00 PM",
               driverName: "John wick",
               driverPicUrl:

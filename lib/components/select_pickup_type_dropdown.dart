@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:taxi_finder/blocs/user_map_bloc/shuttle_finder_bloc/bloc/shuttle_finder_bloc.dart';
+import 'package:taxi_finder/constants/app_strings.dart';
 
 class CustomDropdown extends StatefulWidget {
   const CustomDropdown({super.key});
@@ -12,8 +13,8 @@ class CustomDropdown extends StatefulWidget {
 
 class _CustomDropdownState extends State<CustomDropdown> {
   final List<String> dropdownItems = [
-    "Pick up from your location",
-    "Meet in the town",
+    pickMeUp,
+    meetInTown,
   ];
   @override
   void initState() {

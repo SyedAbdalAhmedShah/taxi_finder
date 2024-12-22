@@ -61,8 +61,8 @@ class _ShuttleServiceState extends State<ShuttleService> {
           } else if (state is ShuttleFinderFailureState) {
             Utils.showErrortoast(errorMessage: state.errorMessage);
           } else if (state is CheckAllAvailableDrivers) {
-            Utils.showshowNearByDriversDialog(
-                context, state.availableDriver, state.requestId );
+            Utils.showshowNearByDriversDialog(context, state.availableDriver,
+                state.requestId, state.selectedCity);
           }
         },
         child: BlocBuilder<ShuttleFinderBloc, ShuttleFinderState>(
