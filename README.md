@@ -17,3 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 <!-- GMSServices.provideAPIKey("AIzaSyDkUEyqm-ty8D_hpxB7SVQQuC62mk5W4is")
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions) -->
+
+
+
+    adb pair 192.168.18.75:37615

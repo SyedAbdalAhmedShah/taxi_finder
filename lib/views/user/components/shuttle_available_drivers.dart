@@ -8,10 +8,12 @@ class ShuttleAvailableDrivers extends StatelessWidget {
   final List<DriverInfo> availableDrivers;
   final CityToCityModel selectedCity;
   final String requestId;
+  final String noSeatsWantToBook;
   const ShuttleAvailableDrivers(
       {required this.availableDrivers,
       super.key,
       required this.selectedCity,
+      required this.noSeatsWantToBook,
       required this.requestId});
 
   @override
@@ -22,6 +24,7 @@ class ShuttleAvailableDrivers extends StatelessWidget {
         separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, index) {
           return NearByDriverShuttler(
+              noSeatsWantToBook: noSeatsWantToBook,
               requestId: requestId,
               selectedCity: selectedCity,
               driverUid: availableDrivers[index].driverUid ?? "",

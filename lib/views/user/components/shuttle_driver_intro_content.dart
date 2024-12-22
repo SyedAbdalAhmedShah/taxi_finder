@@ -42,6 +42,7 @@ class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
                 "You can see available drivers information and send a request to a particular driver ",
             targetBorderRadius: BorderRadius.circular(2.w),
             child: NearByDriverShuttler(
+                noSeatsWantToBook: "2",
                 selectedCity: CityToCityModel(),
                 driverUid: "123",
                 requestId: "123",
@@ -54,6 +55,7 @@ class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
           ),
           Gap(2.h),
           NearByDriverShuttler(
+              noSeatsWantToBook: "2",
               carNumber: "1002",
               selectedCity: CityToCityModel(),
               driverUid: "123",
@@ -65,6 +67,7 @@ class _ShuttleDriverIntroContentState extends State<ShuttleDriverIntroContent> {
               numberOfSeatAvailable: "2"),
           Gap(2.h),
           NearByDriverShuttler(
+              noSeatsWantToBook: "2",
               carNumber: "612",
               selectedCity: CityToCityModel(),
               driverUid: "123",

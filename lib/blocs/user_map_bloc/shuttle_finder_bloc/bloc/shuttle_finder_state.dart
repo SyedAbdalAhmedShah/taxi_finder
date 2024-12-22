@@ -40,9 +40,11 @@ final class CheckAllAvailableDrivers extends ShuttleFinderState {
   final List<DriverInfo> availableDriver;
   final String requestId;
   final CityToCityModel selectedCity;
+  final String noSeatsWantToBook;
 
   CheckAllAvailableDrivers(
       {required this.selectedCity,
       required this.availableDriver,
+      required this.noSeatsWantToBook,
       required this.requestId});
 }

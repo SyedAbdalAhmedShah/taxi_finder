@@ -12,6 +12,7 @@ class NearByDriverShuttler extends StatelessWidget {
   final String driverPicUrl;
   final String carNumber;
   final String numberOfSeatAvailable;
+  final String noSeatsWantToBook;
   final String departureTime;
   final String driverUid;
   final String requestId;
@@ -22,6 +23,7 @@ class NearByDriverShuttler extends StatelessWidget {
       required this.driverName,
       required this.driverPicUrl,
       required this.numberOfSeatAvailable,
+      required this.noSeatsWantToBook,
       required this.driverUid,
       required this.requestId,
       required this.selectedCity,
@@ -89,7 +91,7 @@ class NearByDriverShuttler extends StatelessWidget {
                     .read<ShuttleFinderBloc>()
                     .add(OnSendShuttleRideRequestToSpecificDriver(
                       requestId: requestId,
-                      noOfSeats: numberOfSeatAvailable,
+                      noOfSeats: noSeatsWantToBook,
                       selectedCity: selectedCity,
                       driverId: driverUid,
                     ));

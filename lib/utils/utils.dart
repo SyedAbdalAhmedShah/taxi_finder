@@ -256,6 +256,7 @@ class Utils {
 
   static showshowNearByDriversDialog(
     BuildContext context,
+    String noSeatsWantToBook,
     List<DriverInfo> availableDrivers,
     String requestId,
     CityToCityModel city,
@@ -314,9 +315,18 @@ class Utils {
                           availableDrivers: availableDrivers,
                           selectedCity: city,
                           requestId: requestId,
+                          noSeatsWantToBook: noSeatsWantToBook,
                         ),
                       ),
-                      PrimaryButton(text: "Send To All", onPressed: () {})
+                      PrimaryButton(
+                          text: "Send To All",
+                          onPressed: () {
+                            context.read<ShuttleFinderBloc>().add(
+                                OnSendShuttleRideRequestToAllDrivers(
+                                    noOfSeats: noSeatsWantToBook,
+                                    requestId: requestId,
+                                    selectedCity: city));
+                          })
                     ],
                   ),
                 ),

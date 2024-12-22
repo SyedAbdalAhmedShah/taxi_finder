@@ -32,6 +32,18 @@ final class OnSendShuttleRideRequestToSpecificDriver
       required this.driverId});
 }
 
+final class OnSendShuttleRideRequestToAllDrivers extends ShuttleFinderEvent {
+  final CityToCityModel selectedCity;
+  final String requestId;
+  final String noOfSeats;
+
+  OnSendShuttleRideRequestToAllDrivers({
+    required this.requestId,
+    required this.noOfSeats,
+    required this.selectedCity,
+  });
+}
+
 final class OnRideCancelEvent extends ShuttleFinderEvent {
   final String requestId;
 

@@ -142,6 +142,7 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         emit(CheckAllAvailableDrivers(
             availableDriver: nearByDrivers,
             requestId: requestId,
+            noSeatsWantToBook: event.numOfSeats,
             selectedCity: event.selectedCity));
         // final timer = Timer(const Duration(minutes: 2), () {
         //   log("timer called");
@@ -166,6 +167,31 @@ class ShuttleFinderBloc extends Bloc<ShuttleFinderEvent, ShuttleFinderState>
         // });
       } catch (e) {
         log('error is $e');
+        emit(ShuttleFinderFailureState(errorMessage: e.toString()));
+      }
+    });
+
+    on<OnSendShuttleRideRequestToAllDrivers>((event, emit) async {
+      emit(OnRideBookingLoadingState());
+      bool isPickFromMyLoc = false;
+      if (pickUpFromMyLocation != null && pickUpFromMyLocation == pickMeUp) {
+        isPickFromMyLoc = true;
+      }
+      try {
+        for (final driver in nearByDrivers) {
+          await sendBookingRequestToNearByDrivers(
+              driverUid: driver.driverUid ?? "",
+              reqquestId: event.requestId,
+              numOfSeats: event.noOfSeats,
+              to: event.selectedCity.to ?? "",
+              fare: event.selectedCity.fare ?? "",
+              pickUpFromMyLocation: isPickFromMyLoc);
+        }
+      } on SocketException catch (socketError) {
+        log('socket exception $socketError');
+        emit(ShuttleFinderFailureState(errorMessage: socketError.message));
+      } catch (e) {
+        log('error in OnSendShuttleRideRequestToAllDrivers  $e');
         emit(ShuttleFinderFailureState(errorMessage: e.toString()));
       }
     });
