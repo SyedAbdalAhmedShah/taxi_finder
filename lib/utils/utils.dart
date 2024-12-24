@@ -201,11 +201,15 @@ class Utils {
               insetPadding: EdgeInsets.all(2.w),
               child: ShowCaseWidget(
                 onFinish: () async {
+                  log("booking intro on finished callled");
                   SharedPrefrencesDependency sharedPrefrencesDependency =
                       locator.get();
                   SharedPreferences preferences =
                       sharedPrefrencesDependency.preferences;
                   await preferences.setBool(bookingShuttleRideIntro, true);
+
+                  Navigator.of(context).pop();
+                  Utils.showNearByDriversDialogIntro(context);
                 },
                 builder: (ctx) => ShuttleBookingDiloagContent(
                   cityModel: cityModel,

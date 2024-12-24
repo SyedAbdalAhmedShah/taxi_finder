@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -125,10 +127,10 @@ class _ShuttleBookingDiloagContentState
             key: buttonIntroKey,
             description: "You can send request and book your ride",
             targetBorderRadius: BorderRadius.circular(3.w),
-            onBarrierClick: onIntroTap,
-            onTargetClick: onIntroTap,
-            onToolTipClick: onIntroTap,
-            disposeOnTap: true,
+            // onBarrierClick: onIntroTap,
+            // onTargetClick: onIntroTap,
+            // onToolTipClick: onIntroTap,
+            // disposeOnTap: true,
             child: PrimaryButton(
                 text: bookRide,
                 onPressed: () {
@@ -145,15 +147,10 @@ class _ShuttleBookingDiloagContentState
     );
   }
 
-  Future onIntroTap() async {
-    Navigator.of(context).pop();
-    Utils.showNearByDriversDialogIntro(context);
-  }
-
   checkBookingIntroCheckout() {
     SharedPreferences preferences = sharedPrefrencesDependency.preferences;
     bool? bookingRideIntro = preferences.getBool(bookingShuttleRideIntro);
-
+    log("booking intro $bookingRideIntro");
     if (bookingRideIntro == null || !bookingRideIntro) {
       WidgetsBinding.instance.addPostFrameCallback((_) =>
           ShowCaseWidget.of(context)
