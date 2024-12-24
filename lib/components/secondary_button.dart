@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sizer/sizer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class SecondaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -28,12 +29,6 @@ class SecondaryButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              FontAwesomeIcons.google,
-              color: Colors.white,
-              size: 6.w,
-            ),
-            Gap(2.w),
             Text(
               text,
               style: TextStyle(
@@ -41,6 +36,12 @@ class SecondaryButton extends StatelessWidget {
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
+            ),
+            Gap(2.w),
+            Icon(
+              FontAwesomeIcons.arrowRight,
+              color: Colors.white,
+              size: 6.w,
             ),
           ],
         ),

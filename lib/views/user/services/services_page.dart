@@ -9,6 +9,7 @@ import 'package:taxi_finder/constants/enums.dart';
 import 'package:taxi_finder/main.dart';
 import 'package:taxi_finder/utils/extensions.dart';
 import 'package:taxi_finder/utils/notification_service.dart';
+import 'package:taxi_finder/views/user/shuttle_service/introduction_shuttle_service.dart';
 import 'package:taxi_finder/views/user/shuttle_service/shuttle_service.dart';
 
 import 'package:taxi_finder/views/user/taxi_finder/taxi_finder_service.dart';
@@ -59,7 +60,7 @@ class _ServicesPageState extends State<ServicesPage> {
             ServiceCard(
               imagePath: shuttleFinderImage,
               title: shuttleFinderS,
-              onTap: () => context.push(const ShuttleService()),
+              onTap: () => context.push(const IntroductionShuttleService()),
             )
           ],
         ),

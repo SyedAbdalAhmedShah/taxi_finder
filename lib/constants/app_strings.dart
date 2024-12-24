@@ -69,6 +69,9 @@ const meetInTown = "Meet in the town";
 const numberOfSeatsAvail = "Number of seats Available";
 const carNum = "Car Number";
 const depTime = "Departure time";
+const limpopo = "LIMPOPO";
+const gauteng = "GAUTENG";
+const availTips = "Available Tips For City To City Travels";
 
 // Prefrences key
 const taxiFinderMyLocKey = 'taxiFinderMyLocKey';
